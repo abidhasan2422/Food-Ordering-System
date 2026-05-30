@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
-
+import { toast,ToastContainer} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const [adminData, setAdminData] = useState({
     username: "",
     password: "",
@@ -35,19 +38,19 @@ const AdminLogin = () => {
     const data = await response.json();
 
     if (response.ok) {
-      alert(data.message);
-
+      toast.success(data.message);
+      navigate("/admin-dashboard");
       console.log(data);
 
       // Navigate to dashboard here
       // navigate("/admin/dashboard");
     } else {
-      alert(data.message);
+      toast.error(data.message);
     }
   } catch (error) {
     console.log(error);
 
-    alert("Server Error");
+    toast.error("Server Error");
   }
 };
 
@@ -123,6 +126,7 @@ const AdminLogin = () => {
           </button>
         </form>
       </div>
+       <ToastContainer position="top-right" autoClose={2000}/>
     </div>
   );
 };
