@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
 
+
 const AdminLogin = () => {
   const [adminData, setAdminData] = useState({
     username: "",
@@ -14,13 +15,41 @@ const AdminLogin = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(adminData);
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/admin-login/",
+      {
+        method: "POST",
 
-    alert("Admin Login Successful");
-  };
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(adminData),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message);
+
+      console.log(data);
+
+      // Navigate to dashboard here
+      // navigate("/admin/dashboard");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.log(error);
+
+    alert("Server Error");
+  }
+};
 
   return (
     <div
