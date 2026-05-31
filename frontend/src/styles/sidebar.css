@@ -8,10 +8,11 @@
     position: fixed;
     top: 0;
     left: -260px;
-    width: 260px;
     height: 100vh;
     z-index: 1050;
     transition: all 0.3s ease;
+     width: 260px;
+    min-height: 100vh;
   }
 
   .show-sidebar {

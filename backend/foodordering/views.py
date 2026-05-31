@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+from .serializers import  CategorySerializer
 
 @api_view(['POST'])
 def admin_login_api(request):
@@ -43,3 +43,23 @@ def admin_login_api(request):
         },
         status=status.HTTP_401_UNAUTHORIZED
     )
+@api_view(["POST"])
+def add_category(request):
+
+    serializer = CategorySerializer(
+        data=request.data
+    )
+
+    if serializer.is_valid():
+
+        serializer.save()
+
+        return Response({
+            "success": True,
+            "message": "Category Added Successfully"
+        })
+
+    return Response({
+        "success": False,
+        "errors": serializer.errors
+    })

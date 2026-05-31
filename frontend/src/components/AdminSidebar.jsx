@@ -25,11 +25,7 @@ const AdminSidebar = ({
   };
 
   return (
-  //   <div
-  //     className="bg-dark text-white  p-3"
-  //     style={{  width: "260px",
-  // minHeight: "100vh", }}
-  //   >
+ 
   <div
   className={`bg-dark text-white p-3 sidebar ${
     sidebarOpen ? "show-sidebar" : ""

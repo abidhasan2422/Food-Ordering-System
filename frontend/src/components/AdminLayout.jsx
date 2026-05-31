@@ -1,3 +1,4 @@
+// 
 import { useState } from "react";
 import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
@@ -8,10 +9,6 @@ const AdminLayout = ({ children }) => {
   return (
     <>
       <AdminHeader setSidebarOpen={setSidebarOpen} />
-      <AdminSidebar
-      sidebarOpen={sidebarOpen}
-      setSidebarOpen={setSidebarOpen}
-    />
 
       <div className="d-flex">
         <AdminSidebar

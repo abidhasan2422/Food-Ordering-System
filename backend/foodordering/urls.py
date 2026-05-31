@@ -1,10 +1,7 @@
 from django.urls import path
-from .views import admin_login_api
+from .import views
 
 urlpatterns = [
-    path(
-        'admin-login/',
-        admin_login_api,
-        name='admin-login'
-    ),
+    path('admin-login/',views.admin_login_api,name='admin-login'),
+    path('add-category/',views.add_category, name='add-category')
 ]
