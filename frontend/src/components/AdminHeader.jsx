@@ -1,18 +1,27 @@
-import { FaBell, FaSignOutAlt, FaUserCircle, FaUtensils } from "react-icons/fa";
+import { FaBell, FaSignOutAlt,  FaBars, FaUtensils } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const AdminHeader = () => {
+const AdminHeader = ({ setSidebarOpen }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+
+    localStorage.removeItem("isAdminLoggedIn");
 
     navigate("/admin-login");
   };
 
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
       <div className="container-fluid">
+         {/* Mobile Sidebar Button */}
+        <button
+          className="btn btn-dark d-lg-none me-3"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <FaBars />
+        </button>
 
         {/* Logo */}
         <div className="d-flex align-items-center">
@@ -37,19 +46,6 @@ const AdminHeader = () => {
               </button>
             </li>
 
-            {/* Admin Profile */}
-            {/* <li className="nav-item me-3 d-flex align-items-center">
-              <FaUserCircle
-                size={35}
-                className="me-2 text-primary"
-              /> */}
-
-              {/* <span className="fw-semibold">
-                Admin
-              </span> */}
-            {/* </li> */}
-
-            {/* Logout */}
             <li className="nav-item">
               <button
                 className="btn btn-outline-danger"

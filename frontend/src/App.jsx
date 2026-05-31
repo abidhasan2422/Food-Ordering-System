@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AddCategory from './pages/AddCategory';
+import ProtectedRoute from "./components/ProtectedRoute";
+import "./styles/sidebar.css";
 
 const App = () => {
   return (
@@ -11,7 +13,7 @@ const App = () => {
     <Routes>
         <Route path='/' element={<Home/>}> </Route>
         <Route path='/admin-login' element={<AdminLogin/>}> </Route>
-       <Route path="/admin-dashboard" element={<AdminDashboard />} />
+       <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /> </ProtectedRoute>} />
        <Route path="/admin/category/add" element={<AddCategory />} />
        {/* <Route path="/admin/category/manage" element={<CategoryList />} />
        <Route path="/admin/food/add" element={<AddFood />} />

@@ -39,11 +39,11 @@ const AdminLogin = () => {
 
     if (response.ok) {
       toast.success(data.message);
+      localStorage.setItem("isAdminLoggedIn", "true");
+       setTimeout(() => {
       navigate("/admin-dashboard");
+      }, 2000);
       console.log(data);
-
-      // Navigate to dashboard here
-      // navigate("/admin/dashboard");
     } else {
       toast.error(data.message);
     }

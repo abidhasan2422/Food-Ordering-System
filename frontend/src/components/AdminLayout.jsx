@@ -1,25 +1,29 @@
-import AdminSidebar from "./AdminSidebar";
+import { useState } from "react";
 import AdminHeader from "./AdminHeader";
+import AdminSidebar from "./AdminSidebar";
 
 const AdminLayout = ({ children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div>
-      <AdminHeader />
+    <>
+      <AdminHeader setSidebarOpen={setSidebarOpen} />
+      <AdminSidebar
+      sidebarOpen={sidebarOpen}
+      setSidebarOpen={setSidebarOpen}
+    />
 
       <div className="d-flex">
-        <AdminSidebar />
+        <AdminSidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
 
-        <div
-          className="flex-grow-1 p-4"
-          style={{
-            backgroundColor: "#f8f9fa",
-            minHeight: "100vh",
-          }}
-        >
+        <div className="flex-grow-1 p-4">
           {children}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

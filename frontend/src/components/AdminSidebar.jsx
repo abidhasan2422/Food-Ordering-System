@@ -14,7 +14,10 @@ import {
   FaList,
 } from "react-icons/fa";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({
+  sidebarOpen,
+  setSidebarOpen
+}) => {
   const [openMenu, setOpenMenu] = useState(null);
 
   const toggleMenu = (menu) => {
@@ -22,11 +25,16 @@ const AdminSidebar = () => {
   };
 
   return (
-    <div
-      className="bg-dark text-white  p-3"
-      style={{  width: "260px",
-  minHeight: "100vh", }}
-    >
+  //   <div
+  //     className="bg-dark text-white  p-3"
+  //     style={{  width: "260px",
+  // minHeight: "100vh", }}
+  //   >
+  <div
+  className={`bg-dark text-white p-3 sidebar ${
+    sidebarOpen ? "show-sidebar" : ""
+  }`}
+>
      <div className="text-center mb-4">
   <img
     src="/images/admin.jpg"
