@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import AdminLayout from "../components/AdminLayout";
 import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-
+    console.log("Button Clicked");
   try {
     const response = await fetch(
       "http://127.0.0.1:8000/api/add-category/",
@@ -26,8 +28,9 @@ const AddCategory = () => {
     );
 
     const data = await response.json();
-
+    console.log(data);
     if (response.ok) {
+      console.log("Success Block Running");
 
       toast.success(data.message);
 
@@ -43,7 +46,7 @@ const AddCategory = () => {
 
     console.log(error);
 
-    alert("Server Error");
+    toast.error("Server Error");
 
   }
 };
@@ -92,7 +95,10 @@ const AddCategory = () => {
           </div>
 
         </div>
-
+         <ToastContainer
+        position="top-right"
+        autoClose={2000}
+      />
       </div>
     </AdminLayout>
   );

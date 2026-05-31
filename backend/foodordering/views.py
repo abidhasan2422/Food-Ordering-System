@@ -4,6 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import  CategorySerializer
+from .models import Category
+from django.shortcuts import get_object_or_404
 
 @api_view(['POST'])
 def admin_login_api(request):
@@ -63,3 +65,46 @@ def add_category(request):
         "success": False,
         "errors": serializer.errors
     })
+
+@api_view(['GET'])
+def get_categories(request):
+
+    categories = Category.objects.all().order_by('-id')
+
+    serializer = CategorySerializer(
+        categories,
+        many=True
+    )
+
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def delete_category(request,id):
+    category= get_object_or_404(Category,id=id)
+    category.delete()
+    return Response({
+        "message": "Category Deleted Successfully"
+    })
+
+@api_view(['PUT'])
+def update_category(request, id):
+
+    category = get_object_or_404(
+        Category,
+        id=id
+    )
+
+    serializer = CategorySerializer(
+        category,
+        data=request.data
+    )
+
+    if serializer.is_valid():
+
+        serializer.save()
+
+        return Response({
+            "message": "Category Updated Successfully"
+        })
+
+    return Response(serializer.errors)

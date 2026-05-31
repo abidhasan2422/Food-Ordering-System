@@ -5,6 +5,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AddCategory from './pages/AddCategory';
 import ProtectedRoute from "./components/ProtectedRoute";
+import ManageCategory from "./pages/ManageCategory";
 import "./styles/sidebar.css";
 
 const App = () => {
@@ -15,12 +16,8 @@ const App = () => {
         <Route path='/admin-login' element={<AdminLogin/>}> </Route>
        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /> </ProtectedRoute>} />
        <Route path="/admin/category/add" element={<AddCategory />} />
-       {/* <Route
-  path="/admin/category/add"
-  element={<h1>Add Category Page Working</h1>}
-/> */}
-       {/* <Route path="/admin/category/manage" element={<CategoryList />} />
-       <Route path="/admin/food/add" element={<AddFood />} />
+        <Route path="/admin/category/manage" element={<ManageCategory />} />
+       {/*<Route path="/admin/food/add" element={<AddFood />} />
         <Route path="/admin/food/manage" element={<FoodList />} />
         <Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
