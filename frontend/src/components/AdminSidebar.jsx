@@ -23,8 +23,9 @@ const AdminSidebar = () => {
 
   return (
     <div
-      className="bg-dark text-white vh-100 p-3"
-      style={{ width: "260px" }}
+      className="bg-dark text-white  p-3"
+      style={{  width: "260px",
+  minHeight: "100vh", }}
     >
      <div className="text-center mb-4">
   <img
