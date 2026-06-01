@@ -7,5 +7,14 @@ urlpatterns = [
     path('categories/',views.get_categories,name='categories'),
     path('category/delete/<int:id>/',views.delete_category,name='delete_category'),
     path('category/update/<int:id>/',views.update_category,name='update_category'),
+    path('add-food/',views.add_food, name='add-food'),
+    path('foods/',views.get_foods, name='get-foods'),
+    path('food/delete/<int:id>/',views.delete_food,name='delete_food'),
+    path('food/update/<int:id>/',views.update_food,name='update_food'),
+
+
+
+
+
 
 ]

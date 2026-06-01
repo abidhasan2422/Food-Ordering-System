@@ -7,7 +7,8 @@ import AddCategory from './pages/AddCategory';
 import ProtectedRoute from "./components/ProtectedRoute";
 import ManageCategory from "./pages/ManageCategory";
 import "./styles/sidebar.css";
-
+import AddFood from './pages/AddFood';
+import ManageFood from './pages/ManageFood';
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,9 +18,9 @@ const App = () => {
        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /> </ProtectedRoute>} />
        <Route path="/admin/category/add" element={<AddCategory />} />
         <Route path="/admin/category/manage" element={<ManageCategory />} />
-       {/*<Route path="/admin/food/add" element={<AddFood />} />
-        <Route path="/admin/food/manage" element={<FoodList />} />
-        <Route path="/admin/restaurant/add" element={<AddRestaurant />} />
+       <Route path="/admin/food/add" element={<AddFood />} />
+        <Route path="/admin/food/manage" element={<ManageFood />} />
+        {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}
     </Routes>
