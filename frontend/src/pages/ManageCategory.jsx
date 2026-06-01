@@ -4,6 +4,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {CSVLink} from 'react-csv'
 
 
 
@@ -179,17 +180,18 @@ const handleUpdate = async () => {
               </span>
 
             </div>
-
+            <div className="mb-3 d-flex justify-content-between">
             <input
               type="text"
-              className="form-control mb-4"
+              className="form-control w-50"
               placeholder="Search Category..."
               value={search}
               onChange={(e) =>
                 setSearch(e.target.value)
               }
             />
-
+            <CSVLink data={categories}className="btn btn-success"><i className="fas fa-file-csv me-2"></i> Export to CSV</CSVLink>
+            </div>
             <table className="table table-bordered table-hover">
 
               <thead className="table-dark">
@@ -197,6 +199,7 @@ const handleUpdate = async () => {
                 <tr>
                   <th>S.N</th>
                   <th>Category Name</th>
+                  <th>Creation Date</th>
                   <th>Action</th>
                 </tr>
 
@@ -213,6 +216,10 @@ const handleUpdate = async () => {
 
                       <td>
                         {category.category_name}
+                      </td>
+                      <td>
+                        {/* {new Date(category.creation_date).toDateString("en-GB")} */}
+                        {new Date(category.creation_date).toLocaleDateString("en-GB")}
                       </td>
 
                       <td>
