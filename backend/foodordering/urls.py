@@ -12,9 +12,4 @@ urlpatterns = [
     path('food/delete/<int:id>/',views.delete_food,name='delete_food'),
     path('food/update/<int:id>/',views.update_food,name='update_food'),
 
-
-
-
-
-
 ]

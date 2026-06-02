@@ -3,6 +3,8 @@ import AdminLayout from "../components/AdminLayout";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { CSVLink } from "react-csv";
 import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
 
 const ManageFood = () => {
 const [foods, setFoods] = useState([]);
@@ -51,30 +53,28 @@ useEffect(() => {
 
 }, [currentPage]);
 
-const fetchFoods = async (
-  page
-) => {
-
-  const response =
-    await fetch(
+const fetchFoods = async (page = 1) => {
+  try {
+    const response = await fetch(
       `http://127.0.0.1:8000/api/foods/?page=${page}`
     );
 
-  const data =
-    await response.json();
+    const data = await response.json();
 
-  setFoods(data.results);
+    setFoods(Array.isArray(data.results) ? data.results : []);
 
-  setTotalPages(
-    Math.ceil(
-      data.count / 5
-    )
-  );
+    setTotalPages(
+      Math.ceil((data.count || 0) / 5)
+    );
+  } catch (error) {
+    console.log(error);
+    setFoods([]);
+  }
 };
 
-useEffect(() => {
-  fetchFoods();
-}, []);
+// useEffect(() => {
+//   fetchFoods();
+// }, []);
 
 // const fetchFoods = async () => {
 //   try {
@@ -93,10 +93,11 @@ useEffect(() => {
 
 //   }
 // };
-const filteredFoods = foods.filter(
+
+const filteredFoods = (foods || []).filter(
   (food) =>
     food.item_name
-      .toLowerCase()
+      ?.toLowerCase()
       .includes(search.toLowerCase())
 );
 const handleDelete = async (id) => {
@@ -277,7 +278,7 @@ const handleUpdateFood = async () => {
                   <td>
 
                     <img
-                      src={food.image}
+                      src={`http://127.0.0.1:8000${food.image}`}
                       alt=""
                       width="60"
                       height="60"
@@ -594,7 +595,10 @@ const handleUpdateFood = async () => {
       </div>
 
     </div>
-
+ <ToastContainer
+        position="top-right"
+        autoClose={2000}
+      />
   </div>
 
 </AdminLayout>

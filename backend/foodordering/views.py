@@ -150,26 +150,8 @@ def get_foods(request):
     return paginator.get_paginated_response(
         serializer.data
     )
-@api_view(['GET'])
-def get_foods(request):
 
-    foods = Food.objects.all().order_by('-id')
 
-    paginator = FoodPagination()
-
-    paginated_foods = paginator.paginate_queryset(
-        foods,
-        request
-    )
-
-    serializer = FoodSerializer(
-        paginated_foods,
-        many=True
-    )
-
-    return paginator.get_paginated_response(
-        serializer.data
-    )
 @api_view(['DELETE'])
 def delete_food(
     request,

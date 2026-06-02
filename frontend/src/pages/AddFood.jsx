@@ -3,10 +3,11 @@ import AdminLayout from "../components/AdminLayout";
 import { toast } from "react-toastify";
 import { FaPlusCircle } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
+import { useRef } from "react";
 
 
 const AddFood = () => {
-
+  const fileInputRef = useRef(null);
   const [categories, setCategories] = useState([]);
 
   const [foodData, setFoodData] = useState({
@@ -123,7 +124,7 @@ const AddFood = () => {
           image: null,
           is_available: true,
         });
-
+         fileInputRef.current.value = "";
       } else {
 
         toast.error("Failed to Add Food");
@@ -251,6 +252,7 @@ const AddFood = () => {
                 <input
                   type="file"
                   className="form-control"
+                  ref={fileInputRef}
                   onChange={handleImageChange}
                 />
               </div>
