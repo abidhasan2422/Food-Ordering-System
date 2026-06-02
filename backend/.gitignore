@@ -11,6 +11,7 @@ db.sqlite3
 
 # Media Files
 media/
+food-images/
 
 # Environment Variables
 .env
