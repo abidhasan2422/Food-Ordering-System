@@ -5,7 +5,7 @@ import {FaHome, FaSignInAlt, FaTruck, FaUserPlus, FaUserShield, FaUtensils} from
 const PublicLayout = ({ children }) => {
   return (
     <>
-      <nav>
+      
      
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
   <div className="container">
@@ -29,7 +29,7 @@ const PublicLayout = ({ children }) => {
           <Link className="nav-link" to="#"> <FaSignInAlt className='me-2'/> Login</Link>
         </li>
         <li className="nav-item mx-1">
-          <Link className="nav-link" to="#"> <FaUserShield className='me-2'/> AdminLogin</Link>
+          <Link className="nav-link" to="/admin-login"> <FaUserShield className='me-2'/> AdminLogin</Link>
         </li>
        
       </ul>
@@ -38,13 +38,13 @@ const PublicLayout = ({ children }) => {
   </div>
 </nav>
 
-      </nav>
+     
 
-      <div className="container mt-4">
+      <div>
         {children}
       </div>
 
-      <footer className="bg-dark text-light py-4 mt-5">
+      <footer className="bg-dark text-light py-4 ">
       <div className="container">
         <div className="row">
 
