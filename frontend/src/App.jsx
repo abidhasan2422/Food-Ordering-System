@@ -9,11 +9,13 @@ import ManageCategory from "./pages/ManageCategory";
 import "./styles/sidebar.css";
 import AddFood from './pages/AddFood';
 import ManageFood from './pages/ManageFood';
+import SearchPage from "./pages/SearchPage";
 const App = () => {
   return (
     <BrowserRouter>
     <Routes>
         <Route path='/' element={<Home/>}> </Route>
+         <Route path="/search" element={<SearchPage />} />
         <Route path='/admin-login' element={<AdminLogin/>}> </Route>
        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /> </ProtectedRoute>} />
        <Route path="/admin/category/add" element={<AddCategory />} />

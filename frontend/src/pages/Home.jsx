@@ -1,7 +1,8 @@
 import React from "react";
 import PublicLayout from "../components/PublicLayout";
 import '../styles/home.css'
-
+import SearchPage from "../pages/SearchPage";
+import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <PublicLayout>
@@ -20,9 +21,9 @@ const Home = () => {
               placeholder="Search for food..."
             />
 
-            <button>
-              Search
-            </button>
+             <Link to="/search">
+    <button>Search</button>
+  </Link>
           </div>
         </div>
       </div>

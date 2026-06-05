@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'foodordering',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    "drf_spectacular"
     
 
 ]
@@ -120,3 +121,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Food Ordering API",
+    "DESCRIPTION": "API documentation",
+    "VERSION": "1.0.0",
+}
