@@ -2,6 +2,7 @@
 import '../styles/search.css'
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 const SearchPage = () => {
   const [foods, setFoods] = useState([]);
@@ -30,6 +31,8 @@ const SearchPage = () => {
 
 
   return (
+    <>
+     <Navbar />
     <div className="container py-5">
       {/* <h2 className="text-center mb-4">Search Foods</h2>
 
@@ -75,6 +78,7 @@ const SearchPage = () => {
 ))}
       </div>
     </div>
+    </>
   );
 };
 
