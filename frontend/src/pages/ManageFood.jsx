@@ -292,7 +292,7 @@ const handleUpdateFood = async () => {
                   </td>
 
                   <td>
-                    {food.category_name}
+                    {food.category_name} 
                   </td>
 
                   <td>

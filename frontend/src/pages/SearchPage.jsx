@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+
 import '../styles/search.css'
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const SearchPage = () => {
-  const [search, setSearch] = useState("");
+  const [foods, setFoods] = useState([]);
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword");
+ 
+ useEffect(() => {
+  const fetchFoods = async () => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/search-food/?keyword=${keyword}`
+      );
 
-  const foods = [
-    {
-      id: 1,
-      name: "Burger",
-      price: 250,
-      image: "https://via.placeholder.com/300x200",
-    },
-    {
-      id: 2,
-      name: "Pizza",
-      price: 500,
-      image: "https://via.placeholder.com/300x200",
-    },
-    {
-      id: 3,
-      name: "Pasta",
-      price: 350,
-      image: "https://via.placeholder.com/300x200",
-    },
-  ];
+      const data = await response.json();
 
-  const filteredFoods = foods.filter((food) =>
-    food.name.toLowerCase().includes(search.toLowerCase())
-  );
+      setFoods(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (keyword) {
+    fetchFoods();
+  }
+}, [keyword]);
+
 
   return (
     <div className="container py-5">
-      <h2 className="text-center mb-4">Search Foods</h2>
+      {/* <h2 className="text-center mb-4">Search Foods</h2>
 
       <div className="input-group mb-4">
         <input
@@ -42,44 +42,37 @@ const SearchPage = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <button className="btn btn-warning">
+        <button className="btn btn-warning" onClick={handleSearch}>
           Search
         </button>
-      </div>
+      </div> */}
 
       <h5 className="mb-4">
-        Showing {filteredFoods.length} results
+        Showing {foods.length} results
       </h5>
 
       <div className="row">
-        {filteredFoods.map((food) => (
-          <div
-            className="col-md-4 mb-4"
-            key={food.id}
-          >
-            <div className="card h-100 shadow-sm food-card">
-              <img
-                src={food.image}
-                className="card-img-top"
-                alt={food.name}
-              />
+        {foods.map((food) => (
+  <div
+    className="col-md-4 mb-4"
+    key={food.id}
+  >
+    <div className="card">
+      <img
+        src={`http://127.0.0.1:8000${food.image}`}
+        alt={food.item_name}
+      />
 
-              <div className="card-body">
-                <h5 className="card-title">
-                  {food.name}
-                </h5>
+      <div className="card-body">
+        <h5>{food.item_name}</h5>
 
-                <p className="card-text">
-                  Price: ৳{food.price}
-                </p>
-
-                <button className="btn btn-warning w-100">
-                  Order Now
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+        <p>
+          ৳{food.item_price}
+        </p>
+      </div>
+    </div>
+  </div>
+))}
       </div>
     </div>
   );

@@ -193,3 +193,18 @@ def update_food(
     return Response(
         serializer.errors
     )
+
+@api_view(['GET'])
+def search_food(request):
+    keyword = request.GET.get('keyword', '')
+
+    foods = Food.objects.filter(
+        item_name__icontains=keyword
+    )
+
+    serializer = FoodSerializer(
+        foods,
+        many=True
+    )
+
+    return Response(serializer.data)
