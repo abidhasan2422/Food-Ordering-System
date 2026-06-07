@@ -7,6 +7,7 @@ from .serializers import  CategorySerializer,FoodSerializer
 from .models import Category,Food
 from django.shortcuts import get_object_or_404
 from .Pagination import FoodPagination
+import random
 
 @api_view(['POST'])
 def admin_login_api(request):
@@ -204,6 +205,23 @@ def search_food(request):
 
     serializer = FoodSerializer(
         foods,
+        many=True
+    )
+
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def random_foods(request):
+    foods = list(Food.objects.all())
+
+    random.shuffle(foods)
+
+    limited_foods = foods[0:9]
+
+    serializer = FoodSerializer(
+        limited_foods,
         many=True
     )
 

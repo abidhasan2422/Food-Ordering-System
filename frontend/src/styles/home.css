@@ -112,3 +112,45 @@
 
 
 
+
+.food-card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.food-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.food-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.food-body {
+  padding: 15px;
+}
+
+.food-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.food-description {
+  color: #666;
+  height: 45px;
+  overflow: hidden;
+}
+
+.food-price {
+  color: #ff9800;
+  font-weight: bold;
+  font-size: 20px;
+}

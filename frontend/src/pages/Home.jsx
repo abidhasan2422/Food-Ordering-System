@@ -3,13 +3,26 @@ import PublicLayout from "../components/PublicLayout";
 import '../styles/home.css'
 // import SearchPage from "../pages/SearchPage";
 import { useNavigate } from "react-router-dom";
-import  { useState } from "react";
+import  { useState,useEffect } from "react";
 const Home = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+const [foods, setFoods] = useState([]);
+
+useEffect(() => {
+  fetch(
+    "http://127.0.0.1:8000/api/random-foods/"
+  )
+    .then((response) =>
+      response.json()
+    )
+    .then((data) => {
+      setFoods(data);
+    });
+}, []);
+
   const handleSearch = (e) => {
   e.preventDefault();
-
   navigate(`/search?keyword=${search}`);
 };
   return (
@@ -24,16 +37,7 @@ const Home = () => {
           </p>
 
           <div className="search-box">
-            {/* <input
-            //   type="text"
-            //   placeholder="Search for food..."
-            //    value={search}
-            //   onChange={(e) => setSearch(e.target.value)}
-            // />
-
-            //  <Link to={`/search?keyword=${search}`}>
-            // <button>Search</button>
-            // </Link> */}
+            
   <form onSubmit={handleSearch}>
   <input
     type="text"
@@ -49,8 +53,66 @@ const Home = () => {
           </div>
         </div>
       </div>
+
     </section>
+    <section className="container py-5">
+  <h2 className="text-center mb-5">
+    Most Popular Dishes This Month
+  </h2>
+
+  <div className="row">
+    {foods.map((food) => (
+      <div
+        className="col-md-4 mb-4"
+        key={food.id}
+      >
+        <div className="food-card">
+
+          <img
+            src={`http://127.0.0.1:8000${food.image}`}
+            alt={food.item_name}
+            className="food-image"
+          />
+
+          <div className="food-body">
+
+            <h5 className="food-title">
+              {food.item_name}
+            </h5>
+
+            <p className="food-description">
+              {food.item_description}
+            </p>
+
+            <p className="food-price">
+              ৳{food.item_price}
+            </p>
+            <p>
+              {food.is_available ? (
+
+                      <span className="badge bg-success">
+                        OrderNow
+                      </span>
+
+                    ) : (
+
+                      <span className="badge bg-danger">
+                        Unavailable
+                      </span>
+
+                    )}
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
     </PublicLayout>
+    
   );
 };
 
