@@ -54,3 +54,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
         return user
+
+class LoginSerializer(serializers.Serializer):
+    identifier = serializers.CharField()
+    password = serializers.CharField()

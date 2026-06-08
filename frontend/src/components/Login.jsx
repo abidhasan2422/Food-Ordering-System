@@ -19,11 +19,45 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(formData);
-  };
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/login/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier: formData.identifier,
+          password: formData.password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Login Successful");
+       setFormData({
+    identifier: "",
+    password: "",
+  });
+      console.log(data);
+
+      // Later for JWT
+      // localStorage.setItem("access", data.access);
+
+    } else {
+      alert(data.error);
+    }
+  } catch (error) {
+    console.log(error);
+    alert("Something went wrong");
+  }
+};
 
   return (
     <PublicLayout>

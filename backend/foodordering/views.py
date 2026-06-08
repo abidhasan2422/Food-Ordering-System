@@ -3,11 +3,14 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer
+from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer
 from .models import Category,Food,User
 from django.shortcuts import get_object_or_404
 from .Pagination import FoodPagination
 import random
+from django.db.models import Q
+from django.contrib.auth.hashers import check_password
+
 
 @api_view(['POST'])
 def admin_login_api(request):
@@ -242,3 +245,42 @@ def register(request):
         serializer.errors,
         status=400
     )
+
+
+@api_view(['POST'])
+def login_user(request):
+
+    serializer = LoginSerializer(data=request.data)
+
+    if serializer.is_valid():
+
+        identifier = serializer.validated_data["identifier"]
+        password = serializer.validated_data["password"]
+
+        try:
+            user = User.objects.get(
+                Q(email=identifier) |
+                Q(mobile=identifier)
+            )
+
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User not found"},
+                status=400
+            )
+
+        if not check_password(password, user.password):
+            return Response(
+                {"error": "Invalid password"},
+                status=400
+            )
+
+        return Response({
+            "message": "Login Successful",
+            "user_id": user.id,
+            "first_name": user.first_name,
+            "email": user.email,
+            "mobile": user.mobile
+        })
+
+    return Response(serializer.errors, status=400)
