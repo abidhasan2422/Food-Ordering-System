@@ -19,11 +19,41 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(formData);
-  };
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/register/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Registration Successful");
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        mobile: "",
+        password: "",
+        confirm_password: "",
+      });
+    } else {
+      console.log(data);
+      alert("Registration Failed");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <PublicLayout>
@@ -47,6 +77,7 @@ const Register = () => {
                       type="text"
                       name="first_name"
                       placeholder="First Name"
+                      value={formData.first_name}
                       className="form-control"
                       onChange={handleChange}
                     />
@@ -57,6 +88,7 @@ const Register = () => {
                       type="text"
                       name="last_name"
                       placeholder="Last Name"
+                      value={formData.last_name}
                       className="form-control"
                       onChange={handleChange}
                     />
@@ -68,6 +100,7 @@ const Register = () => {
                     type="email"
                     name="email"
                     placeholder="Email Address"
+                    value={formData.email}
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -76,8 +109,9 @@ const Register = () => {
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="phone"
+                    name="mobile"
                     placeholder="Phone Number"
+                    value={formData.mobile}
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -88,6 +122,7 @@ const Register = () => {
                     type="password"
                     name="password"
                     placeholder="Password"
+                    value={formData.password}
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -97,6 +132,7 @@ const Register = () => {
                   <input
                     type="password"
                     name="confirm_password"
+                    value={formData.confirm_password}
                     placeholder="Confirm Password"
                     className="form-control"
                     onChange={handleChange}
