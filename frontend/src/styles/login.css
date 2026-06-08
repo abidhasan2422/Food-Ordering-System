@@ -1,0 +1,86 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #fff8f0,
+    #ffe5b4
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  max-width: 450px;
+  margin: auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h2 {
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-card p {
+  text-align: center;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+}
+
+.password-toggle:hover {
+  color: #000;
+}
+
+.forgot-link {
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login-btn {
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.divider {
+  text-align: center;
+  margin-top: 25px;
+  position: relative;
+}
+
+.divider span {
+  background: white;
+  padding: 0 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  border-top: 1px solid #ddd;
+  top: 50%;
+  left: 0;
+}
+
+.register-link {
+  margin-left: 5px;
+  text-decoration: none;
+  font-weight: 600;
+}

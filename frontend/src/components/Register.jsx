@@ -154,7 +154,7 @@ const Register = () => {
           <div className="col-lg-6 d-flex">
               <div className="image-wrapper w-100">
             <img
-              src="https://tinywebs.site/dLSFcC"
+              src="https://st3.depositphotos.com/35530942/37682/v/450/depositphotos_376824262-stock-illustration-online-registration-sign-concept-young.jpg"
               alt="Food"
               className="img-fluid register-image"
             />

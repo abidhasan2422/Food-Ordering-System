@@ -11,6 +11,7 @@ import AddFood from './pages/AddFood';
 import ManageFood from './pages/ManageFood';
 import SearchPage from "./pages/SearchPage";
 import Register from './components/Register';
+import Login from './components/Login';
 const App = () => {
   return (
     <BrowserRouter>
@@ -23,6 +24,8 @@ const App = () => {
         <Route path="/admin/category/manage" element={<ManageCategory />} />
        <Route path="/admin/food/add" element={<AddFood />} />
        <Route path="/register" element={<Register />} />
+       <Route path="/login" element={<Login />} />
+
         <Route path="/admin/food/manage" element={<ManageFood />} />
         {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
