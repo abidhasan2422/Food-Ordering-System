@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'foodordering',
     'rest_framework',
     'corsheaders',
-    "drf_spectacular"
+    "drf_spectacular",
+     'rest_framework_simplejwt',
     
 
 ]
@@ -130,4 +131,21 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Food Ordering API",
     "DESCRIPTION": "API documentation",
     "VERSION": "1.0.0",
+}
+AUTH_USER_MODEL = 'foodordering.User'
+# 2. Configure Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+#  JWT settings (Token lifetime, etc.)
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD':          'id',        
+    'USER_ID_CLAIM':          'user_id',   
 }

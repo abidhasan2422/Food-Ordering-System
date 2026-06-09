@@ -3,6 +3,7 @@ import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
 import { toast,ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -55,6 +56,8 @@ const AdminLogin = () => {
 };
 
   return (
+     <>
+      <Navbar />
     <div
       className="d-flex justify-content-center align-items-center vh-100"
       style={{
@@ -128,6 +131,8 @@ const AdminLogin = () => {
       </div>
        <ToastContainer position="top-right" autoClose={2000}/>
     </div>
+    
+    </>
   );
 };
 

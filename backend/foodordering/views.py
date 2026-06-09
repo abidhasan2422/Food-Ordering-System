@@ -10,6 +10,7 @@ from .Pagination import FoodPagination
 import random
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @api_view(['POST'])
@@ -249,38 +250,51 @@ def register(request):
 
 @api_view(['POST'])
 def login_user(request):
+    identifier = request.data.get('identifier', '').strip()
+    password   = request.data.get('password', '').strip()
 
-    serializer = LoginSerializer(data=request.data)
+    if not identifier or not password:
+        return Response(
+            {"error": "Please provide both identifier and password"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    if serializer.is_valid():
+    # Find user by email OR mobile
+    try:
+        if '@' in identifier:
+            user = User.objects.get(email=identifier)
+        else:
+            user = User.objects.get(mobile=identifier)
+    except User.DoesNotExist:
+        return Response(
+            {"error": "Invalid email/mobile or password"},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
 
-        identifier = serializer.validated_data["identifier"]
-        password = serializer.validated_data["password"]
+    #  Check if account is active
+    if not user.is_active:
+        return Response(
+            {"error": "Account is disabled"},
+            status=status.HTTP_403_FORBIDDEN
+        )
 
-        try:
-            user = User.objects.get(
-                Q(email=identifier) |
-                Q(mobile=identifier)
-            )
+    #Verify password using AbstractBaseUser's built-in method
+    if not user.check_password(password):  
+        return Response(
+            {"error": "Invalid email/mobile or password"},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
 
-        except User.DoesNotExist:
-            return Response(
-                {"error": "User not found"},
-                status=400
-            )
+    #  Generate JWT tokens
+    refresh = RefreshToken.for_user(user)
 
-        if not check_password(password, user.password):
-            return Response(
-                {"error": "Invalid password"},
-                status=400
-            )
-
-        return Response({
-            "message": "Login Successful",
-            "user_id": user.id,
+    return Response({
+        "message": "Login successful",
+        "access":  str(refresh.access_token),
+        "refresh": str(refresh),
+        "user": {
             "first_name": user.first_name,
-            "email": user.email,
-            "mobile": user.mobile
-        })
-
-    return Response(serializer.errors, status=400)
+            "last_name":  user.last_name,
+            "email":      user.email,
+        }
+    }, status=status.HTTP_200_OK)

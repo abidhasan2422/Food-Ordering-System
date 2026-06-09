@@ -19,7 +19,7 @@ const Login = () => {
     });
   };
 
- const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
@@ -38,24 +38,34 @@ const Login = () => {
     );
 
     const data = await response.json();
-
+        console.log(data);
     if (response.ok) {
       alert("Login Successful");
-       setFormData({
-    identifier: "",
-    password: "",
-  });
-      console.log(data);
 
-      // Later for JWT
-      // localStorage.setItem("access", data.access);
+      // Save JWT tokens to LocalStorage
+      localStorage.setItem("access_token", data.access);
+      localStorage.setItem("refresh_token", data.refresh);
+      
+      //  Save user profile info
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Clear Form
+      setFormData({
+        identifier: "",
+        password: "",
+      });
+
+      console.log("Tokens stored successfully!", data);
+      
+
 
     } else {
-      alert(data.error);
+      // Handles the error object returned from your Django view
+      alert(data.error || "Invalid Credentials");
     }
   } catch (error) {
     console.log(error);
-    alert("Something went wrong");
+    alert("Something went wrong with the server connection");
   }
 };
 

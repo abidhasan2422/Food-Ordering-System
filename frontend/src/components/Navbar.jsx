@@ -28,9 +28,9 @@ const Navbar = () => {
                     <li className="nav-item mx-1">
                       <Link className="nav-link" to="#"> <FaTruck className='me-2'/> Track</Link>
                     </li>
-                    <li className="nav-item mx-1">
+                    {/* <li className="nav-item mx-1">
                       <Link className="nav-link" to="/register"> <FaUserPlus className='me-2'/> Register</Link>
-                    </li>
+                    </li> */}
                   
                     <li className="nav-item mx-1">
                       <Link className="nav-link" to="#"> <FaSignInAlt className='me-2'/> Login</Link>

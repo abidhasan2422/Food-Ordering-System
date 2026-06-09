@@ -8,16 +8,15 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
      SpectacularRedocView,
 )
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('foodordering.urls')),
     path("api/schema/", SpectacularAPIView.as_view(), name='schema'),
     path("api/docs/",SpectacularSwaggerView.as_view(),   name='swagger-ui'),
-     path(
-         "api/redoc/",
-        SpectacularRedocView.as_view(url_name="schema"),
-        name="redoc",
-    ),
+    path("api/redoc/",SpectacularRedocView.as_view(url_name="schema"),name="redoc",),
+  
 ]
 if settings.DEBUG:
     urlpatterns += static(
