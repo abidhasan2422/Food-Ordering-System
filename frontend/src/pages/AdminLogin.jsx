@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -38,12 +38,23 @@ const AdminLogin = () => {
 
     const data = await response.json();
 
-    if (response.ok) {
-      toast.success(data.message);
-      localStorage.setItem("isAdminLoggedIn", "true");
-       setTimeout(() => {
-      navigate("/admin-dashboard");
-      }, 2000);
+if (response.ok) {
+  console.log("Response Data:", data);
+
+  localStorage.setItem("admin_access", data.access);
+  localStorage.setItem("admin_refresh", data.refresh);
+
+  console.log(
+    "Stored Token:",
+    localStorage.getItem("admin_access")
+  );
+
+  // setTimeout(() => {
+  //   navigate("/admin-dashboard");
+  // }, 2000);
+  console.log("Navigating to dashboard");
+  navigate("/admin-dashboard");
+
       console.log(data);
     } else {
       toast.error(data.message);
@@ -82,7 +93,7 @@ const AdminLogin = () => {
         <form onSubmit={handleSubmit}>
           {/* Username */}
           <div className="mb-3">
-            <label className="form-label">Username</label>
+            <label className="form-label">Email</label>
 
             <div className="input-group">
               <span className="input-group-text">
@@ -92,9 +103,9 @@ const AdminLogin = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter username"
-                name="username"
-                value={adminData.username}
+                placeholder="Enter Email"
+                name="email"
+                value={adminData.email}
                 onChange={handleChange}
                 required
               />

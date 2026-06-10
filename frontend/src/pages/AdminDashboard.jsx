@@ -1,6 +1,13 @@
 import AdminLayout from "../components/AdminLayout";
+import { Navigate } from "react-router-dom";
+
 
 const AdminDashboard = () => {
+  const token = localStorage.getItem("admin_access");
+  if (!token) {
+  return <Navigate to="/admin-login" />;
+}
+else{
   return (
     <AdminLayout>
 
@@ -39,6 +46,7 @@ const AdminDashboard = () => {
 
     </AdminLayout>
   );
+}
 };
 
 export default AdminDashboard;

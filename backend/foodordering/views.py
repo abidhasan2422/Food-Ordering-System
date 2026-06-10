@@ -15,41 +15,63 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
 def admin_login_api(request):
+    print(request.data)
+    email = request.data.get('email', '').strip()
+    password = request.data.get('password', '').strip()
 
-    username = request.data.get('username')
-    password = request.data.get('password')
-
-    if not username or not password:
+    if not email or not password:
         return Response(
             {
                 "success": False,
-                "message": "Username and Password are required"
+                "message": "Email and Password are required"
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    user = authenticate(
-        username=username,
-        password=password
-    )
+    try:
+        user = User.objects.get(email=email)
 
-    if user is not None and user.is_staff:
-
+    except User.DoesNotExist:
         return Response(
             {
-                "success": True,
-                "message": "Admin Login Successful",
-                "username": user.username
+                "success": False,
+                "message": "Invalid Credentials"
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_401_UNAUTHORIZED
         )
+
+    # Check password
+    if not user.check_password(password):
+        return Response(
+            {
+                "success": False,
+                "message": "Invalid Credentials"
+            },
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    # Check admin permission
+    if not user.is_staff:
+        return Response(
+            {
+                "success": False,
+                "message": "Admin Access Required"
+            },
+            status=status.HTTP_403_FORBIDDEN
+        )
+
+    refresh = RefreshToken.for_user(user)
 
     return Response(
         {
-            "success": False,
-            "message": "Invalid Credentials"
+            "success": True,
+            "message": "Admin Login Successful",
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "email": user.email,
+            "name": f"{user.first_name} {user.last_name}"
         },
-        status=status.HTTP_401_UNAUTHORIZED
+        status=status.HTTP_200_OK
     )
 @api_view(["POST"])
 def add_category(request):

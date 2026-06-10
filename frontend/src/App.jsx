@@ -19,7 +19,7 @@ const App = () => {
         <Route path='/' element={<Home/>}> </Route>
          <Route path="/search" element={<SearchPage />} />
         <Route path='/admin-login' element={<AdminLogin/>}> </Route>
-       <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /> </ProtectedRoute>} />
+       <Route path="/admin-dashboard" element={<AdminDashboard /> } />
        <Route path="/admin/category/add" element={<AddCategory />} />
         <Route path="/admin/category/manage" element={<ManageCategory />} />
        <Route path="/admin/food/add" element={<AddFood />} />
