@@ -1,8 +1,9 @@
 import React from "react";
 import PublicLayout from "../components/PublicLayout";
 import '../styles/home.css'
+
 // import SearchPage from "../pages/SearchPage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Link } from "react-router-dom";
 import  { useState,useEffect } from "react";
 const Home = () => {
   const navigate = useNavigate();
@@ -109,6 +110,46 @@ useEffect(() => {
       </div>
     ))}
   </div>
+</section>
+<section className="bg-dark text-white py-5">
+  <div className="container">
+    <h2 className="text-center fw-bold mb-5">
+      How It Works
+    </h2>
+
+    <div className="row text-center">
+      <div className="col-md-4 mb-4">
+        <h4>🍔 Choose Your Meal</h4>
+        <p>
+          Browse our menu and select your favorite food from a wide range of dishes.
+        </p>
+      </div>
+
+      <div className="col-md-4 mb-4">
+        <h4>📍 Add Delivery Address</h4>
+        <p>
+          Enter your location and we'll make sure your order reaches you quickly.
+        </p>
+      </div>
+
+      <div className="col-md-4 mb-4">
+        <h4>🚚 Fast Delivery</h4>
+        <p>
+          Relax and enjoy while our delivery partners bring your meal to your doorstep.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section className="py-5 bg-warning text-center text-dark">
+    <h4 className="fw-bold">
+      Ready to Order Your Favorite Food?
+    </h4>
+
+    <Link to="/foods" className="btn btn-dark btn-lg mt-3">
+      Browse Full Menu
+    </Link>
+  </section>
 </section>
 
     </PublicLayout>
