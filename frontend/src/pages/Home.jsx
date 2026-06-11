@@ -1,10 +1,11 @@
 import React from "react";
 import PublicLayout from "../components/PublicLayout";
 import '../styles/home.css'
-
-// import SearchPage from "../pages/SearchPage";
 import { useNavigate ,Link } from "react-router-dom";
 import  { useState,useEffect } from "react";
+import { FaShoppingBasket } from "react-icons/fa";
+
+
 const Home = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -91,15 +92,21 @@ useEffect(() => {
             <p>
               {food.is_available ? (
 
-                      <span className="badge bg-success">
-                        OrderNow
-                      </span>
+                 <Link to={`/food/${food.id}`} className="btn btn-outline-primary btn-sm">
+                  <i className="fas fa-shopping-basket me-1"></i>
+                   Order Now
+                  </Link>
 
                     ) : (
 
-                      <span className="badge bg-danger">
-                        Unavailable
-                      </span>
+                      <button
+                    className="btn btn-outline-secondary btn-sm"
+                    disabled
+                    title="This food item is currently unavailable"
+                  >
+                    <i className="fas fa-times-circle me-1"></i>
+                    Unavailable
+                  </button>
 
                     )}
             </p>
