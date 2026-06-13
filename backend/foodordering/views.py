@@ -320,3 +320,16 @@ def login_user(request):
             "email":      user.email,
         }
     }, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_food_detail(request, id):
+    try:
+        food = Food.objects.get(id=id)
+    except Food.DoesNotExist:
+        return Response(
+            {"error": "Food not found"},
+            status=404
+        )
+
+    serializer = FoodSerializer(food)
+    return Response(serializer.data)

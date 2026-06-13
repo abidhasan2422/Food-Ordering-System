@@ -21,4 +21,5 @@ urlpatterns = [
     path('random-foods/',views.random_foods, name='random-foods'),
     path('register/',views.register, name='register'),
     path('login/',views.login_user, name='login_user'),
+    path('foods/<int:id>/', views.get_food_detail, name='food-detail'),
 ]

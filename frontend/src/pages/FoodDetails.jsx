@@ -13,6 +13,34 @@ const FoodDetails = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
+
+const addToCart = () => {
+
+  const cart = JSON.parse(
+    localStorage.getItem("cart")
+  ) || [];
+
+  const existingItem = cart.find(
+    item => item.id === food.id
+  );
+
+  if(existingItem){
+    existingItem.quantity += 1;
+  }else{
+    cart.push({
+      ...food,
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  alert("Added to cart");
+};
+
   if (!food) {
     return <h2 className="text-center mt-5">Loading...</h2>;
   }
@@ -77,7 +105,7 @@ const FoodDetails = () => {
                 Back
               </button>
 
-              <button className="btn btn-warning px-4">
+              <button className="btn btn-warning px-4"  onClick={addToCart}>
                 <i className="fas fa-shopping-cart me-2"></i>
                 Add to Cart
               </button>

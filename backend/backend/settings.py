@@ -125,6 +125,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -133,12 +137,7 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
 }
 AUTH_USER_MODEL = 'foodordering.User'
-# 2. Configure Django REST Framework
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
+
 
 #  JWT settings (Token lifetime, etc.)
 from datetime import timedelta

@@ -10,15 +10,29 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# class FoodSerializer(serializers.ModelSerializer):
+
+#     image = serializers.ImageField(
+#         use_url=True
+#     )
+
+#     class Meta:
+#         model = Food
+#         fields = "__all__"
+
 class FoodSerializer(serializers.ModelSerializer):
 
+    category_name = serializers.CharField(
+        source='category.category_name',
+        read_only=True
+    )
     image = serializers.ImageField(
         use_url=True
     )
 
     class Meta:
         model = Food
-        fields = "__all__"
+        fields = '__all__'
 
 
 class RegisterSerializer(serializers.ModelSerializer):

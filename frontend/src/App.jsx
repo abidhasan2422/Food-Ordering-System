@@ -13,6 +13,7 @@ import SearchPage from "./pages/SearchPage";
 import Register from './components/Register';
 import Login from './components/Login';
 import FoodDetails from './pages/FoodDetails';
+import Cart from './pages/Cart';
 const App = () => {
   return (
     <BrowserRouter>
@@ -28,6 +29,7 @@ const App = () => {
        <Route path="/login" element={<Login />} />
         <Route path="/food/:id" element={<FoodDetails />} />
         <Route path="/admin/food/manage" element={<ManageFood />} />
+        <Route path="/cart" element={<Cart />} />
         {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}
