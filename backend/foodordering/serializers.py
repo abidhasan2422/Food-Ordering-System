@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category,Food,User
+from .models import Category,Food,User,CartItem
 from django.contrib.auth.hashers import make_password
 
 
@@ -72,3 +72,27 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     identifier = serializers.CharField()
     password = serializers.CharField()
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+
+    item_name = serializers.CharField(
+        source="food.item_name",
+        read_only=True
+    )
+
+    image = serializers.ImageField(
+        source="food.image",
+        read_only=True
+    )
+
+    item_price = serializers.DecimalField(
+        source="food.item_price",
+        max_digits=10,
+        decimal_places=2,
+        read_only=True
+    )
+
+    class Meta:
+        model = CartItem
+        fields = "__all__"

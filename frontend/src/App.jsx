@@ -14,8 +14,10 @@ import Register from './components/Register';
 import Login from './components/Login';
 import FoodDetails from './pages/FoodDetails';
 import Cart from './pages/Cart';
+import CartProvider from "./components/CartContext";
 const App = () => {
   return (
+     <CartProvider>
     <BrowserRouter>
     <Routes>
         <Route path='/' element={<Home/>}> </Route>
@@ -35,6 +37,7 @@ const App = () => {
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}
     </Routes>
     </BrowserRouter>
+    </CartProvider>
   )
 }
 

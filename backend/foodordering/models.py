@@ -1,6 +1,7 @@
 from django.db import models
+from django.conf import settings
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin  # ✅ Add PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin  
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -55,3 +56,40 @@ class Food(models.Model):
     
     def __str__(self):
         return f"{self.item_name} ({self.item_quantity})"
+    
+
+
+class Cart(models.Model):
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return self.user.username
+
+
+class CartItem(models.Model):
+
+    cart = models.ForeignKey(
+        Cart,
+        on_delete=models.CASCADE,
+        related_name="items"
+    )
+
+    food = models.ForeignKey(
+        Food,
+        on_delete=models.CASCADE
+    )
+
+    quantity = models.PositiveIntegerField(
+        default=1
+    )
+
+    def __str__(self):
+        return self.food.item_name

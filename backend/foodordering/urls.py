@@ -22,4 +22,34 @@ urlpatterns = [
     path('register/',views.register, name='register'),
     path('login/',views.login_user, name='login_user'),
     path('foods/<int:id>/', views.get_food_detail, name='food-detail'),
+    path(
+    "cart/add/",
+    views.add_to_cart,
+    name="add_to_cart"
+),
+
+path(
+    "cart/",
+    views.get_cart,
+    name="get_cart"
+),
+
+path(
+    "cart/increase/<int:id>/",
+    views.increase_quantity,
+    name = "increase_quantity"
+
+),
+
+path(
+    "cart/decrease/<int:id>/",
+    views.decrease_quantity,
+    name=" decrease_quantity"
+),
+
+path(
+    "cart/remove/<int:id>/",
+    views.remove_cart_item,
+    name="remove_cart_item"
+),
 ]

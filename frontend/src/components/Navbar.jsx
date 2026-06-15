@@ -1,29 +1,30 @@
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaSignInAlt,
   FaTruck,
- 
   FaUserShield,
   FaUtensils,
-  FaShoppingCart ,
-   FaBox,
+  FaShoppingCart,
+  FaBox,
   FaUserCircle,
 } from "react-icons/fa";
 import "../styles/layout.css";
 
+import { useContext } from "react";
+import { CartContext } from "./CartContext";
 
 const Navbar = () => {
+  const { cart } = useContext(CartContext);
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user");
 
-const handleLogout = () => {
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("refresh_token");
-  localStorage.removeItem("user");
-
-  navigate("/login");
-};
+    navigate("/login");
+  };
   const token = localStorage.getItem("access_token");
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -33,64 +34,100 @@ const handleLogout = () => {
           Food Ordering System
         </Link>
 
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li className="nav-item mx-1" >
-                      <Link className="nav-link active" to="/"><FaHome className='me-2'/>Home</Link>
-                    </li>
-                    <li className="nav-item mx-1">
-                      <Link className="nav-link" to="#"> <FaTruck className='me-2'/> Track</Link>
-                    </li>
-                    
-                     { 
-                      token ? (
-                        <>
-                      <li className="nav-item mx-1">
-                        <Link className="nav-link" to="/cart"> <FaShoppingCart className="me-2" /> 
-                          Cart
-                        </Link>
-                      </li>
-                           <li className="nav-item mx-1">
-                      <Link className="nav-link" to="/my-orders"> <FaBox className="me-2" />
-                         My Orders
-                      </Link>
-                    </li>
-                          <li className="nav-item mx-1">
-                      <Link className="nav-link" to="/profile"> <FaUserCircle className="me-2" />
-                         Profile
-                      </Link>
-                    </li>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item mx-1">
+              <Link className="nav-link active" to="/">
+                <FaHome className="me-2" />
+                Home
+              </Link>
+            </li>
+            <li className="nav-item mx-1">
+              <Link className="nav-link" to="#">
+                {" "}
+                <FaTruck className="me-2" /> Track
+              </Link>
+            </li>
 
-                    <li className="nav-item mx-1">
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={handleLogout}
+            {token ? (
+              <>
+                <li className="nav-item mx-1">
+                  {/* <Link className="nav-link" to="/cart"> <FaShoppingCart className="me-2" /> 
+                          Cart
+                        </Link> */}
+                  <Link
+                    to="/cart"
+                    className="btn btn-outline-light position-relative"
+                  >
+                    <i className="fas fa-shopping-cart"></i>
+
+                    <span
+                      className="
+              position-absolute
+              top-0
+              start-100
+              translate-middle
+              badge
+              rounded-pill
+              bg-danger
+            "
                     >
-                      Logout
-                    </button>
-                  </li>
-                  </>
-                      ):(
-                        <>
-                    <li className="nav-item mx-1">
-                      <Link className="nav-link" to="/login"> <FaSignInAlt className='me-2'/> Login</Link>
-                    </li>
-                    <li className="nav-item mx-1">
-                      <Link className="nav-link" to="/admin-login"> <FaUserShield className='me-2'/> AdminLogin</Link>
-                    </li>
-                    </>
-                     )}
-                   
-                  </ul>
-                 
-                </div>
-              
+                      {cart.length}
+                    </span>
+                  </Link>
+                </li>
+                <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/my-orders">
+                    {" "}
+                    <FaBox className="me-2" />
+                    My Orders
+                  </Link>
+                </li>
+                <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/profile">
+                    {" "}
+                    <FaUserCircle className="me-2" />
+                    Profile
+                  </Link>
+                </li>
+
+                <li className="nav-item mx-1">
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/login">
+                    {" "}
+                    <FaSignInAlt className="me-2" /> Login
+                  </Link>
+                </li>
+                <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/admin-login">
+                    {" "}
+                    <FaUserShield className="me-2" /> AdminLogin
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </nav>
-                     
   );
 };
 

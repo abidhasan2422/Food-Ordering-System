@@ -1,36 +1,103 @@
-import React, { useContext } from "react";
-// import { CartContext } from "../context/CartContext";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import PublicLayout from "../components/PublicLayout";
 
 const Cart = () => {
-  const {
-    cart,
-    removeFromCart,
-    increaseQty,
-    decreaseQty,
-  } = useContext(CartContext);
+  const [cart, setCart] = useState([]);
+
+  const token = localStorage.getItem("access_token");
+
+  const fetchCart = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/cart/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setCart(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const increaseQty = async (id) => {
+    try {
+      await axios.patch(
+        `http://127.0.0.1:8000/api/cart/increase/${id}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const decreaseQty = async (id) => {
+    try {
+      await axios.patch(
+        `http://127.0.0.1:8000/api/cart/decrease/${id}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeFromCart = async (id) => {
+    try {
+      await axios.delete(
+        `http://127.0.0.1:8000/api/cart/remove/${id}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const subtotal = cart.reduce(
     (sum, item) =>
       sum +
-      Number(item.item_price) *
-        item.quantity,
+      Number(item.item_price) * item.quantity,
     0
   );
 
   return (
     <PublicLayout>
       <div className="container py-5">
-
         <h2 className="mb-4">
           Shopping Cart
         </h2>
 
         <div className="card shadow border-0">
           <div className="card-body">
-
             <table className="table align-middle">
-
               <thead>
                 <tr>
                   <th>Food</th>
@@ -44,16 +111,14 @@ const Cart = () => {
               <tbody>
                 {cart.map((item) => (
                   <tr key={item.id}>
-
                     <td>
                       <div className="d-flex align-items-center">
                         <img
                           src={`http://127.0.0.1:8000${item.image}`}
-                          alt=""
+                          alt={item.item_name}
                           width="70"
                           className="rounded me-3"
                         />
-
                         {item.item_name}
                       </div>
                     </td>
@@ -64,7 +129,6 @@ const Cart = () => {
 
                     <td>
                       <div className="btn-group">
-
                         <button
                           className="btn btn-outline-secondary"
                           onClick={() =>
@@ -74,9 +138,7 @@ const Cart = () => {
                           -
                         </button>
 
-                        <button
-                          className="btn btn-light"
-                        >
+                        <button className="btn btn-light">
                           {item.quantity}
                         </button>
 
@@ -88,7 +150,6 @@ const Cart = () => {
                         >
                           +
                         </button>
-
                       </div>
                     </td>
 
@@ -96,7 +157,7 @@ const Cart = () => {
                       ৳
                       {(
                         item.quantity *
-                        item.item_price
+                        Number(item.item_price)
                       ).toFixed(2)}
                     </td>
 
@@ -110,19 +171,15 @@ const Cart = () => {
                         Remove
                       </button>
                     </td>
-
                   </tr>
                 ))}
               </tbody>
-
             </table>
-
           </div>
         </div>
 
         <div className="card mt-4 shadow border-0">
           <div className="card-body">
-
             <h4>
               Subtotal:
               <span className="float-end">
@@ -132,20 +189,11 @@ const Cart = () => {
 
             <hr />
 
-            <button
-              className="
-                btn
-                btn-warning
-                btn-lg
-                w-100
-              "
-            >
+            <button className="btn btn-warning btn-lg w-100">
               Proceed To Checkout
             </button>
-
           </div>
         </div>
-
       </div>
     </PublicLayout>
   );

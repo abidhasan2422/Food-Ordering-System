@@ -1,10 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
+import axios from "axios";
 
 const FoodDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [food, setFood] = useState(null);
+
+  const addToCart = async () => {
+  try {
+    const token = localStorage.getItem("access_token");
+
+    await axios.post(
+      "http://127.0.0.1:8000/api/cart/add/",
+      {
+        food_id: food.id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    navigate("/cart");
+
+  } catch (error) {
+    console.log(error.response?.data);
+    console.log(error);
+  }
+};
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/foods/${id}/`)
@@ -14,32 +40,32 @@ const FoodDetails = () => {
   }, [id]);
 
 
-const addToCart = () => {
+// const addToCart = () => {
 
-  const cart = JSON.parse(
-    localStorage.getItem("cart")
-  ) || [];
+//   const cart = JSON.parse(
+//     localStorage.getItem("cart")
+//   ) || [];
 
-  const existingItem = cart.find(
-    item => item.id === food.id
-  );
+//   const existingItem = cart.find(
+//     item => item.id === food.id
+//   );
 
-  if(existingItem){
-    existingItem.quantity += 1;
-  }else{
-    cart.push({
-      ...food,
-      quantity: 1
-    });
-  }
+//   if(existingItem){
+//     existingItem.quantity += 1;
+//   }else{
+//     cart.push({
+//       ...food,
+//       quantity: 1
+//     });
+//   }
 
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
+//   localStorage.setItem(
+//     "cart",
+//     JSON.stringify(cart)
+//   );
 
-  alert("Added to cart");
-};
+//   alert("Added to cart");
+// };
 
   if (!food) {
     return <h2 className="text-center mt-5">Loading...</h2>;

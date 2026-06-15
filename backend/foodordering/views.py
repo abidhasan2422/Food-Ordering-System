@@ -3,14 +3,16 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer
-from .models import Category,Food,User
+from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer
+from .models import Category,Food,User,Cart,CartItem
 from django.shortcuts import get_object_or_404
 from .Pagination import FoodPagination
 import random
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 
 @api_view(['POST'])
@@ -333,3 +335,88 @@ def get_food_detail(request, id):
 
     serializer = FoodSerializer(food)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_cart(request):
+
+    user = request.user
+
+    food_id = request.data.get("food_id")
+
+    food = Food.objects.get(id=food_id)
+
+    cart, created = Cart.objects.get_or_create(
+        user=user
+    )
+
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        food=food
+    )
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return Response({
+        "message": "Added to cart"
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_cart(request):
+
+    print(request.user)
+
+    cart, created = Cart.objects.get_or_create(
+        user=request.user
+    )
+
+    serializer = CartItemSerializer(
+        cart.items.all(),
+        many=True
+    )
+
+    return Response(serializer.data)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def increase_quantity(request, id):
+
+    item = CartItem.objects.get(id=id)
+
+    item.quantity += 1
+
+    item.save()
+
+    return Response({
+        "message": "updated"
+    })
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def decrease_quantity(request, id):
+
+    item = CartItem.objects.get(id=id)
+
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+
+    return Response({
+        "message": "updated"
+    })
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def remove_cart_item(request, id):
+
+    item = CartItem.objects.get(id=id)
+
+    item.delete()
+
+    return Response({
+        "message": "removed"
+    })
