@@ -139,10 +139,7 @@ const buyNow = () => {
               </button>
 
               <button className="btn btn-success px-4" onClick={buyNow}>
-                {/* <i className="fas fa-credit-card me-2"></i> */}
-                 {/* <i className="fas fa-money-check-alt me-2"></i> */}
                   <i className="fas fa-shopping-bag me-2"></i>
-                    {/* <i className="fas fa-utensils me-2"></i> */}
 
                 Buy Now
               </button>

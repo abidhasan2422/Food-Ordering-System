@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PublicLayout from "../components/PublicLayout";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
-
+  const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
   const fetchCart = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/cart/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setCart(response.data);
     } catch (error) {
@@ -37,7 +35,7 @@ const Cart = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       fetchCart();
@@ -55,7 +53,7 @@ const Cart = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       fetchCart();
@@ -66,14 +64,11 @@ const Cart = () => {
 
   const removeFromCart = async (id) => {
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/cart/remove/${id}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`http://127.0.0.1:8000/api/cart/remove/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       fetchCart();
     } catch (error) {
@@ -82,18 +77,14 @@ const Cart = () => {
   };
 
   const subtotal = cart.reduce(
-    (sum, item) =>
-      sum +
-      Number(item.item_price) * item.quantity,
-    0
+    (sum, item) => sum + Number(item.item_price) * item.quantity,
+    0,
   );
 
   return (
     <PublicLayout>
       <div className="container py-5">
-        <h2 className="mb-4">
-          Shopping Cart
-        </h2>
+        <h2 className="mb-4">Shopping Cart</h2>
 
         <div className="card shadow border-0">
           <div className="card-body">
@@ -123,17 +114,13 @@ const Cart = () => {
                       </div>
                     </td>
 
-                    <td>
-                      ৳{item.item_price}
-                    </td>
+                    <td>৳{item.item_price}</td>
 
                     <td>
                       <div className="btn-group">
                         <button
                           className="btn btn-outline-secondary"
-                          onClick={() =>
-                            decreaseQty(item.id)
-                          }
+                          onClick={() => decreaseQty(item.id)}
                         >
                           -
                         </button>
@@ -144,9 +131,7 @@ const Cart = () => {
 
                         <button
                           className="btn btn-outline-secondary"
-                          onClick={() =>
-                            increaseQty(item.id)
-                          }
+                          onClick={() => increaseQty(item.id)}
                         >
                           +
                         </button>
@@ -154,19 +139,13 @@ const Cart = () => {
                     </td>
 
                     <td>
-                      ৳
-                      {(
-                        item.quantity *
-                        Number(item.item_price)
-                      ).toFixed(2)}
+                      ৳{(item.quantity * Number(item.item_price)).toFixed(2)}
                     </td>
 
                     <td>
                       <button
                         className="btn btn-danger"
-                        onClick={() =>
-                          removeFromCart(item.id)
-                        }
+                        onClick={() => removeFromCart(item.id)}
                       >
                         Remove
                       </button>
@@ -182,16 +161,30 @@ const Cart = () => {
           <div className="card-body">
             <h4>
               Subtotal:
-              <span className="float-end">
-                ৳{subtotal.toFixed(2)}
-              </span>
+              <span className="float-end">৳{subtotal.toFixed(2)}</span>
             </h4>
 
             <hr />
 
-            <button className="btn btn-warning btn-lg w-100">
+            <button
+              className="btn btn-warning btn-lg w-100"
+              onClick={() => navigate("/checkout")}
+            >
               Proceed To Checkout
             </button>
+            {/* <button
+  className="btn btn-warning btn-lg w-100"
+  onClick={() =>
+    navigate("/checkout", {
+      state: {
+        food: food,
+        quantity: quantity,
+      },
+    })
+  }
+>
+  Proceed To Checkout
+</button> */}
           </div>
         </div>
       </div>
