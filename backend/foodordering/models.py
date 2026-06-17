@@ -93,3 +93,79 @@ class CartItem(models.Model):
 
     def __str__(self):
         return self.food.item_name
+
+
+class Order(models.Model):
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    full_name = models.CharField(max_length=100)
+
+    phone = models.CharField(max_length=20)
+
+    email = models.EmailField()
+
+    address = models.TextField()
+
+    city = models.CharField(max_length=100)
+
+    notes = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    area = models.CharField(
+        max_length=50
+    )
+
+    subtotal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    delivery_charge = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    total_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    payment_method = models.CharField(
+        max_length=20,
+        default="COD"
+    )
+
+    status = models.CharField(
+        max_length=20,
+        default="Pending"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+class OrderItem(models.Model):
+
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name="items"
+    )
+
+    food = models.ForeignKey(
+        Food,
+        on_delete=models.CASCADE
+    )
+
+    quantity = models.PositiveIntegerField()
+
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )

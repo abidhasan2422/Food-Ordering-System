@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer
+from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer,OrderSerializer
 from .models import Category,Food,User,Cart,CartItem
 from django.shortcuts import get_object_or_404
 from .Pagination import FoodPagination
@@ -420,3 +420,28 @@ def remove_cart_item(request, id):
     return Response({
         "message": "removed"
     })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_order(request):
+
+    serializer = OrderSerializer(
+        data=request.data
+    )
+
+    if serializer.is_valid():
+
+        order = serializer.save(
+            user=request.user
+        )
+
+        return Response({
+            "message": "Order Created",
+            "order_id": order.id
+        })
+
+    return Response(
+        serializer.errors,
+        status=400
+    )
