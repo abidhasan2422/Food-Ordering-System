@@ -52,4 +52,9 @@ path(
     views.remove_cart_item,
     name="remove_cart_item"
 ),
+path(
+    "order/create/",
+    views.create_order,
+    name="create_order"
+),
 ]

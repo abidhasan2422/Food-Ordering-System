@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
+import axios from "axios";
 
 const Checkout = () => {
   const location = useLocation();
@@ -19,6 +20,57 @@ const Checkout = () => {
     area:"",
     notes: "",
   });
+  const handleOrder = async () => {
+
+  const token =
+    localStorage.getItem("access_token");
+
+  try {
+
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/order/create/",
+      {
+        food_id: food.id,
+        quantity: quantity,
+
+        full_name: formData.full_name,
+        phone: formData.phone,
+        email: formData.email,
+        address: formData.address,
+        city: formData.city,
+        area: formData.area,
+        notes: formData.notes,
+
+        subtotal: subtotal,
+        delivery_charge: deliveryCharge,
+        total_amount: total
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    console.log(response.data);
+
+    alert("Order placed successfully");
+     setFormData({
+      full_name: "",
+      phone: "",
+      email: "",
+      address: "",
+      city: "",
+      area: "",
+      notes: "",
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
 
   if (!food) {
     return (
@@ -76,6 +128,7 @@ const Checkout = () => {
                   className="form-control mb-3"
                   placeholder="Enter your full name"
                   onChange={handleChange}
+                  value={formData.full_name}
                 />
 
                 <label className="form-label fw-semibold">
@@ -88,6 +141,7 @@ const Checkout = () => {
                   className="form-control mb-3"
                   placeholder="Enter phone number"
                   onChange={handleChange}
+                    value={formData.phone}
                 />
 
                 <label className="form-label fw-semibold">
@@ -100,6 +154,7 @@ const Checkout = () => {
                   className="form-control mb-3"
                   placeholder="Enter email address"
                   onChange={handleChange}
+                    value={formData.email}
                 />
 
                 <label className="form-label fw-semibold">
@@ -136,6 +191,7 @@ const Checkout = () => {
                   className="form-control mb-3"
                   placeholder="Enter delivery address"
                   onChange={handleChange}
+                    value={formData.address}
                 ></textarea>
 
                 <label className="form-label fw-semibold">
@@ -148,6 +204,7 @@ const Checkout = () => {
                   className="form-control mb-3"
                   placeholder="Enter city"
                   onChange={handleChange}
+                  value={formData.address}
                 />
 
                 <label className="form-label fw-semibold">
@@ -160,6 +217,7 @@ const Checkout = () => {
                   className="form-control"
                   placeholder="Any special instructions..."
                   onChange={handleChange}
+                  value={formData.notes}
                 ></textarea>
 
                 <hr className="my-4" />
@@ -183,6 +241,7 @@ const Checkout = () => {
 
                 <button
                   className="btn btn-success btn-lg w-100 mt-4"
+                  onClick={handleOrder}
                 >
                   <i className="fas fa-check-circle me-2"></i>
                   Confirm Order
