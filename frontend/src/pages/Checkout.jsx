@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
 import axios from "axios";
 
 const Checkout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const food = location.state?.food;
   const quantity = location.state?.quantity || 1;
@@ -55,6 +56,7 @@ const Checkout = () => {
     console.log(response.data);
 
     alert("Order placed successfully");
+    navigate("/order-success");
      setFormData({
       full_name: "",
       phone: "",
