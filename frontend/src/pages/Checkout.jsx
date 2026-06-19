@@ -8,7 +8,10 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const food = location.state?.food;
-  const quantity = location.state?.quantity || 1;
+const quantity = location.state?.quantity || 1;
+
+const cartItems =
+  location.state?.cartItems || [];
 
 //   const [area, setArea] = useState("");
 
@@ -74,17 +77,25 @@ const Checkout = () => {
   }
 };
 
-  if (!food) {
-    return (
-      <PublicLayout>
-        <div className="container py-5 text-center">
-          <h3>No food selected.</h3>
-        </div>
-      </PublicLayout>
-    );
-  }
+if (!food && cartItems.length === 0) {
+  return (
+    <PublicLayout>
+      <div className="container py-5 text-center">
+        <h3>No food selected.</h3>
+      </div>
+    </PublicLayout>
+  );
+}
 
-  const subtotal = Number(food.item_price) * quantity;
+ const subtotal = food
+  ? Number(food.item_price) * quantity
+  : cartItems.reduce(
+      (sum, item) =>
+        sum +
+        Number(item.item_price) *
+          item.quantity,
+      0
+    );
 
   const deliveryCharge =
     subtotal >= 1000
@@ -254,80 +265,129 @@ const Checkout = () => {
 
           </div>
 
-          {/* Order Summary */}
-          <div className="col-lg-5">
+        {/* Order Summary */}
+<div className="col-lg-5">
 
-            <div className="card border-0 shadow sticky-top">
-              <div className="card-body p-4">
+  <div className="card border-0 shadow sticky-top">
+    <div className="card-body p-4">
 
-                <h3 className="fw-bold mb-4">
-                  Order Summary
-                </h3>
+      <h3 className="fw-bold mb-4">
+        Order Summary
+      </h3>
 
-                <img
-                  src={`http://127.0.0.1:8000${food.image}`}
-                  alt={food.item_name}
-                  className="img-fluid rounded mb-3"
-                  style={{
-                    height: "220px",
-                    width: "100%",
-                    objectFit: "cover",
-                  }}
-                />
+      {food ? (
 
-                <h5 className="fw-bold">
-                  {food.item_name}
-                </h5>
+        <>
+          <img
+            src={`http://127.0.0.1:8000${food.image}`}
+            alt={food.item_name}
+            className="img-fluid rounded mb-3"
+            style={{
+              height: "220px",
+              width: "100%",
+              objectFit: "cover",
+            }}
+          />
 
-                <p className="mb-2">
-                  <strong>Price:</strong>
-                  {" "}৳{food.item_price}
-                </p>
+          <h5 className="fw-bold">
+            {food.item_name}
+          </h5>
 
-                <p className="mb-2">
-                  <strong>Quantity:</strong>
-                  {" "}{quantity}
-                </p>
+          <p className="mb-2">
+            <strong>Price:</strong> ৳{food.item_price}
+          </p>
 
-                <hr />
+          <p className="mb-2">
+            <strong>Quantity:</strong> {quantity}
+          </p>
+        </>
 
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Subtotal</span>
-                  <span>৳{subtotal}</span>
-                </div>
+      ) : (
 
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Delivery Charge</span>
+        cartItems.map((item) => (
+          <div
+            key={item.id}
+            className="d-flex justify-content-between align-items-center border-bottom py-3"
+          >
+            <div className="d-flex align-items-center">
 
-                  <span className="badge bg-warning text-dark">
-                    ৳{deliveryCharge}
-                  </span>
-                </div>
+              <img
+                src={`http://127.0.0.1:8000${item.image}`}
+                alt={item.item_name}
+                width="60"
+                height="60"
+                className="rounded me-3"
+                style={{
+                  objectFit: "cover",
+                }}
+              />
 
-                {subtotal >= 1000 && (
-                  <div className="alert alert-success mt-3 mb-3">
-                    🎉 Congratulations! Free Delivery Applied
-                  </div>
-                )}
+              <div>
 
-                <hr />
+                <h6 className="mb-1">
+                  {item.item_name}
+                </h6>
 
-                <div className="bg-light rounded p-3 text-center">
-
-                  <small className="text-muted">
-                    Total Amount
-                  </small>
-
-                  <h2 className="text-success fw-bold mb-0">
-                    ৳{total}
-                  </h2>
-
-                </div>
+                <small className="text-muted">
+                  Qty: {item.quantity}
+                </small>
 
               </div>
+
             </div>
 
+            <strong>
+              ৳
+              {(
+                Number(item.item_price) *
+                item.quantity
+              ).toFixed(2)}
+            </strong>
+
           </div>
+        ))
+
+      )}
+
+      <hr />
+
+      <div className="d-flex justify-content-between mb-2">
+        <span>Subtotal</span>
+        <span>৳{subtotal}</span>
+      </div>
+
+      <div className="d-flex justify-content-between mb-2">
+        <span>Delivery Charge</span>
+
+        <span className="badge bg-warning text-dark">
+          ৳{deliveryCharge}
+        </span>
+      </div>
+
+      {subtotal >= 1000 && (
+        <div className="alert alert-success mt-3 mb-3">
+           Congratulations! Free Delivery Applied
+        </div>
+      )}
+
+      <hr />
+
+      <div className="bg-light rounded p-3 text-center">
+
+        <small className="text-muted">
+          Total Amount
+        </small>
+
+        <h2 className="text-success fw-bold mb-0">
+          ৳{total}
+        </h2>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
 
         </div>
 

@@ -166,12 +166,18 @@ const Cart = () => {
 
             <hr />
 
-            <button
-              className="btn btn-warning btn-lg w-100"
-              onClick={() => navigate("/checkout")}
-            >
-              Proceed To Checkout
-            </button>
+          <button
+  className="btn btn-warning btn-lg w-100"
+  onClick={() =>
+    navigate("/checkout", {
+      state: {
+        cartItems: cart,
+      },
+    })
+  }
+>
+  Proceed To Checkout
+</button>
             {/* <button
   className="btn btn-warning btn-lg w-100"
   onClick={() =>
