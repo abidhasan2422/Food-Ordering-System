@@ -38,12 +38,14 @@ const OrderDetails = () => {
       </div>
     );
   }
+  console.log(order);
+console.log(order.items);
 
   return (
     <PublicLayout>
       <div className="container py-5">
 
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        {/* <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold">
             Order Details
           </h2>
@@ -54,7 +56,32 @@ const OrderDetails = () => {
           >
             Back To Orders
           </Link>
-        </div>
+          
+        </div> */}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+  <h2 className="fw-bold">
+    Order Details
+  </h2>
+
+  <div className="d-flex gap-2">
+
+    <a
+      href={`http://127.0.0.1:8000/api/order/${order.id}/invoice/`}
+      className="btn btn-danger"
+    >
+      <i className="fas fa-file-pdf me-2"></i>
+      Download Invoice
+    </a>
+
+    <Link
+      to="/my-orders"
+      className="btn btn-outline-secondary"
+    >
+      Back To Orders
+    </Link>
+
+  </div>
+</div>
 
         <div className="card shadow border-0 mb-4">
           <div className="card-body">

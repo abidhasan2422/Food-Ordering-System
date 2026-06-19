@@ -13,7 +13,9 @@ from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
-
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
 
 @api_view(['POST'])
 def admin_login_api(request):
@@ -472,3 +474,456 @@ def my_orders(request):
     )
 
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def order_details(request, id):
+
+    order = Order.objects.get(
+        id=id,
+        user=request.user
+    )
+
+    serializer = OrderSerializer(order)
+
+    return Response(serializer.data)
+
+
+
+from django.http import HttpResponse
+from reportlab.lib.styles import ParagraphStyle
+
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle
+)
+
+from .models import Order, OrderItem
+
+def download_invoice(request, id):
+
+    order = Order.objects.get(id=id)
+
+    response = HttpResponse(
+        content_type="application/pdf"
+    )
+
+    response[
+        "Content-Disposition"
+    ] = (
+        f'attachment; '
+        f'filename="Invoice-{order.id}.pdf"'
+    )
+
+    doc = SimpleDocTemplate(response)
+
+    styles = getSampleStyleSheet()
+
+    elements = []
+
+    order_number = f"FO-{order.id:06d}"
+    invoice_number = f"INV-{order.id:06d}"
+
+    # ==========================
+    # COMPANY HEADER
+    # ==========================
+
+    title_style = ParagraphStyle(
+    "TitleStyle",
+    parent=styles["Title"],
+    alignment=1,
+    fontSize=24
+)
+
+    subtitle_style = ParagraphStyle(
+        "SubtitleStyle",
+        parent=styles["BodyText"],
+        alignment=1,
+        textColor=colors.grey
+    )
+
+    elements.append(
+        Paragraph(
+            "<b>FOOD ORDERING SYSTEM</b>",
+            title_style
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "Fast • Fresh • Delivered",
+            subtitle_style
+        )
+    )
+
+    elements.append(
+        Spacer(1, 15)
+    )
+
+    # ==========================
+    # INVOICE INFO
+    # ==========================
+
+    invoice_data = [
+        [
+            f"Invoice No: {invoice_number}",
+            f"Order ID: {order_number}"
+        ],
+        [
+            f"Date: {order.created_at.strftime('%d %b %Y')}",
+            f"Status: {order.status}"
+        ]
+    ]
+
+    invoice_table = Table(
+        invoice_data,
+        colWidths=[250, 250]
+    )
+
+    invoice_table.setStyle(
+        TableStyle([
+            (
+                "GRID",
+                (0, 0),
+                (-1, -1),
+                1,
+                colors.black
+            ),
+            (
+                "BACKGROUND",
+                (0, 0),
+                (-1, -1),
+                colors.whitesmoke
+            ),
+            (
+                "FONTNAME",
+                (0, 0),
+                (-1, -1),
+                "Helvetica-Bold"
+            )
+        ])
+    )
+
+    elements.append(
+        invoice_table
+    )
+
+    elements.append(
+        Spacer(1, 20)
+    )
+
+    # ==========================
+    # CUSTOMER INFO
+    # ==========================
+
+    elements.append(
+        Paragraph(
+            "<b>Customer Information</b>",
+            styles["Heading3"]
+        )
+    )
+
+    customer_data = [
+        ["Name", order.full_name],
+        ["Phone", order.phone],
+        ["Email", order.email],
+    ]
+
+    customer_table = Table(
+        customer_data,
+        colWidths=[120, 350]
+    )
+
+    customer_table.setStyle(
+        TableStyle([
+            (
+                "GRID",
+                (0, 0),
+                (-1, -1),
+                1,
+                colors.lightgrey
+            )
+        ])
+    )
+
+    elements.append(
+        customer_table
+    )
+
+    elements.append(
+        Spacer(1, 15)
+    )
+
+    # ==========================
+    # DELIVERY ADDRESS
+    # ==========================
+
+    elements.append(
+        Paragraph(
+            "<b>Delivery Address</b>",
+            styles["Heading3"]
+        )
+    )
+
+    address_data = [
+        ["Area", order.area],
+        ["City", order.city],
+        ["Address", order.address],
+    ]
+
+    address_table = Table(
+        address_data,
+        colWidths=[120, 350]
+    )
+
+    address_table.setStyle(
+        TableStyle([
+            (
+                "GRID",
+                (0, 0),
+                (-1, -1),
+                1,
+                colors.lightgrey
+            )
+        ])
+    )
+
+    elements.append(
+        address_table
+    )
+
+    elements.append(
+        Spacer(1, 20)
+    )
+
+    # ==========================
+    # ORDER ITEMS
+    # ==========================
+
+    elements.append(
+        Paragraph(
+            "<b>Ordered Items</b>",
+            styles["Heading3"]
+        )
+    )
+
+    items = OrderItem.objects.filter(
+        order=order
+    )
+
+    table_data = [
+        [
+            "#",
+            "Item Name",
+            "Qty",
+            "Unit Price",
+            "Total"
+        ]
+    ]
+
+    for index, item in enumerate(
+        items,
+        start=1
+    ):
+
+        item_total = (
+            item.quantity *
+            item.price
+        )
+
+        table_data.append([
+            str(index),
+            item.food.item_name,
+            str(item.quantity),
+            f"BDT {item.price}",
+            f"BDT {item_total}"
+        ])
+
+    item_table = Table(
+        table_data,
+        colWidths=[
+            40,
+            220,
+            60,
+            90,
+            90
+        ]
+    )
+
+    item_table.setStyle(
+        TableStyle([
+
+            (
+                "BACKGROUND",
+                (0, 0),
+                (-1, 0),
+                colors.HexColor("#198754")
+            ),
+
+            (
+                "TEXTCOLOR",
+                (0, 0),
+                (-1, 0),
+                colors.white
+            ),
+
+            (
+                "FONTNAME",
+                (0, 0),
+                (-1, 0),
+                "Helvetica-Bold"
+            ),
+
+            (
+                "GRID",
+                (0, 0),
+                (-1, -1),
+                1,
+                colors.black
+            ),
+
+            (
+                "ALIGN",
+                (0, 0),
+                (-1, -1),
+                "CENTER"
+            ),
+        ])
+    )
+
+    elements.append(
+        item_table
+    )
+
+    elements.append(
+        Spacer(1, 20)
+    )
+
+    # ==========================
+    # PAYMENT SUMMARY
+    # ==========================
+
+    elements.append(
+        Paragraph(
+            "<b>Payment Summary</b>",
+            styles["Heading3"]
+        )
+    )
+
+    payment_data = [
+        [
+            "Subtotal",
+            f"BDT {order.subtotal}"
+        ],
+        [
+            "Delivery Charge",
+            f"BDT {order.delivery_charge}"
+        ],
+        [
+            "Total Amount",
+            f"BDT {order.total_amount}"
+        ]
+    ]
+
+    payment_table = Table(
+        payment_data,
+        colWidths=[250, 200]
+    )
+
+    payment_table.setStyle(
+        TableStyle([
+            (
+                "GRID",
+                (0, 0),
+                (-1, -1),
+                1,
+                colors.black
+            ),
+            (
+                "BACKGROUND",
+                (0, 2),
+                (-1, 2),
+                colors.lightgrey
+            ),
+            (
+                "FONTNAME",
+                (0, 2),
+                (-1, 2),
+                "Helvetica-Bold"
+            )
+        ])
+    )
+
+    elements.append(
+        payment_table
+    )
+
+    elements.append(
+        Spacer(1, 20)
+    )
+
+    # ==========================
+    # NOTES
+    # ==========================
+
+    if order.notes:
+
+        elements.append(
+            Paragraph(
+                "<b>Special Instructions</b>",
+                styles["Heading3"]
+            )
+        )
+
+        elements.append(
+            Paragraph(
+                order.notes,
+                styles["BodyText"]
+            )
+        )
+
+        elements.append(
+            Spacer(1, 20)
+        )
+
+    # ==========================
+    # FOOTER
+    # ==========================
+
+    elements.append(
+        Paragraph(
+            "<b>Thank You For Your Order!</b>",
+            styles["Heading2"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "support@foodordering.com",
+            styles["BodyText"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "+8801XXXXXXXXX",
+            styles["BodyText"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "This invoice serves as proof of purchase.",
+            styles["Italic"]
+        )
+    )
+
+    doc.build(elements)
+
+    return response

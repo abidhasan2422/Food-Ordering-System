@@ -98,8 +98,31 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+
+    item_name = serializers.CharField(
+        source="food.item_name",
+        read_only=True
+    )
+
+    image = serializers.ImageField(
+        source="food.image",
+        read_only=True
+    )
+
+    class Meta:
+        model = OrderItem
+        fields = "__all__"
+
+
 class OrderSerializer(serializers.ModelSerializer):
     order_number = serializers.SerializerMethodField()
+    items = OrderItemSerializer(
+        many=True,
+        read_only=True
+    )
 
     class Meta:
         model = Order

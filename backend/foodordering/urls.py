@@ -62,4 +62,14 @@ path(
     views.my_orders,
     name="my_orders"
 ),
+path(
+    "order/<int:id>/",
+    views.order_details,
+    name="order_details"
+),
+path(
+    "order/<int:id>/invoice/",
+    views.download_invoice,
+    name="download-invoice"
+),
 ]
