@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer,OrderSerializer
-from .models import Category,Food,User,Cart,CartItem,OrderItem
+from .models import Category,Food,User,Cart,CartItem,OrderItem,Order
 from django.shortcuts import get_object_or_404
 from .Pagination import FoodPagination
 import random
@@ -456,3 +456,19 @@ def create_order(request):
         serializer.errors,
         status=400
     )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def my_orders(request):
+
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by('-id')
+
+    serializer = OrderSerializer(
+        orders,
+        many=True
+    )
+
+    return Response(serializer.data)

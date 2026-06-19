@@ -99,8 +99,12 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    order_number = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = "__all__"
         read_only_fields = ["user"]
+    
+    def get_order_number(self, obj):
+        return f"FO-{obj.id:06d}"

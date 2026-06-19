@@ -57,4 +57,9 @@ path(
     views.create_order,
     name="create_order"
 ),
+path(
+    "my-orders/",
+    views.my_orders,
+    name="my_orders"
+),
 ]
