@@ -1,150 +1,103 @@
-import React, {
-  useEffect,
-  useState
-} from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import axios from "axios";
 
 import PublicLayout from "../components/PublicLayout";
 
 const MyOrders = () => {
-    const [orders, setOrders] =
-useState([]);
+  const [orders, setOrders] = useState([]);
 
-useEffect(() => {
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const token = localStorage.getItem("access_token");
 
-  const fetchOrders =
-    async () => {
-
-      const token =
-        localStorage.getItem(
-          "access_token"
-        );
-
-      const response =
-        await axios.get(
-          "http://127.0.0.1:8000/api/my-orders/",
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`
-            }
-          }
-        );
+      const response = await axios.get("http://127.0.0.1:8000/api/my-orders/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setOrders(response.data);
     };
 
-  fetchOrders();
+    fetchOrders();
+  }, []);
+  return (
+    <PublicLayout>
+      <div className="container py-5">
+        <div className="text-center mb-5">
+          <h1 className="fw-bold">My Orders</h1>
 
-}, []);
-return (
-  <PublicLayout>
+          <p className="text-muted">Track and manage all your orders</p>
+        </div>
 
-    <div className="container py-5">
-
-      <div className="text-center mb-5">
-
-        <h1 className="fw-bold">
-          My Orders
-        </h1>
-
-        <p className="text-muted">
-          Track and manage all
-          your orders
-        </p>
-
-      </div>
-
-      {orders.map(order => (
-
-        <div
-          key={order.id}
-          className="
+        {orders.map((order) => (
+          <div
+            key={order.id}
+            className="
             card
             border-0
             shadow-sm
             mb-4
           "
-        >
-
-          <div
-            className="
-              card-body
-            "
           >
-
             <div
               className="
+              card-body
+            "
+            >
+              <div
+                className="
                 d-flex
                 justify-content-between
                 align-items-center
               "
-            >
+              >
+                <div>
+                  <h5>Order #{order.order_number}</h5>
 
-              <div>
-
-                <h5>
-                  Order #
-                  {order.order_number}
-                </h5>
-
-                <small
-                  className="
+                  <small
+                    className="
                     text-muted
                   "
-                >
-                  {
-                    order.created_at
-                  }
-                </small>
+                  >
+                    {order.created_at}
+                  </small>
+                </div>
 
-              </div>
-
-              <span
-                className="
+                <span
+                  className="
                   badge
                   bg-warning
                 "
-              >
-                {order.status}
-              </span>
+                >
+                  {order.status}
+                </span>
+              </div>
 
-            </div>
+              <hr />
 
-            <hr />
-
-            <h4
-              className="
+              <h4
+                className="
                 text-success
               "
-            >
-              ৳
-              {
-                order.total_amount
-              }
-            </h4>
+              >
+                ৳{order.total_amount}
+              </h4>
 
-            <button
-              className="
-                btn
-                btn-outline-primary
-                mt-3
-              "
-            >
-              View Details
-            </button>
-
+              <Link
+                to={`/order/${order.id}`}
+                className="btn btn-outline-primary mt-3"
+              >
+                View Details
+              </Link>
+            </div>
           </div>
-
-        </div>
-
-      ))}
-
-    </div>
-
-  </PublicLayout>
-);
-}
+        ))}
+      </div>
+    </PublicLayout>
+  );
+};
 
 export default MyOrders;

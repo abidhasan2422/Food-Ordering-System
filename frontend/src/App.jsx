@@ -18,6 +18,7 @@ import CartProvider from "./components/CartContext";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
+import OrderDetails from "./pages/OrderDetails";
 const App = () => {
   return (
     <CartProvider>
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}
