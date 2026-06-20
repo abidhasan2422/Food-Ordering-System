@@ -896,34 +896,35 @@ def download_invoice(request, id):
     # FOOTER
     # ==========================
 
+    footer_style = ParagraphStyle(
+    "FooterStyle",
+    parent=styles["BodyText"],
+    alignment=1
+)
     elements.append(
-        Paragraph(
-            "<b>Thank You For Your Order!</b>",
-            styles["Heading2"]
-        )
+    Paragraph(
+        "<b>Thank You For Your Order!</b>",
+        footer_style
     )
-
+)
     elements.append(
-        Paragraph(
-            "support@foodordering.com",
-            styles["BodyText"]
-        )
+    Paragraph(
+        "support@foodordering.com",
+        footer_style
     )
-
+)
     elements.append(
-        Paragraph(
-            "+8801XXXXXXXXX",
-            styles["BodyText"]
-        )
+    Paragraph(
+         "+8801XXXXXXXXX",
+        footer_style
     )
-
+)
     elements.append(
-        Paragraph(
-            "This invoice serves as proof of purchase.",
-            styles["Italic"]
-        )
+    Paragraph(
+         "This invoice serves as proof of purchase.",
+        footer_style
     )
-
+)
     doc.build(elements)
 
     return response
