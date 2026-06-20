@@ -1,90 +1,56 @@
 import { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    const savedCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(savedCart);
-  }, []);
+  const [cartCount, setCartCount] = useState(0);
 
-  useEffect(() => {
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cart)
-    );
-  }, [cart]);
+  const fetchCartCount = async () => {
 
-  const addToCart = (food) => {
-    const exist = cart.find(
-      (item) => item.id === food.id
-    );
+    const token =
+      localStorage.getItem("access_token");
 
-    if (exist) {
-      setCart(
-        cart.map((item) =>
-          item.id === food.id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-            : item
-        )
-      );
-    } else {
-      setCart([
-        ...cart,
+    if (!token) {
+      setCartCount(0);
+      return;
+    }
+
+    try {
+
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/cart/",
         {
-          ...food,
-          quantity: 1,
-        },
-      ]);
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const totalQty =
+        response.data.reduce(
+          (sum, item) =>
+            sum + item.quantity,
+          0
+        );
+
+      setCartCount(totalQty);
+
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const removeFromCart = (id) => {
-    setCart(
-      cart.filter((item) => item.id !== id)
-    );
-  };
-
-  const increaseQty = (id) => {
-    setCart(
-      cart.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-            }
-          : item
-      )
-    );
-  };
-
-  const decreaseQty = (id) => {
-    setCart(
-      cart.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: item.quantity - 1,
-            }
-          : item
-      ).filter((item) => item.quantity > 0)
-    );
-  };
+  useEffect(() => {
+    fetchCartCount();
+  }, []);
 
   return (
     <CartContext.Provider
       value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        increaseQty,
-        decreaseQty,
+        cartCount,
+        fetchCartCount,
       }}
     >
       {children}

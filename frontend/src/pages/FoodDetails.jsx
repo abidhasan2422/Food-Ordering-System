@@ -3,9 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
 import axios from "axios";
 // import Checkout from './Checkout';
+import { useContext } from "react";
+import { CartContext } from "../components/CartContext";
 
 
 const FoodDetails = () => {
+  const { fetchCartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const { id } = useParams();
   const [food, setFood] = useState(null);
@@ -25,7 +28,7 @@ const FoodDetails = () => {
           },
         },
       );
-
+      await fetchCartCount();
       navigate("/cart");
     } catch (error) {
       console.log(error.response?.data);

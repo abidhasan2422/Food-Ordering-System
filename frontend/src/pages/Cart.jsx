@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,  useContext, } from "react";
 import axios from "axios";
 import PublicLayout from "../components/PublicLayout";
 import { useNavigate } from "react-router-dom";
+import { CartContext }
+from "../components/CartContext";
 
 const Cart = () => {
+  const { fetchCartCount } = useContext(CartContext);
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -37,8 +40,8 @@ const Cart = () => {
           },
         },
       );
-
       fetchCart();
+      fetchCartCount();
     } catch (error) {
       console.log(error);
     }
@@ -55,8 +58,9 @@ const Cart = () => {
           },
         },
       );
-
-      fetchCart();
+     fetchCart();
+fetchCartCount();
+      
     } catch (error) {
       console.log(error);
     }
@@ -69,8 +73,8 @@ const Cart = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       fetchCart();
+fetchCartCount();
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +92,19 @@ const Cart = () => {
 
         <div className="card shadow border-0">
           <div className="card-body">
-            <table className="table align-middle">
+            {cart.length === 0 && (
+              <div className="alert alert-info text-center">
+                <h5>Your cart is empty</h5>
+
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={() => navigate("/")}
+                >
+                  Continue Shopping
+                </button>
+              </div>
+            )}
+            <table className="table table-hover table-sm align-middle">
               <thead>
                 <tr>
                   <th>Food</th>
@@ -107,17 +123,23 @@ const Cart = () => {
                         <img
                           src={`http://127.0.0.1:8000${item.image}`}
                           alt={item.item_name}
-                          width="70"
+                          width="55"
+                          height="55"
                           className="rounded me-3"
+                          style={{
+                            objectFit: "cover",
+                          }}
                         />
-                        {item.item_name}
+                        <div>
+                          <h6 className="mb-0 fw-semibold">{item.item_name}</h6>
+                        </div>
                       </div>
                     </td>
 
                     <td>৳{item.item_price}</td>
 
                     <td>
-                      <div className="btn-group">
+                      <div className="btn-group btn-group-sm">
                         <button
                           className="btn btn-outline-secondary"
                           onClick={() => decreaseQty(item.id)}
@@ -144,7 +166,7 @@ const Cart = () => {
 
                     <td>
                       <button
-                        className="btn btn-danger"
+                        className="btn btn-outline-danger btn-sm"
                         onClick={() => removeFromCart(item.id)}
                       >
                         Remove
@@ -159,25 +181,28 @@ const Cart = () => {
 
         <div className="card mt-4 shadow border-0">
           <div className="card-body">
-            <h4>
-              Subtotal:
-              <span className="float-end">৳{subtotal.toFixed(2)}</span>
-            </h4>
+            <div className="d-flex justify-content-between align-items-center">
+              <h5 className="mb-0 fw-bold">Subtotal</h5>
+
+              <h4 className="mb-0 text-success fw-bold">
+                ৳{subtotal.toFixed(2)}
+              </h4>
+            </div>
 
             <hr />
 
-          <button
-  className="btn btn-warning btn-lg w-100"
-  onClick={() =>
-    navigate("/checkout", {
-      state: {
-        cartItems: cart,
-      },
-    })
-  }
->
-  Proceed To Checkout
-</button>
+            <button
+              className="btn btn-warning btn-lg w-100"
+              onClick={() =>
+                navigate("/checkout", {
+                  state: {
+                    cartItems: cart,
+                  },
+                })
+              }
+            >
+              Proceed To Checkout
+            </button>
             {/* <button
   className="btn btn-warning btn-lg w-100"
   onClick={() =>

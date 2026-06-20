@@ -72,4 +72,8 @@ path(
     views.download_invoice,
     name="download-invoice"
 ),
+path(
+    "order/create-from-cart/",
+    views.create_order_from_cart
+),
 ]

@@ -11,12 +11,35 @@ import {
 } from "react-icons/fa";
 import "../styles/layout.css";
 
-import { useContext } from "react";
 import { CartContext } from "./CartContext";
+import { useEffect, useState, useContext } from "react";
+import axios from "axios";
 
 const Navbar = () => {
-  const { cart } = useContext(CartContext);
+  const { cartCount  } = useContext(CartContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      const token = localStorage.getItem("access_token");
+
+      if (!token) return;
+
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        //setCartCount(response.data.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCartCount();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -69,19 +92,21 @@ const Navbar = () => {
                   >
                     <i className="fas fa-shopping-cart"></i>
 
-                    <span
-                      className="
-              position-absolute
-              top-0
-              start-100
-              translate-middle
-              badge
-              rounded-pill
-              bg-danger
-            "
-                    >
-                      {cart.length}
-                    </span>
+                   {cartCount > 0 && (
+  <span
+    className="
+      position-absolute
+      top-0
+      start-100
+      translate-middle
+      badge
+      rounded-pill
+      bg-danger
+    "
+  >
+    {cartCount}
+  </span>
+)}
                   </Link>
                 </li>
                 <li className="nav-item mx-1">

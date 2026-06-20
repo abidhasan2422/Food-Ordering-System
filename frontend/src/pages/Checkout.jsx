@@ -24,57 +24,62 @@ const cartItems =
     area:"",
     notes: "",
   });
-  const handleOrder = async () => {
+const handleOrder = async () => {
 
-  const token =
-    localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token");
+
+  const orderData = {
+    full_name: formData.full_name,
+    phone: formData.phone,
+    email: formData.email,
+    address: formData.address,
+    city: formData.city,
+    area: formData.area,
+    notes: formData.notes,
+
+    subtotal: subtotal,
+    delivery_charge: deliveryCharge,
+    total_amount: total,
+  };
+
+  // Buy Now
+  if (food) {
+    orderData.food_id = food.id;
+    orderData.quantity = quantity;
+  }
+
+  const url = food
+    ? "http://127.0.0.1:8000/api/order/create/"
+    : "http://127.0.0.1:8000/api/order/create-from-cart/";
 
   try {
 
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/order/create/",
-      {
-        food_id: food.id,
-        quantity: quantity,
-
-        full_name: formData.full_name,
-        phone: formData.phone,
-        email: formData.email,
-        address: formData.address,
-        city: formData.city,
-        area: formData.area,
-        notes: formData.notes,
-
-        subtotal: subtotal,
-        delivery_charge: deliveryCharge,
-        total_amount: total
-      },
+      url,
+      orderData,
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
     console.log(response.data);
 
     alert("Order placed successfully");
+
     navigate("/order-success");
-     setFormData({
-      full_name: "",
-      phone: "",
-      email: "",
-      address: "",
-      city: "",
-      area: "",
-      notes: "",
-    });
 
   } catch (error) {
 
     console.log(error);
 
+    console.log(
+      error.response?.data
+    );
+
   }
+
 };
 
 if (!food && cartItems.length === 0) {
@@ -217,7 +222,7 @@ if (!food && cartItems.length === 0) {
                   className="form-control mb-3"
                   placeholder="Enter city"
                   onChange={handleChange}
-                  value={formData.address}
+                  value={formData.city}
                 />
 
                 <label className="form-label fw-semibold">

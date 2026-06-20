@@ -927,3 +927,45 @@ def download_invoice(request, id):
     doc.build(elements)
 
     return response
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_order_from_cart(request):
+
+    serializer = OrderSerializer(
+        data=request.data
+    )
+
+    if serializer.is_valid():
+
+        order = serializer.save(
+            user=request.user
+        )
+
+        cart = Cart.objects.get(
+            user=request.user
+        )
+
+        cart_items = cart.items.all()
+
+        for item in cart_items:
+
+            OrderItem.objects.create(
+                order=order,
+                food=item.food,
+                quantity=item.quantity,
+                price=item.food.item_price
+            )
+
+        cart_items.delete()
+
+        return Response({
+            "message": "Order Created Successfully",
+            "order_id": order.id
+        })
+
+    return Response(
+        serializer.errors,
+        status=400
+    )
