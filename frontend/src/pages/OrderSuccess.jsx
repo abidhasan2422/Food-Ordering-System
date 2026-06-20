@@ -1,52 +1,85 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
 
 const OrderSuccess = () => {
   return (
-    <div className="container py-5 text-center">
+ <div className="container py-5">
 
-      <div className="card shadow border-0 p-5">
+  <div
+    className="card border-0 shadow-lg mx-auto"
+    style={{
+      maxWidth: "650px",
+    }}
+  >
 
-        <h1 className="text-success mb-4">
-          ✅ Order Placed Successfully
-        </h1>
+    <div className="card-body text-center p-5">
 
-        <p className="lead">
-          Thank you for your order.
-        </p>
+      {/* Success Icon */}
 
-        <p>
-          Your order is now being processed.
-        </p>
+      <div
+        className="
+        bg-success
+        rounded-circle
+        d-inline-flex
+        align-items-center
+        justify-content-center
+        mb-4
+        "
+        style={{
+          width: "90px",
+          height: "90px",
+          fontSize: "42px",
+          color: "white",
+        }}
+      >
+        ✓
+      </div>
 
-        <h5 className="mt-3">
+      <h1 className="fw-bold text-success mb-3">
+        Order Placed Successfully
+      </h1>
+
+      <p className="text-muted mb-4">
+        Thank you for your order.
+        <br />
+        Your order is being processed.
+      </p>
+
+      <div className="mb-4">
+
+        <span className="me-2">
           Status:
-          <span className="badge bg-warning ms-2">
-            Pending
-          </span>
-        </h5>
+        </span>
 
-        <div className="mt-4">
+        <span className="badge bg-warning text-dark px-3 py-2">
+          Pending
+        </span>
 
-          <Link
-            to="/my-orders"
-            className="btn btn-primary me-2"
-          >
-            View My Orders
-          </Link>
+      </div>
 
-          <Link
-            to="/"
-            className="btn btn-success"
-          >
-            Continue Shopping
-          </Link>
+      <div className="d-flex justify-content-center gap-3">
 
-        </div>
+        <Link
+          to="/my-orders"
+          className="btn btn-primary px-4"
+        >
+          My Orders
+        </Link>
+
+        <Link
+          to="/"
+          className="btn btn-success px-4"
+        >
+          Continue Shopping
+        </Link>
 
       </div>
 
     </div>
+
+  </div>
+
+</div>
   );
 };
 

@@ -87,4 +87,9 @@ path(
     views.update_order_status,
     name="update_order_status"
 ),
+path(
+    "admin/order/<int:id>/",
+    views.admin_order_details,
+    name="admin_order_details"
+),
 ]

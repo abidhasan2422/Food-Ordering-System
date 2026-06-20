@@ -1009,3 +1009,12 @@ def update_order_status(request, id):
         "message": "Status Updated"
     })
 
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def admin_order_details(request, id):
+
+    order = Order.objects.get(id=id)
+
+    serializer = OrderSerializer(order)
+
+    return Response(serializer.data)
