@@ -1,6 +1,10 @@
 import React,{useEffect,useState} from 'react'
 import axios from "axios";
+import AdminLayout from "../components/AdminLayout";
+import { FaSearch } from "react-icons/fa";
+
 const ManageOrders = () => {
+const [search, setSearch] = useState("");
  const [orders, setOrders] = useState([]);
 useEffect(() => {
   fetchOrders();
@@ -56,151 +60,266 @@ const updateStatus = async (
 
   fetchOrders();
 };
+
+const filteredOrders = orders.filter(
+  (order) =>
+    order.order_number
+      .toLowerCase()
+      .includes(search.toLowerCase().trim()) ||
+
+    order.full_name
+      .toLowerCase()
+      .includes(search.toLowerCase().trim()) ||
+
+    order.phone.includes(search.trim())
+);
   return (
     <>
-    
-    <div className="mb-4">
+<AdminLayout>
+    <div className="container-fluid p-4">
 
-  <button
-    className="btn btn-dark me-2"
-    onClick={() =>
-      fetchOrders()
-    }
-  >
-    All Orders
-  </button>
+    <div className="d-flex justify-content-between align-items-center mb-4">
 
-  <button
-    className="btn btn-warning me-2"
-    onClick={() =>
-      fetchOrders("Pending")
-    }
-  >
-    Pending
-  </button>
+      <h2 className="fw-bold mb-0">
+        Order Management
+      </h2>
 
-  <button
-    className="btn btn-primary me-2"
-    onClick={() =>
-      fetchOrders("Confirmed")
-    }
-  >
-    Confirmed
-  </button>
+      <span className="badge bg-dark fs-6 p-2">
+        Total Orders: {orders.length}
+      </span>
 
-  <button
-    className="btn btn-info me-2"
-    onClick={() =>
-      fetchOrders("Processing")
-    }
-  >
-    Processing
-  </button>
+    </div>
 
-  <button
-    className="btn btn-success me-2"
-    onClick={() =>
-      fetchOrders("Delivered")
-    }
-  >
-    Delivered
-  </button>
+    {/* Filters */}
 
-  <button
-    className="btn btn-danger"
-    onClick={() =>
-      fetchOrders("Cancelled")
-    }
-  >
-    Cancelled
-  </button>
+    <div className="card border-0 shadow-sm mb-4">
+
+      <div className="card-body">
+
+        <div className="d-flex flex-wrap gap-2">
+
+          <button
+            className="btn btn-dark"
+            onClick={() => fetchOrders()}
+          >
+            All Orders
+          </button>
+
+          <button
+            className="btn btn-warning"
+            onClick={() => fetchOrders("Pending")}
+          >
+            Pending
+          </button>
+
+          <button
+            className="btn btn-primary"
+            onClick={() => fetchOrders("Confirmed")}
+          >
+            Confirmed
+          </button>
+
+          <button
+            className="btn btn-info text-white"
+            onClick={() => fetchOrders("Processing")}
+          >
+            Processing
+          </button>
+
+          <button
+            className="btn btn-success"
+            onClick={() => fetchOrders("Delivered")}
+          >
+            Delivered
+          </button>
+
+          <button
+            className="btn btn-danger"
+            onClick={() => fetchOrders("Cancelled")}
+          >
+            Cancelled
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+    {/* <div className="row mb-4">
+
+  <div className="col-md-4">
+
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Search Order ID, Customer, Phone..."
+      value={search}
+      onChange={(e) =>
+        setSearch(e.target.value)
+      }
+    />
+
+  </div>
+</div> */}
+<div className="input-group">
+
+  <span className="input-group-text">
+    <FaSearch />
+  </span>
+
+  <input
+    type="text"
+    className="form-control"
+    placeholder="Search Order ID, Customer Name, Phone..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
 
 </div>
-<table className="table table-hover">
-    
+    {/* Orders Table */}
 
-<thead>
+    <div className="card border-0 shadow-sm">
 
-<tr>
-  <th>Order ID</th>
-  <th>Customer</th>
-  <th>Phone</th>
-  <th>Total</th>
-  <th>Status</th>
-  <th>Action</th>
-</tr>
+      <div className="card-body">
 
-</thead>
+        <div className="table-responsive">
 
-<tbody>
+          <table className="table table-hover align-middle">
 
-{orders.map((order) => (
+            <thead className="table-dark">
 
-<tr key={order.id}>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th width="220">Update Status</th>
+              </tr>
 
-  <td>{order.order_number}</td>
+            </thead>
 
-  <td>{order.full_name}</td>
+            <tbody>
 
-  <td>{order.phone}</td>
+              {filteredOrders.length === 0 ? (
 
-  <td>৳{order.total_amount}</td>
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="text-center py-4"
+                  >
+                    No Orders Found
+                  </td>
+                </tr>
 
-  <td>
+              ) : (
 
-    <span
-      className={
-        order.status === "Pending"
-          ? "badge bg-warning"
-          : order.status === "Confirmed"
-          ? "badge bg-primary"
-          : "badge bg-success"
-      }
-    >
-      {order.status}
-    </span>
+                filteredOrders.map((order) => (
 
-  </td>
+                  <tr key={order.id}>
 
-  <td>
+                    <td>
+                      <strong>
+                        {order.order_number}
+                      </strong>
+                    </td>
 
-    <select
-      className="form-select"
-      value={order.status}
-      onChange={(e) =>
-        updateStatus(
-          order.id,
-          e.target.value
-        )
-      }
-    >
+                    <td>
+                      {order.full_name}
+                    </td>
 
-      <option value="Pending">
-        Pending
-      </option>
+                    <td>
+                      {order.phone}
+                    </td>
 
-      <option value="Confirmed">
-        Confirmed
-      </option>
+                    <td>
+                      {new Date(
+                        order.created_at
+                      ).toLocaleDateString()}
+                    </td>
 
-      <option value="Delivered">
-        Delivered
-      </option>
-      <option value="Cancelled">
-        Cancelled
-      </option>
+                    <td>
+                      <strong>
+                        ৳{order.total_amount}
+                      </strong>
+                    </td>
 
-    </select>
+                    <td>
 
-  </td>
+                      <span
+                        className={
+                          order.status === "Pending"
+                            ? "badge bg-warning text-dark"
+                            : order.status === "Confirmed"
+                            ? "badge bg-primary"
+                            : order.status === "Processing"
+                            ? "badge bg-info text-dark"
+                            : order.status === "Delivered"
+                            ? "badge bg-success"
+                            : "badge bg-danger"
+                        }
+                      >
+                        {order.status}
+                      </span>
 
-</tr>
+                    </td>
 
-))}
+                    <td>
 
-</tbody>
+                      <select
+                        className="form-select"
+                        value={order.status}
+                        onChange={(e) =>
+                          updateStatus(
+                            order.id,
+                            e.target.value
+                          )
+                        }
+                      >
 
-</table>
+                        <option value="Pending">
+                          Pending
+                        </option>
+
+                        <option value="Confirmed">
+                          Confirmed
+                        </option>
+
+                        <option value="Processing">
+                          Processing
+                        </option>
+
+                        <option value="Delivered">
+                          Delivered
+                        </option>
+
+                        <option value="Cancelled">
+                          Cancelled
+                        </option>
+
+                      </select>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</AdminLayout>
 </>
   )
 }

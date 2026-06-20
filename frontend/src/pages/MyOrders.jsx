@@ -67,13 +67,22 @@ const MyOrders = () => {
                 </div>
 
                 <span
-                  className="
-                  badge
-                  bg-warning
-                "
-                >
-                  {order.status}
-                </span>
+  className={
+    order.status === "Pending"
+      ? "badge bg-warning text-dark"
+      : order.status === "Confirmed"
+      ? "badge bg-primary"
+      : order.status === "Processing"
+      ? "badge bg-info text-dark"
+      : order.status === "Delivered"
+      ? "badge bg-success"
+      : "badge bg-danger"
+  }
+>
+  {order.status === "Delivered" && "✓ "}
+  {order.status === "Cancelled" && "✕ "}
+  {order.status}
+</span>
               </div>
 
               <hr />
