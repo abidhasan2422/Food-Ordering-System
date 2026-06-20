@@ -11,7 +11,7 @@ import random
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import permission_classes
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
@@ -970,3 +970,42 @@ def create_order_from_cart(request):
         serializer.errors,
         status=400
     )
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def admin_orders(request):
+
+    status = request.GET.get("status")
+
+    orders = Order.objects.all()
+
+    if status:
+        orders = orders.filter(
+            status=status
+        )
+
+    orders = orders.order_by("-id")
+
+    serializer = OrderSerializer(
+        orders,
+        many=True
+    )
+
+    return Response(serializer.data)
+
+@api_view(["PATCH"])
+@permission_classes([IsAdminUser])
+def update_order_status(request, id):
+
+    order = Order.objects.get(id=id)
+
+    status = request.data.get("status")
+
+    order.status = status
+
+    order.save()
+
+    return Response({
+        "message": "Status Updated"
+    })
+

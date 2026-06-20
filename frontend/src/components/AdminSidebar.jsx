@@ -238,30 +238,18 @@ const AdminSidebar = ({
           </span>
         </button>
 
-        {openMenu === "orders" && (
-          <div className="ms-4 mt-2 d-flex flex-column">
-            <Link
-              to="/admin/orders/pending"
-              className="text-white text-decoration-none mb-2"
-            >
-              Pending Orders
-            </Link>
+       {openMenu === "orders" && (
+  <div className="ms-4 mt-2 d-flex flex-column">
 
-            <Link
-              to="/admin/orders/processing"
-              className="text-white text-decoration-none mb-2"
-            >
-              Processing Orders
-            </Link>
+    <Link
+      to="/admin/orders"
+      className="text-white text-decoration-none mb-2"
+    >
+      Manage Orders
+    </Link>
 
-            <Link
-              to="/admin/orders/completed"
-              className="text-white text-decoration-none"
-            >
-              Completed Orders
-            </Link>
-          </div>
-        )}
+  </div>
+)}
       </div>
 
       {/* Reports */}

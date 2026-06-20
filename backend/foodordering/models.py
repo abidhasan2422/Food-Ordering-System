@@ -101,7 +101,16 @@ class Order(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+    
+    STATUS_CHOICES = (
+    ("Pending", "Pending"),
+    ("Confirmed", "Confirmed"),
+    ("Processing", "Processing"),
+    ("Delivered", "Delivered"),
+    ("Cancelled", "Cancelled"),
+)
 
+   
     full_name = models.CharField(max_length=100)
 
     phone = models.CharField(max_length=20)
@@ -143,6 +152,7 @@ class Order(models.Model):
 
     status = models.CharField(
         max_length=20,
+        choices=STATUS_CHOICES,
         default="Pending"
     )
 

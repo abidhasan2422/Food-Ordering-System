@@ -74,6 +74,17 @@ path(
 ),
 path(
     "order/create-from-cart/",
-    views.create_order_from_cart
+    views.create_order_from_cart,
+    name = "create_order_from_cart"
+),
+path(
+    "admin/orders/",
+    views.admin_orders,
+    name="admin_order"
+),
+path(
+    "admin/orders/<int:id>/status/",
+    views.update_order_status,
+    name="update_order_status"
 ),
 ]
