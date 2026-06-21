@@ -92,4 +92,9 @@ path(
     views.admin_order_details,
     name="admin_order_details"
 ),
+path(
+    "admin/dashboard/stats/",
+    views.dashboard_stats,
+    name="dashboard_stats"
+),
 ]

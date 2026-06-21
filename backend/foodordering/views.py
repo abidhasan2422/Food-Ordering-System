@@ -1018,3 +1018,49 @@ def admin_order_details(request, id):
     serializer = OrderSerializer(order)
 
     return Response(serializer.data)
+
+from django.db.models import Sum
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def dashboard_stats(request):
+
+    total_orders = Order.objects.count()
+
+    pending_orders = Order.objects.filter(
+        status="Pending"
+    ).count()
+
+    delivered_orders = Order.objects.filter(
+        status="Delivered"
+    ).count()
+
+    processing_orders = Order.objects.filter(
+        status="Processing"
+    ).count()
+
+    total_revenue = (
+        Order.objects.filter(
+            status="Delivered"
+        ).aggregate(
+            total=Sum("total_amount")
+        )["total"]
+        or 0
+    )
+
+    total_users = User.objects.count()
+
+    total_foods = Food.objects.count()
+
+    total_category = Category.objects.count()
+
+
+    return Response({
+        "total_orders": total_orders,
+        "pending_orders": pending_orders,
+        "delivered_orders": delivered_orders,
+        "processing_orders":processing_orders,
+        "total_revenue": total_revenue,
+        "total_users": total_users,
+        "total_foods": total_foods,
+        "total_category":total_category
+    })

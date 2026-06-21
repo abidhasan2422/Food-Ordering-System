@@ -55,7 +55,7 @@ if (response.ok) {
   console.log("Navigating to dashboard");
   navigate("/admin-dashboard");
 
-      console.log(data);
+      //console.log(data);
     } else {
       toast.error(data.message);
     }
