@@ -16,6 +16,7 @@ from rest_framework.decorators import permission_classes
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
+from django.db.models.functions import TruncDate
 
 @api_view(['POST'])
 def admin_login_api(request):
@@ -1037,6 +1038,13 @@ def dashboard_stats(request):
     processing_orders = Order.objects.filter(
         status="Processing"
     ).count()
+    confirmed_orders = Order.objects.filter(
+        status="Confirmed"
+    ).count()
+    cancelled_orders = Order.objects.filter(
+        status="Cancelled"
+    ).count()
+
 
     total_revenue = (
         Order.objects.filter(
@@ -1052,15 +1060,43 @@ def dashboard_stats(request):
     total_foods = Food.objects.count()
 
     total_category = Category.objects.count()
+    revenue_data = (
+    Order.objects
+    .filter(status="Delivered")
+    .annotate(day=TruncDate("created_at"))
+    .values("day")
+    .annotate(
+        revenue=Sum("total_amount")
+    )
+    .order_by("day")
+)
+    recent_orders = Order.objects.order_by("-id")[:5]
+
+    recent_orders_data = []
+
+    for order in recent_orders:
+
+        recent_orders_data.append({
+            "id": order.id,
+            "order_number":  f"FO-{order.id:06d}",
+            "customer": order.full_name,
+            "status": order.status,
+            "total": order.total_amount,
+            "created_at":order.created_at
+        })
 
 
     return Response({
         "total_orders": total_orders,
         "pending_orders": pending_orders,
-        "delivered_orders": delivered_orders,
+        "confirmed_orders": confirmed_orders,
+        "delivered_orders":delivered_orders,
+        "cancelled_orders": cancelled_orders,
         "processing_orders":processing_orders,
         "total_revenue": total_revenue,
         "total_users": total_users,
         "total_foods": total_foods,
-        "total_category":total_category
+        "total_category":total_category,
+        "revenue_chart": revenue_data,
+        "recent_orders": recent_orders_data
     })

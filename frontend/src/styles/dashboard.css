@@ -1,0 +1,23 @@
+/* .dashboard-card {
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.15);
+} */
+
+.dashboard-card {
+  border-radius: 15px;
+    border-top: 4px solid #0d6efd;
+
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.dashboard-card:hover {
+  /* transform: translateY(-5px); */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px) scale(1.02);
+}
+ 
