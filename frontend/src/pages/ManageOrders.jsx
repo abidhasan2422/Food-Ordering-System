@@ -181,7 +181,14 @@ const ManageOrders = () => {
                           <td>{order.phone}</td>
 
                           <td>
-                            {new Date(order.created_at).toLocaleDateString()}
+                            {new Date(order.created_at).toLocaleDateString(
+  "en-GB",
+  {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }
+)}
                           </td>
 
                           <td>

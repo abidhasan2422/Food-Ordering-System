@@ -102,4 +102,9 @@ path(
     views.customers,
     name="customers"
 ),
+path(
+    "admin/customers/<int:id>/",
+    views.customer_details,
+    name="customer_details"
+),
 ]

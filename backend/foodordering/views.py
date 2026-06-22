@@ -1122,3 +1122,51 @@ def customers(request):
         })
 
     return Response(data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def customer_details(request, id):
+
+    user = get_object_or_404(
+        User,
+        id=id
+    )
+
+    orders = Order.objects.filter(
+        user=user
+    ).order_by("-id")
+
+    total_orders = orders.count()
+
+    total_spending = (
+        orders.aggregate(
+            total=Sum("total_amount")
+        )["total"]
+        or 0
+    )
+
+    order_data = []
+
+    for order in orders:
+
+        order_data.append({
+            "id": order.id,
+            "order_number": f"FO-{order.id:06d}",
+            "status": order.status,
+            "total_amount": order.total_amount,
+            "created_at": order.created_at,
+        })
+
+    data = {
+        "id": user.id,
+        "name": f"{user.first_name} {user.last_name}",
+        "email": user.email,
+        "phone": user.mobile,
+        "join_date": user.reg_date,
+        "total_orders": total_orders,
+        "total_spending": total_spending,
+        "orders": order_data,
+    }
+
+    return Response(data)
