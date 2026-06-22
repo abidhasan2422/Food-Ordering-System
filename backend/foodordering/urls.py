@@ -97,4 +97,9 @@ path(
     views.dashboard_stats,
     name="dashboard_stats"
 ),
+path(
+    "admin/customers/",
+    views.customers,
+    name="customers"
+),
 ]

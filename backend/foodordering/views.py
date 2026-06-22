@@ -1100,3 +1100,25 @@ def dashboard_stats(request):
         "revenue_chart": revenue_data,
         "recent_orders": recent_orders_data
     })
+
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def customers(request):
+
+    users = User.objects.all().order_by("-id")
+
+    data = []
+
+    for user in users:
+
+        data.append({
+            "id": user.id,
+            "name": f"{user.first_name} {user.last_name}",
+            "email": user.email,
+            "phone": user.mobile,
+            "join_date": user.reg_date,
+            "total_orders": user.order_set.count()
+        })
+
+    return Response(data)
