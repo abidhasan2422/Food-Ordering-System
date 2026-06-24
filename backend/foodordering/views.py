@@ -1523,7 +1523,27 @@ def export_order_report_excel(request):
         "Date"
     ])
 
+    status = request.GET.get("status")
+    from_date = request.GET.get("from_date")
+    to_date = request.GET.get("to_date")
     orders = Order.objects.order_by("-id")
+    if status and status != "All Orders":
+
+        orders = orders.filter(
+            status=status
+        )
+
+    if from_date:
+
+        orders = orders.filter(
+            created_at__date__gte=from_date
+        )
+
+    if to_date:
+
+        orders = orders.filter(
+            created_at__date__lte=to_date
+        )
 
     for order in orders:
 
