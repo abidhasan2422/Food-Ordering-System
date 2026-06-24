@@ -280,7 +280,7 @@ const AdminSidebar = ({
             </Link>
 
             <Link
-              to="/admin/reports/orders"
+              to="/admin/order-report"
               className="text-white text-decoration-none"
             >
               Order Report

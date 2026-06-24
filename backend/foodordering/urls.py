@@ -111,5 +111,22 @@ path(
     "admin/sales-report/",
     views.sales_report,
     name="sales_report"
+   
 ),
+path(
+    "admin/order-report/",
+    views.order_report,
+    name="order_report"
+   
+),
+path(
+    "admin/order-report/pdf/",
+    views.export_order_report_pdf
+),
+path(
+    "admin/order-report/excel/",
+    views.export_order_report_excel,
+    name="export_order_report_excel"
+),
+
 ]

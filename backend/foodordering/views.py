@@ -6,7 +6,7 @@ from rest_framework import status
 from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer,OrderSerializer
 from .models import Category,Food,User,Cart,CartItem,OrderItem,Order
 from django.shortcuts import get_object_or_404
-from .Pagination import FoodPagination
+from .Pagination import FoodPagination, OrderReportPagination
 import random
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
@@ -1302,3 +1302,241 @@ def sales_report(request):
          "top_foods": top_foods,
           "revenue_growth": round(growth, 1)
     })
+
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def order_report(request):
+    status = request.GET.get("status")
+    from_date = request.GET.get("from_date")
+    to_date = request.GET.get("to_date")
+
+    total_orders = Order.objects.count()
+
+    pending = Order.objects.filter(
+        status="Pending"
+    ).count()
+
+    confirmed = Order.objects.filter(
+        status="Confirmed"
+    ).count()
+
+    processing = Order.objects.filter(
+        status="Processing"
+    ).count()
+
+    delivered = Order.objects.filter(
+        status="Delivered"
+    ).count()
+
+    cancelled = Order.objects.filter(
+        status="Cancelled"
+    ).count()
+
+    orders = Order.objects.order_by("-id")
+    if status and status != "All Orders":
+
+      orders = orders.filter(
+        status=status
+    )
+    if from_date:
+
+       orders = orders.filter(
+        created_at__date__gte=from_date
+    )
+
+    if to_date:
+
+        orders = orders.filter(
+            created_at__date__lte=to_date
+        )
+    pagination = OrderReportPagination()
+
+    page = pagination.paginate_queryset(
+    orders,
+    request
+)
+      
+
+    order_data = []
+
+    for order in page:
+
+     order_data.append({
+        "id": order.id,
+        "order_number": f"FO-{order.id:06d}",
+        "customer": order.full_name,
+        "status": order.status,
+        "total": order.total_amount,
+        "date": order.created_at
+    })
+
+    return pagination.get_paginated_response({
+        "total_orders": total_orders,
+        "pending": pending,
+        "confirmed": confirmed,
+        "processing": processing,
+        "delivered": delivered,
+        "cancelled": cancelled,
+        "recent_orders": order_data
+    })
+
+from django.http import HttpResponse
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Table,
+    TableStyle,
+    Paragraph,
+    Spacer
+)
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def export_order_report_pdf(request):
+
+    response = HttpResponse(
+        content_type="application/pdf"
+    )
+
+    response[
+        "Content-Disposition"
+    ] = 'attachment; filename="Order_Report.pdf"'
+
+    doc = SimpleDocTemplate(response)
+
+    elements = []
+
+    styles = getSampleStyleSheet()
+
+    elements.append(
+        Paragraph(
+            "Order Report",
+            styles["Title"]
+        )
+    )
+
+    elements.append(
+        Spacer(1, 20)
+    )
+
+    data = [
+        [
+            "Order ID",
+            "Customer",
+            "Status",
+            "Amount"
+        ]
+    ]
+
+    status = request.GET.get("status")
+    from_date = request.GET.get("from_date")
+    to_date = request.GET.get("to_date")
+    orders = Order.objects.order_by("-id")
+    if status and status != "All Orders":
+
+        orders = orders.filter(
+            status=status
+        )
+
+    if from_date:
+
+        orders = orders.filter(
+            created_at__date__gte=from_date
+        )
+
+    if to_date:
+
+        orders = orders.filter(
+            created_at__date__lte=to_date
+        )
+    for order in orders:
+
+        data.append([
+            f"FO-{order.id:06d}",
+            order.full_name,
+            order.status,
+            str(order.total_amount)
+        ])
+
+    table = Table(data)
+
+    table.setStyle(
+        TableStyle([
+            (
+                "BACKGROUND",
+                (0,0),
+                (-1,0),
+                colors.black
+            ),
+            (
+                "TEXTCOLOR",
+                (0,0),
+                (-1,0),
+                colors.white
+            ),
+            (
+                "GRID",
+                (0,0),
+                (-1,-1),
+                1,
+                colors.black
+            ),
+        ])
+    )
+
+    elements.append(table)
+
+    doc.build(elements)
+
+    return response
+
+from openpyxl import Workbook
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+
+def export_order_report_excel(request):
+
+    response = HttpResponse(
+        content_type=
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+    response[
+        "Content-Disposition"
+    ] = 'attachment; filename="Order_Report.xlsx"'
+
+    wb = Workbook()
+
+    ws = wb.active
+
+    ws.title = "Order Report"
+
+    # Header Row
+
+    ws.append([
+        "Order ID",
+        "Customer",
+        "Status",
+        "Amount",
+        "Date"
+    ])
+
+    orders = Order.objects.order_by("-id")
+
+    for order in orders:
+
+        ws.append([
+            f"FO-{order.id:06d}",
+            order.full_name,
+            order.status,
+            float(order.total_amount),
+            order.created_at.strftime(
+                "%d-%m-%Y"
+            )
+        ])
+
+    wb.save(response)
+
+    return response
