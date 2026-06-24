@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/adminApi";
+
 import AdminLayout from "../components/AdminLayout";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -12,34 +13,34 @@ const ManageOrders = () => {
   }, []);
 
   const fetchOrders = async (status = "") => {
-    const token = localStorage.getItem("admin_access");
+    //const token = localStorage.getItem("admin_access");
 
-    let url = "http://127.0.0.1:8000/api/admin/orders/";
+    let url = "admin/orders/";
 
     if (status) {
       url += `?status=${status}`;
     }
 
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await api.get(url, {
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     });
 
     setOrders(response.data);
   };
   const updateStatus = async (id, status) => {
-    const token = localStorage.getItem("admin_access");
+    //const token = localStorage.getItem("admin_access");
 
-    await axios.patch(
-      `http://127.0.0.1:8000/api/admin/orders/${id}/status/`,
+    await api.patch(
+      `admin/orders/${id}/status/`,
       {
         status,
       },
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       },
     );
 

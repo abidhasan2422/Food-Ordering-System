@@ -2,7 +2,8 @@ import AdminLayout from "../components/AdminLayout";
 import { Navigate } from "react-router-dom";
 import "../styles/dashboard.css";
 import { useEffect, useState } from "react";
-import axios from "axios";
+//import axios from "axios";
+import api from "../utils/adminApi";
 import {
   FaShoppingBag,
   FaClock,
@@ -49,15 +50,15 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem("admin_access");
+      //const token = localStorage.getItem("admin_access");
 
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/dashboard/stats/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+      const response = await api.get(
+        "admin/dashboard/stats/",
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // },
       );
 
       setStats(response.data);
@@ -74,14 +75,14 @@ const AdminDashboard = () => {
         <div className="mb-4">
           <h2 className="fw-bold">Dashboard</h2>
           <p className="text-muted mb-0">Welcome back, Administrator 👋</p>
-            <small className="text-secondary">
-  📅 {new Date().toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })}
-</small>
-  
+          <small className="text-secondary">
+            📅{" "}
+            {new Date().toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
+          </small>
         </div>
         <div className="row g-3">
           <div className="col-md-3">
@@ -293,13 +294,9 @@ const AdminDashboard = () => {
 
         <div className="card shadow-sm border-0 mt-4">
           <div className="card-header bg-white">
-            <h5 className="mb-0 fw-bold">
-    Recent Orders
-  </h5>
+            <h5 className="mb-0 fw-bold">Recent Orders</h5>
 
-  <small className="text-muted">
-    Latest 5 orders
-  </small>
+            <small className="text-muted">Latest 5 orders</small>
           </div>
 
           <div className="card-body">

@@ -273,7 +273,7 @@ const AdminSidebar = ({
         {openMenu === "reports" && (
           <div className="ms-4 mt-2 d-flex flex-column">
             <Link
-              to="/admin/reports/sales"
+              to="/admin/sales-report"
               className="text-white text-decoration-none mb-2"
             >
               Sales Report

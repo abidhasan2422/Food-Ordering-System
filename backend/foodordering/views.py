@@ -20,7 +20,7 @@ from django.db.models.functions import TruncDate
 
 @api_view(['POST'])
 def admin_login_api(request):
-    print(request.data)
+
     email = request.data.get('email', '').strip()
     password = request.data.get('password', '').strip()
 
@@ -1170,3 +1170,135 @@ def customer_details(request, id):
     }
 
     return Response(data)
+
+# For Sales Report 
+from django.db.models import Sum, Avg
+from django.db.models.functions import TruncDate
+from django.utils import timezone
+from datetime import timedelta
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def sales_report(request):
+
+    today = timezone.now().date()
+    this_week_start = today - timedelta(days=7)
+    last_week_start = today - timedelta(days=14)
+    last_week_end = today - timedelta(days=7)
+
+    total_revenue = (
+        Order.objects
+        .filter(status="Delivered")
+        .aggregate(
+            total=Sum("total_amount")
+        )["total"] or 0
+    )
+
+    today_revenue = (
+        Order.objects
+        .filter(
+            status="Delivered",
+            created_at__date=today
+        )
+        .aggregate(
+            total=Sum("total_amount")
+        )["total"] or 0
+    )
+
+    monthly_revenue = (
+        Order.objects
+        .filter(
+            status="Delivered",
+            created_at__month=today.month,
+            created_at__year=today.year
+        )
+        .aggregate(
+            total=Sum("total_amount")
+        )["total"] or 0
+    )
+
+    average_order = (
+        Order.objects
+        .filter(status="Delivered")
+        .aggregate(
+            avg=Avg("total_amount")
+        )["avg"] or 0
+    )
+
+    revenue_chart = (
+        Order.objects
+        .filter(status="Delivered")
+        .annotate(day=TruncDate("created_at"))
+        .values("day")
+        .annotate(
+            revenue=Sum("total_amount")
+        )
+        .order_by("day")
+    )
+    this_week_revenue = (
+    Order.objects.filter(
+        status="Delivered",
+        created_at__date__gte=this_week_start
+    ).aggregate(
+        total=Sum("total_amount")
+    )["total"] or 0
+)
+    last_week_revenue = (
+    Order.objects.filter(
+        status="Delivered",
+        created_at__date__gte=last_week_start,
+        created_at__date__lt=last_week_end
+    ).aggregate(
+        total=Sum("total_amount")
+    )["total"] or 0
+)
+    if last_week_revenue > 0:
+        growth = (
+            (
+                this_week_revenue -
+                last_week_revenue
+            )
+            / last_week_revenue
+        ) * 100
+    else:
+        growth = 0
+
+    recent_sales = (
+        Order.objects
+        .filter(status="Delivered")
+        .order_by("-id")[:5]
+    )
+    top_foods = (
+    OrderItem.objects
+    .values(
+        "food__item_name"
+    )
+    .annotate(
+        total_sold=Sum("quantity"),
+        revenue=Sum("price")
+    )
+    .order_by("-total_sold")[:5]
+)
+
+
+    recent_sales_data = []
+
+    for sale in recent_sales:
+
+        recent_sales_data.append({
+            "id": sale.id,
+            "order_number": f"FO-{sale.id:06d}",
+            "full_name": sale.full_name,
+            "total_amount": sale.total_amount,
+            "created_at": sale.created_at
+        })
+
+    return Response({
+        "total_revenue": total_revenue,
+        "today_revenue": today_revenue,
+        "monthly_revenue": monthly_revenue,
+        "average_order": round(average_order, 2),
+        "revenue_chart": revenue_chart,
+        "recent_sales": recent_sales_data,
+         "top_foods": top_foods,
+          "revenue_growth": round(growth, 1)
+    })

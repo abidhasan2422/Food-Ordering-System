@@ -23,6 +23,7 @@ import ManageOrders from "./pages/ManageOrders";
 import ManageOrderDetails from "./pages/ManageOrderDetails"
 import Customers from "./pages/Customers";
 import CustomerDetails from "./pages/CustomerDetails";
+import SalesReport from "./pages/SalesReport";
 const App = () => {
   return (
     <CartProvider>
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/admin/order/:id" element={<ManageOrderDetails />} />
           <Route path="/admin/customers" element={<Customers />} />
           <Route path="/admin/customers/:id" element={<CustomerDetails />} />
+          <Route path="/admin/sales-report" element={<SalesReport />} />
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/adminApi";
+
 import AdminLayout from "../components/AdminLayout";
 import { FaSearch, FaUsers } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -14,15 +15,15 @@ const Customers = () => {
 
   const fetchCustomers = async () => {
     try {
-      const token = localStorage.getItem("admin_access");
+      //const token = localStorage.getItem("admin_access");
 
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/customers/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await api.get(
+        "admin/customers/",
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // }
       );
 
       setCustomers(response.data);

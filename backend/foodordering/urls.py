@@ -107,4 +107,9 @@ path(
     views.customer_details,
     name="customer_details"
 ),
+path(
+    "admin/sales-report/",
+    views.sales_report,
+    name="sales_report"
+),
 ]

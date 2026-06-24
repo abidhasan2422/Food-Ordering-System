@@ -39,7 +39,7 @@ const AdminLogin = () => {
     const data = await response.json();
 
 if (response.ok) {
-  console.log("Response Data:", data);
+  //console.log("Response Data:", data);
 
   localStorage.setItem("admin_access", data.access);
   localStorage.setItem("admin_refresh", data.refresh);
