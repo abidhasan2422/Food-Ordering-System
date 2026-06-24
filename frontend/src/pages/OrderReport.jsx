@@ -71,13 +71,18 @@ const downloadExcel = async () => {
 
   try {
 
-    const response = await api.get(
-      "admin/order-report/excel/",
-      {
-        responseType: "blob",
-      }
-    );
-
+    
+      const response = await api.get(
+  "admin/order-report/excel/",
+  {
+    params: {
+      status,
+      from_date: fromDate,
+      to_date: toDate,
+    },
+    responseType: "blob",
+  }
+);
     const url =
       window.URL.createObjectURL(
         new Blob([response.data])
@@ -136,13 +141,7 @@ const downloadExcel = async () => {
     );
   }
 
-  //   const filteredOrders =
-  //     status === "All Orders"
-  //       ? report.recent_orders
-  //       : report.recent_orders.filter(
-  //           (order) =>
-  //             order.status === status
-  //         );
+  
   const totalPages = Math.ceil(report.count / 10);
   return (
     <AdminLayout>
@@ -270,7 +269,7 @@ const downloadExcel = async () => {
 
         {/* Export Buttons */}
 
-{/* Export Buttons */}
+
 
 <div className="d-flex justify-content-end gap-2 mb-4">
 
