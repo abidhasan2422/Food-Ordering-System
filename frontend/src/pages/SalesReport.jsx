@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 
 import AdminLayout from "../components/AdminLayout";
 import {
@@ -28,16 +28,9 @@ const SalesReport = () => {
 
   const fetchReport = async () => {
     try {
-      //const token =localStorage.getItem("admin_access");
 
-      const response = await api.get(
-        "admin/sales-report/",
-        {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        }
-      );
+      const response = await adminApi.get(
+        "admin/sales-report/");
 
       setReport(response.data);
     } catch (error) {
@@ -76,22 +69,7 @@ const SalesReport = () => {
         <div className="row g-3 mb-4">
 
           <div className="col-md-3">
-            {/* <div className="card border-0 shadow-sm h-100">
-              <div className="card-body">
-
-                <h6 className="text-muted">
-                  <FaMoneyBillWave
-                    className="me-2 text-success"
-                  />
-                  Total Revenue
-                </h6>
-
-                <h2 className="fw-bold text-success">
-                  ৳{report.total_revenue}
-                </h2>
-
-              </div>
-            </div> */}
+           
             <div className="card border-0 shadow-sm">
   <div className="card-body">
 

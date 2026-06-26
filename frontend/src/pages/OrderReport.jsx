@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 import AdminLayout from "../components/AdminLayout";
 import { Link } from "react-router-dom";
 import {
@@ -26,7 +26,7 @@ const downloadPDF = async () => {
 
   try {
 
-  const response = await api.get(
+  const response = await adminApi.get(
   "admin/order-report/pdf/",
   {
     params: {
@@ -72,7 +72,7 @@ const downloadExcel = async () => {
   try {
 
     
-      const response = await api.get(
+      const response = await adminApi.get(
   "admin/order-report/excel/",
   {
     params: {
@@ -118,7 +118,7 @@ const downloadExcel = async () => {
 
   const fetchReport = async () => {
     try {
-      const response = await api.get("admin/order-report/", {
+      const response = await adminApi.get("admin/order-report/", {
         params: {
           status,
           from_date: fromDate,

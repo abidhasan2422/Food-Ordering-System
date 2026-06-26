@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {CSVLink} from 'react-csv'
+import adminApi  from "../utils/adminApi";
 
 
 
@@ -45,13 +46,13 @@ const [editCategoryName,
 
     try {
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/categories/"
-      );
+     const response = await fetch(
+  "http://127.0.0.1:8000/api/categories/"
+);
 
-      const data = await response.json();
+const data = await response.json();
 
-      setCategories(data);
+setCategories(data); 
 
     } catch (error) {
 
@@ -78,26 +79,13 @@ const [editCategoryName,
 
   try {
 
-    const response = await fetch(
-      `http://127.0.0.1:8000/api/category/delete/${id}/`,
-      {
-        method: "DELETE",
-      }
-    );
+await adminApi.delete(
+  `category/delete/${id}/`
+);
 
-    const data = await response.json();
+toast.success("Category deleted successfully");
 
-    if (response.ok) {
-
-      toast.success(data.message);
-
-      fetchCategories();
-
-    } else {
-
-      toast.error("Delete Failed");
-
-    }
+await fetchCategories();
 
   } catch (error) {
 
@@ -113,52 +101,32 @@ const handleUpdate = async () => {
 
   try {
 
-    const response =
-      await fetch(
-        `http://127.0.0.1:8000/api/category/update/${editCategoryId}/`,
-        {
-          method: "PUT",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify({
-            category_name:
-              editCategoryName,
-          }),
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if (response.ok) {
-
-      toast.success(
-        data.message
-      );
-
-      setShowModal(false);
-
-      fetchCategories();
-
-    } else {
-
-      toast.error(
-        "Update Failed"
-      );
-
-    }
-
-  } catch (error) {
-
-    toast.error(
-      "Server Error"
-    );
-
+  
+     await adminApi.put(
+  `category/update/${editCategoryId}/`,
+  {
+    category_name:
+      editCategoryName,
   }
+);
+
+toast.success(
+  "Category updated successfully"
+);
+
+setShowModal(false);
+setEditCategoryName("");
+setEditCategoryId(null);
+
+await fetchCategories();
+
+} catch (error) {
+
+  console.log(error);
+
+  toast.error("Server Error");
+
+}
 };
 
 

@@ -1,4 +1,4 @@
-import axios from "axios";
+import userApi from "../utils/userApi";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
@@ -16,20 +16,16 @@ const OrderDetails = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const token = localStorage.getItem("access_token");
+        
 
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/order/${id}/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+       const response = await userApi.get(
+  `order/${id}/`
+);
 
         setOrder(response.data);
       } catch (error) {
         console.log(error);
+          // toast.error("Failed to load order");
       }
     };
 

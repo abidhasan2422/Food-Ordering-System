@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation,useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
-import axios from "axios";
+import userApi from "../utils/userApi";
 
 const Checkout = () => {
   const location = useLocation();
@@ -26,7 +26,6 @@ const cartItems =
   });
 const handleOrder = async () => {
 
-  const token = localStorage.getItem("access_token");
 
   const orderData = {
     full_name: formData.full_name,
@@ -48,21 +47,15 @@ const handleOrder = async () => {
     orderData.quantity = quantity;
   }
 
-  const url = food
-    ? "http://127.0.0.1:8000/api/order/create/"
-    : "http://127.0.0.1:8000/api/order/create-from-cart/";
-
+ 
   try {
 
-    const response = await axios.post(
-      url,
-      orderData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await userApi.post(
+  food
+    ? "order/create/"
+    : "order/create-from-cart/",
+  orderData
+);
 
     console.log(response.data);
 

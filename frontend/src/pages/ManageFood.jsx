@@ -4,7 +4,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { CSVLink } from "react-csv";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-
+import adminApi from "../utils/adminApi";
 
 const ManageFood = () => {
 const [foods, setFoods] = useState([]);
@@ -36,8 +36,7 @@ const openEditModal = (food) => {
   setShowModal(true);
 };
 
-// const [foods, setFoods] =
-//   useState([]);
+
 
 const [currentPage,
   setCurrentPage] =
@@ -72,27 +71,6 @@ const fetchFoods = async (page = 1) => {
   }
 };
 
-// useEffect(() => {
-//   fetchFoods();
-// }, []);
-
-// const fetchFoods = async () => {
-//   try {
-
-//     const response = await fetch(
-//       "http://127.0.0.1:8000/api/foods/"
-//     );
-
-//     const data = await response.json();
-
-//     setFoods(data);
-
-//   } catch (error) {
-
-//     console.log(error);
-
-//   }
-// };
 
 const filteredFoods = (foods || []).filter(
   (food) =>
@@ -110,87 +88,54 @@ const handleDelete = async (id) => {
 
   try {
 
-    const response = await fetch(
-      `http://127.0.0.1:8000/api/food/delete/${id}/`,
-      {
-        method: "DELETE",
-      }
-    );
+    await adminApi.delete(
+  `food/delete/${id}/`
+);
 
-    const data = await response.json();
+toast.success("Food deleted successfully");
 
-    toast.success(data.message);
-
-    fetchFoods();
+await fetchFoods(currentPage);
 
   } catch (error) {
 
-    toast.error("Delete Failed");
+  console.log(error);
 
-  }
+  toast.error(
+    error.response?.data?.message || "Delete Failed"
+  );
+
+}
 };
 const handleUpdateFood = async () => {
 
   try {
 
-    const response =
-      await fetch(
-        `http://127.0.0.1:8000/api/food/update/${editFood.id}/`,
-        {
-          method: "PUT",
+    await adminApi.put(
+  `food/update/${editFood.id}/`,
+  {
+    item_name: editFood.item_name,
+    item_price: editFood.item_price,
+    item_quantity: editFood.item_quantity,
+    item_description: editFood.item_description,
+    is_available: editFood.is_available,
+  }
+);
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+toast.success("Food updated successfully");
 
-          body: JSON.stringify({
-            item_name:
-              editFood.item_name,
+setShowModal(false);
 
-            item_price:
-              editFood.item_price,
-
-            item_quantity:
-              editFood.item_quantity,
-
-            item_description:
-              editFood.item_description,
-
-            is_available:
-              editFood.is_available,
-          }),
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if (response.ok) {
-
-      toast.success(
-        data.message
-      );
-
-      setShowModal(false);
-
-      fetchFoods();
-
-    } else {
-
-      toast.error(
-        "Update Failed"
-      );
-
-    }
+await fetchFoods(currentPage);
 
   } catch (error) {
 
-    toast.error(
-      "Server Error"
-    );
+  console.log(error);
 
-  }
+  toast.error(
+    error.response?.data?.message || "Update Failed"
+  );
+
+}
 };
   return (
    <AdminLayout>

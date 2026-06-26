@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 
 import AdminLayout from "../components/AdminLayout";
 import { FaSearch } from "react-icons/fa";
@@ -13,7 +13,6 @@ const ManageOrders = () => {
   }, []);
 
   const fetchOrders = async (status = "") => {
-    //const token = localStorage.getItem("admin_access");
 
     let url = "admin/orders/";
 
@@ -21,31 +20,32 @@ const ManageOrders = () => {
       url += `?status=${status}`;
     }
 
-    const response = await api.get(url, {
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
-    });
+    const response = await adminApi.get(url);
 
     setOrders(response.data);
   };
   const updateStatus = async (id, status) => {
-    //const token = localStorage.getItem("admin_access");
 
-    await api.patch(
+  try {
+
+    await adminApi.patch(
       `admin/orders/${id}/status/`,
       {
         status,
-      },
-      {
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
-      },
+      }
     );
 
-    fetchOrders();
-  };
+    await fetchOrders();
+
+  } catch (error) {
+
+    console.log(error);
+
+    toast.error("Status update failed");
+
+  }
+
+};
 
   const filteredOrders = orders.filter(
     (order) =>

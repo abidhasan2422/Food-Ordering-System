@@ -4,50 +4,44 @@ import AdminLayout from "../components/AdminLayout";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import adminApi from "../utils/adminApi";
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-    console.log("Button Clicked");
+    if (!categoryName.trim()) {
+  toast.error("Category Name is required");
+  return;
+}
   try {
-    const response = await fetch(
-      "http://127.0.0.1:8000/api/add-category/",
+    const response = await adminApi.post(
+      "add-category/",
       {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
+  
           category_name: categoryName,
-        }),
+      
       }
     );
 
-    const data = await response.json();
-    console.log(data);
-    if (response.ok) {
-      console.log("Success Block Running");
 
-      toast.success(data.message);
+     //console.log(response.data);
 
-      setCategoryName("");
+     toast.success(response.data.message);
 
-    } else {
+     setCategoryName("");
 
-      toast.error("Failed to Add Category");
-
-    }
+   
 
   } catch (error) {
 
     console.log(error);
 
-    toast.error("Server Error");
-
+    toast.error(
+      error.response?.data?.message ||
+      "Server Error"
+    );
   }
 };
 

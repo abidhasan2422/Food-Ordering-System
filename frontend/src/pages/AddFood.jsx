@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { FaPlusCircle } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import { useRef } from "react";
+import adminApi from "../utils/adminApi";
 
 
 const AddFood = () => {
@@ -58,87 +59,51 @@ const AddFood = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
+  try {
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append(
-        "category",
-        foodData.category
-      );
+    formData.append("category", foodData.category);
+    formData.append("item_name", foodData.item_name);
+    formData.append("item_price", foodData.item_price);
+    formData.append("item_description", foodData.item_description);
+    formData.append("item_quantity", foodData.item_quantity);
+    formData.append("is_available", foodData.is_available);
+    formData.append("image", foodData.image);
 
-      formData.append(
-        "item_name",
-        foodData.item_name
-      );
+    const response = await adminApi.post(
+      "add-food/",
+      formData
+    );
 
-      formData.append(
-        "item_price",
-        foodData.item_price
-      );
+    toast.success(response.data.message);
 
-      formData.append(
-        "item_description",
-        foodData.item_description
-      );
+    setFoodData({
+      category: "",
+      item_name: "",
+      item_price: "",
+      item_description: "",
+      item_quantity: "",
+      image: null,
+      is_available: true,
+    });
 
-      formData.append(
-        "item_quantity",
-        foodData.item_quantity
-      );
+    fileInputRef.current.value = "";
 
-      formData.append(
-        "is_available",
-        foodData.is_available
-      );
+  } catch (error) {
 
-      formData.append(
-        "image",
-        foodData.image
-      );
+    console.log(error);
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/add-food/",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-
-        toast.success(data.message);
-
-        setFoodData({
-          category: "",
-          item_name: "",
-          item_price: "",
-          item_description: "",
-          item_quantity: "",
-          image: null,
-          is_available: true,
-        });
-         fileInputRef.current.value = "";
-      } else {
-
-        toast.error("Failed to Add Food");
-
-      }
-
-    } catch (error) {
-
-      console.log(error);
-
-      toast.error("Server Error");
-
-    }
-  };
+    toast.error(
+      error.response?.data?.message ||
+      "Server Error"
+    );
+  }
+};
 
   return (
     <AdminLayout>

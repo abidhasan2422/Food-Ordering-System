@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 
 import AdminLayout from "../components/AdminLayout";
 import { FaSearch, FaUsers } from "react-icons/fa";
@@ -15,15 +15,10 @@ const Customers = () => {
 
   const fetchCustomers = async () => {
     try {
-      //const token = localStorage.getItem("admin_access");
 
-      const response = await api.get(
+      const response = await adminApi.get(
         "admin/customers/",
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
+        
       );
 
       setCustomers(response.data);

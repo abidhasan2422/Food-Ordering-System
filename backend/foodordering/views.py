@@ -143,6 +143,7 @@ def update_category(request, id):
     return Response(serializer.errors)
 
 @api_view(['POST'])
+@permission_classes([IsAdminUser])
 def add_food(request):
 
     serializer = FoodSerializer(
@@ -185,6 +186,7 @@ def get_foods(request):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAdminUser])
 def delete_food(
     request,
     id
@@ -200,6 +202,7 @@ def delete_food(
     })
 
 @api_view(['PUT'])
+@permission_classes([IsAdminUser])
 def update_food(
     request,
     id

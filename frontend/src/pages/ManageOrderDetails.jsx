@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 
 import { useParams, Link } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
@@ -15,15 +15,10 @@ const ManageOrderDetails = () => {
 
   const fetchOrder = async () => {
     try {
-      //const token = localStorage.getItem("admin_access");
 
-      const response = await axios.get(
-        `/admin/order/${id}/`,
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // },
+      const response = await adminApi.get(
+        `admin/order/${id}/`,
+        
       );
 
       setOrder(response.data);

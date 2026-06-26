@@ -34,21 +34,7 @@ const SearchPage = () => {
     <>
      <Navbar />
     <div className="container py-5">
-      {/* <h2 className="text-center mb-4">Search Foods</h2>
-
-      <div className="input-group mb-4">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search food..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <button className="btn btn-warning" onClick={handleSearch}>
-          Search
-        </button>
-      </div> */}
+     
 
       <h5 className="mb-4">
         Showing {foods.length} results

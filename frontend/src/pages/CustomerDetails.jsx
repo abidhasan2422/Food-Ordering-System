@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 
 import { useParams, Link } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
@@ -15,15 +15,10 @@ const [search, setSearch] = useState("");
 
   const fetchCustomer = async () => {
     try {
-     // const token = localStorage.getItem("admin_access");
 
-      const response = await api.get(
+      const response = await adminApi.get(
         `admin/customers/${id}/`,
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // },
+        
       );
 
       setCustomer(response.data);

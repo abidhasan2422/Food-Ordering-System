@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
-import axios from "axios";
+import userApi from "../utils/userApi";
 // import Checkout from './Checkout';
 import { useContext } from "react";
 import { CartContext } from "../components/CartContext";
@@ -15,18 +15,13 @@ const FoodDetails = () => {
 
   const addToCart = async () => {
     try {
-      const token = localStorage.getItem("access_token");
 
-      await axios.post(
-        "http://127.0.0.1:8000/api/cart/add/",
+      await userApi.post(
+        "cart/add/",
         {
           food_id: food.id,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        
       );
       await fetchCartCount();
       navigate("/cart");
@@ -43,32 +38,7 @@ const FoodDetails = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
-  // const addToCart = () => {
 
-  //   const cart = JSON.parse(
-  //     localStorage.getItem("cart")
-  //   ) || [];
-
-  //   const existingItem = cart.find(
-  //     item => item.id === food.id
-  //   );
-
-  //   if(existingItem){
-  //     existingItem.quantity += 1;
-  //   }else{
-  //     cart.push({
-  //       ...food,
-  //       quantity: 1
-  //     });
-  //   }
-
-  //   localStorage.setItem(
-  //     "cart",
-  //     JSON.stringify(cart)
-  //   );
-
-  //   alert("Added to cart");
-  // };
 
  
 

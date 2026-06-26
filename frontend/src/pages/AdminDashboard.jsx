@@ -2,8 +2,7 @@ import AdminLayout from "../components/AdminLayout";
 import { Navigate } from "react-router-dom";
 import "../styles/dashboard.css";
 import { useEffect, useState } from "react";
-//import axios from "axios";
-import api from "../utils/adminApi";
+import adminApi from "../utils/adminApi";
 import {
   FaShoppingBag,
   FaClock,
@@ -50,15 +49,10 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      //const token = localStorage.getItem("admin_access");
 
-      const response = await api.get(
+      const response = await adminApi.get(
         "admin/dashboard/stats/",
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // },
+  
       );
 
       setStats(response.data);

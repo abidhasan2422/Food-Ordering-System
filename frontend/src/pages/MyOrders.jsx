@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import axios from "axios";
+import userApi from "../utils/userApi";
 
 import PublicLayout from "../components/PublicLayout";
 
@@ -9,17 +9,21 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const token = localStorage.getItem("access_token");
+   const fetchOrders = async () => {
 
-      const response = await axios.get("http://127.0.0.1:8000/api/my-orders/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  try {
 
-      setOrders(response.data);
-    };
+    const response = await userApi.get("my-orders/");
+
+    setOrders(response.data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
 
     fetchOrders();
   }, []);

@@ -9,7 +9,7 @@ api.interceptors.request.use(
 
     const token =
       localStorage.getItem(
-        "admin_access"
+        "access_token"
       );
 
     if (token) {
@@ -38,7 +38,7 @@ api.interceptors.response.use(
 
       const refresh =
         localStorage.getItem(
-          "admin_refresh"
+          "refresh_token"
         );
 
       try {
@@ -55,7 +55,7 @@ api.interceptors.response.use(
           response.data.access;
 
         localStorage.setItem(
-          "admin_access",
+          "access_token",
           newAccess
         );
 
@@ -67,16 +67,16 @@ api.interceptors.response.use(
       } catch (err) {
 
         localStorage.removeItem(
-          "admin_access"
+          "access_token"
         );
 
         localStorage.removeItem(
-          "admin_refresh"
+          "refresh_token"
         );
-        
+        localStorage.removeItem("user");
 
         window.location.href =
-          "/admin-login";
+          "/login";
       }
     }
 

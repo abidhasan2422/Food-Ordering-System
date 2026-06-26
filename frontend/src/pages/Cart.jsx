@@ -1,5 +1,5 @@
 import React, { useEffect, useState,  useContext, } from "react";
-import axios from "axios";
+import userApi from "../utils/userApi";
 import PublicLayout from "../components/PublicLayout";
 import { useNavigate } from "react-router-dom";
 import { CartContext }
@@ -9,14 +9,10 @@ const Cart = () => {
   const { fetchCartCount } = useContext(CartContext);
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
-  const token = localStorage.getItem("access_token");
 
   const fetchCart = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await userApi.get("cart/", {
       });
 
       setCart(response.data);
@@ -31,14 +27,10 @@ const Cart = () => {
 
   const increaseQty = async (id) => {
     try {
-      await axios.patch(
-        `http://127.0.0.1:8000/api/cart/increase/${id}/`,
+      await userApi.patch(
+        `cart/increase/${id}/`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        
       );
       fetchCart();
       fetchCartCount();
@@ -49,14 +41,10 @@ const Cart = () => {
 
   const decreaseQty = async (id) => {
     try {
-      await axios.patch(
-        `http://127.0.0.1:8000/api/cart/decrease/${id}/`,
+      await userApi.patch(
+        `/cart/decrease/${id}/`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        
       );
      fetchCart();
 fetchCartCount();
@@ -68,11 +56,9 @@ fetchCartCount();
 
   const removeFromCart = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/cart/remove/${id}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await userApi.delete(`cart/remove/${id}/`, 
+        
+      );
       fetchCart();
 fetchCartCount();
     } catch (error) {
