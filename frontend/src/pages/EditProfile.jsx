@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import userApi from "../utils/userApi";
 import { useNavigate } from "react-router-dom";
+import PublicLayout from "../components/PublicLayout";
+import {FaTimes , FaSave} from "react-icons/fa";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -63,7 +65,9 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="container py-5">
+    <PublicLayout>
+    {/* <div className="container py-3"> */}
+    <div className="container mt-4 mb-4">
       <div className="row justify-content-center">
 
         <div className="col-lg-7">
@@ -72,7 +76,7 @@ const EditProfile = () => {
 
             <div className="card-header bg-dark text-white text-center py-4">
               <h3 className="mb-0">Edit Profile</h3>
-            </div>
+<p>Update your personal information below.</p>            </div>
 
             <div className="card-body p-4">
 
@@ -108,7 +112,7 @@ const EditProfile = () => {
                   />
                 </div>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label fw-semibold">
                     Email Address
                   </label>
@@ -119,7 +123,7 @@ const EditProfile = () => {
                     value={formData.email}
                     disabled
                   />
-                </div>
+                </div> */}
 
                 <div className="mb-4">
                   <label className="form-label fw-semibold">
@@ -136,13 +140,14 @@ const EditProfile = () => {
                   />
                 </div>
 
-                <div className="d-flex justify-content-end gap-2">
+                {/* <div className="d-flex justify-content-end gap-2">
 
                   <button
                     type="button"
                     className="btn btn-outline-secondary"
                     onClick={() => navigate("/profile")}
                   >
+                    <FaTimes className="me-2" />
                     Cancel
                   </button>
 
@@ -150,10 +155,47 @@ const EditProfile = () => {
                     type="submit"
                     className="btn btn-dark"
                   >
+                      <FaSave className="me-2" />
                     Save Changes
                   </button>
 
-                </div>
+                </div> */}
+                <div className="d-flex justify-content-end gap-3 mt-4">
+
+  <button
+    type="button"
+    className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+    onClick={() => navigate("/profile")}
+    style={{
+      minWidth: "170px",
+      height: "50px",
+      borderRadius: "12px",
+      fontWeight: "600",
+      fontSize: "16px",
+      transition: "0.3s ease",
+    }}
+  >
+    <FaTimes size={18} className="me-2" />
+    Cancel
+  </button>
+
+  <button
+    type="submit"
+    className="btn btn-dark d-flex align-items-center justify-content-center"
+    style={{
+      minWidth: "170px",
+      height: "50px",
+      borderRadius: "12px",
+      fontWeight: "600",
+      fontSize: "16px",
+      transition: "0.3s ease",
+    }}
+  >
+    <FaSave size={18} className="me-2" />
+    Save Changes
+  </button>
+
+</div>
 
               </form>
 
@@ -165,6 +207,7 @@ const EditProfile = () => {
 
       </div>
     </div>
+    </PublicLayout>
   );
 };
 

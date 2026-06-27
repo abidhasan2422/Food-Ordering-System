@@ -1865,7 +1865,7 @@ def export_order_report_excel(request):
 
     return response
 
-from .serializers import UserProfileSerializer,UserUpdateSerializer
+from .serializers import UserProfileSerializer,UserUpdateSerializer,ChangePasswordSerializer
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -1894,3 +1894,43 @@ def update_profile(request):
         })
 
     return Response(serializer.errors)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+
+    serializer = ChangePasswordSerializer(
+        data=request.data
+    )
+
+    if serializer.is_valid():
+
+        user = request.user
+
+        old_password = serializer.validated_data["old_password"]
+        new_password = serializer.validated_data["new_password"]
+
+        if not user.check_password(old_password):
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Old password is incorrect."
+                },
+                status=400
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Password changed successfully."
+            }
+        )
+
+    return Response(
+        serializer.errors,
+        status=400
+    )

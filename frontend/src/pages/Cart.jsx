@@ -12,8 +12,7 @@ const Cart = () => {
 
   const fetchCart = async () => {
     try {
-      const response = await userApi.get("cart/", {
-      });
+      const response = await userApi.get("cart/");
 
       setCart(response.data);
     } catch (error) {

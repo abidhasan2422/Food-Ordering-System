@@ -2,6 +2,7 @@ import React,{ useEffect, useState } from "react";
 import PublicLayout from "../components/PublicLayout";
 import userApi from "../utils/userApi";
 import { useNavigate } from 'react-router-dom';
+import { FaUserEdit,FaLock } from "react-icons/fa";
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -87,16 +88,47 @@ const Profile = () => {
           </div>
 
           {/* Footer */}
-          <div className="card-footer bg-white border-0 text-center pb-4">
+          {/* <div className="card-footer bg-white border-0 text-center pb-4">
             <button className="btn btn-dark px-4 me-2 "
              onClick={() => navigate("/edit-profile")}>
+                <FaUserEdit className="me-2" />
               Edit Profile
             </button>
 
-            <button className="btn btn-outline-dark px-4">
+            <button className="btn btn-outline-dark px-4"
+              onClick={() => navigate("/change_password")}
+            >
+                <FaLock className="me-2" />
               Change Password
             </button>
-          </div>
+          </div> */}
+          <div className="card-footer bg-white border-0 py-4">
+
+  <div className="row g-3">
+
+    <div className="col-md-6">
+      <button
+        className="btn btn-outline-dark w-100 py-2"
+        onClick={() => navigate("/edit-profile")}
+      >
+        <FaUserEdit className="me-2" />
+        Edit Profile
+      </button>
+    </div>
+
+    <div className="col-md-6">
+      <button
+        className="btn btn-dark w-100 py-2"
+        onClick={() => navigate("/change_password")}
+      >
+        <FaLock className="me-2" />
+        Change Password
+      </button>
+    </div>
+
+  </div>
+
+</div>
 
         </div>
       </div>
