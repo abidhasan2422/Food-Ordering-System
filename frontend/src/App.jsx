@@ -29,6 +29,7 @@ import OrderReport from "./pages/OrderReport";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import ChangePassword from "./pages/ChangePassword";
+import Menu from "./pages/Menu";
 const App = () => {
   return (
     <CartProvider>
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/profile" element={  <UserProtectedRoute>  <Profile /> </UserProtectedRoute>  } />
           <Route path="/edit-profile" element={  <UserProtectedRoute>  <EditProfile /> </UserProtectedRoute>  } />
           <Route path="/change_password" element={  <UserProtectedRoute>  <ChangePassword /> </UserProtectedRoute>  } />
+          <Route path="/menu" element={<Menu />} />
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}

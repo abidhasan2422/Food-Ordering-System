@@ -153,9 +153,15 @@ useEffect(() => {
       Ready to Order Your Favorite Food?
     </h4>
 
-    <Link to="/foods" className="btn btn-dark btn-lg mt-3">
+    {/* <Link to="/foods" className="btn btn-dark btn-lg mt-3">
       Browse Full Menu
-    </Link>
+    </Link> */}
+    <button
+    className="btn btn-dark"
+    onClick={() => navigate("/menu")}
+>
+    Browse Full Menu
+</button>
   </section>
 </section>
 
