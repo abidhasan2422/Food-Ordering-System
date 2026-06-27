@@ -4,7 +4,8 @@ import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AddCategory from "./pages/AddCategory";
-// import ProtectedRoute from "./components/ProtectedRoute";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import UserProtectedRoute from "./components/UserProtectedRoute";
 import ManageCategory from "./pages/ManageCategory";
 import "./styles/sidebar.css";
 import AddFood from "./pages/AddFood";
@@ -37,25 +38,25 @@ const App = () => {
           <Route path="/admin-login" element={<AdminLogin />}>
             {" "}
           </Route>
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/category/add" element={<AddCategory />} />
-          <Route path="/admin/category/manage" element={<ManageCategory />} />
-          <Route path="/admin/food/add" element={<AddFood />} />
+          <Route path="/admin-dashboard" element={ <AdminProtectedRoute> <AdminDashboard /> </AdminProtectedRoute>} />
+          <Route path="/admin/category/add" element={<AdminProtectedRoute> <AddCategory /> </AdminProtectedRoute>} />
+          <Route path="/admin/category/manage" element={<AdminProtectedRoute> <ManageCategory /> </AdminProtectedRoute>} />
+          <Route path="/admin/food/add" element={<AdminProtectedRoute> <AddFood /> </AdminProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/food/:id" element={<FoodDetails />} />
-          <Route path="/admin/food/manage" element={<ManageFood />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/my-orders" element={<MyOrders />} />
-          <Route path="/order/:id" element={<OrderDetails />} />
-          <Route path="/admin/orders" element={<ManageOrders />} />
-          <Route path="/admin/order/:id" element={<ManageOrderDetails />} />
-          <Route path="/admin/customers" element={<Customers />} />
-          <Route path="/admin/customers/:id" element={<CustomerDetails />} />
-          <Route path="/admin/sales-report" element={<SalesReport />} />
-          <Route path="/admin/order-report" element={<OrderReport />} />
+          <Route path="/admin/food/manage" element={<AdminProtectedRoute> <ManageFood /> </AdminProtectedRoute>} />
+          <Route path="/cart" element={  <UserProtectedRoute>  <Cart /> </UserProtectedRoute>  } />
+          <Route path="/checkout" element={<UserProtectedRoute> <Checkout /> </UserProtectedRoute>} />
+          <Route path="/order-success" element={<UserProtectedRoute> <OrderSuccess /> </UserProtectedRoute>} />
+          <Route path="/my-orders" element={<UserProtectedRoute> <MyOrders /></UserProtectedRoute>} />
+          <Route path="/order/:id" element={<AdminProtectedRoute> <OrderDetails /> </AdminProtectedRoute>} />
+          <Route path="/admin/orders" element={<AdminProtectedRoute> <ManageOrders /> </AdminProtectedRoute>} />
+          <Route path="/admin/order/:id" element={<AdminProtectedRoute> <ManageOrderDetails /> </AdminProtectedRoute>} />
+          <Route path="/admin/customers" element={<AdminProtectedRoute> <Customers /> </AdminProtectedRoute>} />
+          <Route path="/admin/customers/:id" element={<AdminProtectedRoute> <CustomerDetails /> </AdminProtectedRoute>} />
+          <Route path="/admin/sales-report" element={<AdminProtectedRoute> <SalesReport /> </AdminProtectedRoute>} />
+          <Route path="/admin/order-report" element={<AdminProtectedRoute> <OrderReport /> </AdminProtectedRoute>} />
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}

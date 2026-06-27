@@ -6,10 +6,17 @@ const AdminHeader = ({ setSidebarOpen }) => {
 
   const handleLogout = () => {
 
-    localStorage.removeItem("isAdminLoggedIn");
+  // Remove admin authentication data
+  localStorage.removeItem("admin_access");
+  localStorage.removeItem("admin_refresh");
 
-    navigate("/admin-login");
-  };
+  // (Optional) Remove admin info if you store it
+  localStorage.removeItem("admin");
+
+  // Redirect to login page
+  navigate("/admin-login", { replace: true });
+
+};
 
 
   return (
