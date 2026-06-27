@@ -26,6 +26,8 @@ import Customers from "./pages/Customers";
 import CustomerDetails from "./pages/CustomerDetails";
 import SalesReport from "./pages/SalesReport";
 import OrderReport from "./pages/OrderReport";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 const App = () => {
   return (
     <CartProvider>
@@ -57,6 +59,8 @@ const App = () => {
           <Route path="/admin/customers/:id" element={<AdminProtectedRoute> <CustomerDetails /> </AdminProtectedRoute>} />
           <Route path="/admin/sales-report" element={<AdminProtectedRoute> <SalesReport /> </AdminProtectedRoute>} />
           <Route path="/admin/order-report" element={<AdminProtectedRoute> <OrderReport /> </AdminProtectedRoute>} />
+          <Route path="/profile" element={  <UserProtectedRoute>  <Profile /> </UserProtectedRoute>  } />
+          <Route path="/edit-profile" element={  <UserProtectedRoute>  <EditProfile /> </UserProtectedRoute>  } />
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}

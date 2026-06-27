@@ -128,5 +128,17 @@ path(
     views.export_order_report_excel,
     name="export_order_report_excel"
 ),
+path(
+    "profile/",
+    views.profile,
+    name="profile"
+   
+),
+path(
+    "update/profile/",
+    views.update_profile,
+    name="update_profile"
+   
+),
 
 ]

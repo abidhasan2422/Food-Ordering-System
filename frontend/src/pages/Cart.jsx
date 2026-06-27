@@ -189,19 +189,7 @@ fetchCartCount();
             >
               Proceed To Checkout
             </button>
-            {/* <button
-  className="btn btn-warning btn-lg w-100"
-  onClick={() =>
-    navigate("/checkout", {
-      state: {
-        food: food,
-        quantity: quantity,
-      },
-    })
-  }
->
-  Proceed To Checkout
-</button> */}
+            
           </div>
         </div>
       </div>
