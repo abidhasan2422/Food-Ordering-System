@@ -1934,3 +1934,16 @@ def change_password(request):
         serializer.errors,
         status=400
     )
+
+from .serializers import MenuCategorySerializer
+@api_view(["GET"])
+def menu(request):
+
+    categories = Category.objects.all()
+
+    serializer = MenuCategorySerializer(
+        categories,
+        many=True
+    )
+
+    return Response(serializer.data)

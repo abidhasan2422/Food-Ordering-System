@@ -146,5 +146,11 @@ path(
     name="change_password"
    
 ),
+path(
+    "menu/",
+    views.menu,
+    name="menu"
+   
+),
 
 ]

@@ -164,3 +164,20 @@ class ChangePasswordSerializer(serializers.Serializer):
                 {"confirm_password": "Passwords do not match."}
             )
         return data
+
+
+class MenuCategorySerializer(serializers.ModelSerializer):
+
+    foods = FoodSerializer(
+        source="food_set",
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Category
+        fields = [
+            "id",
+            "category_name",
+            "foods",
+        ]
