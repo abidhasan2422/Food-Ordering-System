@@ -153,4 +153,30 @@ path(
    
 ),
 
+path(
+        "wishlist/add/<int:food_id>/",
+        views.add_to_wishlist,
+        name ="add_to_wishlist"
+    ),
+
+    path(
+        "wishlist/",
+        views.wishlist_list,
+        name="wishlist_list"
+    ),
+
+    path(
+        "wishlist/remove/<int:food_id>/",
+        views.remove_wishlist,
+        name="remove_wishlist"
+    ),
+
+    path(
+        "wishlist/check/<int:food_id>/",
+        views.check_wishlist,
+        name="check_wishlist"
+    ),
+
+
+
 ]

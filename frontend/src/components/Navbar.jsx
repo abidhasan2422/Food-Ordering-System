@@ -85,7 +85,8 @@ const Navbar = () => {
                     to="/cart"
                     className="btn btn-outline-light position-relative"
                   >
-                    <i className="fas fa-shopping-cart"></i>
+                    
+                    <i className="fas fa-shopping-cart"></i> 
 
                    {cartCount > 0 && (
   <span
@@ -98,7 +99,7 @@ const Navbar = () => {
       rounded-pill
       bg-danger
     "
-  >
+  > 
     {cartCount}
   </span>
 )}
@@ -107,7 +108,7 @@ const Navbar = () => {
 
 
                  <li className="nav-item mx-1">
-              <Link className="nav-link" to="#">
+              <Link className="nav-link" to="/wishlist">
                 {" "}
                 <FaRegHeart className="me-2" /> Wishlist
               </Link>

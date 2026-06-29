@@ -30,6 +30,7 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import ChangePassword from "./pages/ChangePassword";
 import Menu from "./pages/Menu";
+import Wishlist from "./pages/Wishlist";
 const App = () => {
   return (
     <CartProvider>
@@ -65,6 +66,8 @@ const App = () => {
           <Route path="/edit-profile" element={  <UserProtectedRoute>  <EditProfile /> </UserProtectedRoute>  } />
           <Route path="/change_password" element={  <UserProtectedRoute>  <ChangePassword /> </UserProtectedRoute>  } />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/wishlist" element={  <UserProtectedRoute>  <Wishlist /> </UserProtectedRoute>  } />
+
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
         <Route path="/admin/restaurant/manage" element={<RestaurantList />} /> */}

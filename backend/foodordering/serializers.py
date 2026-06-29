@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category,Food,User,CartItem,Order,OrderItem
+from .models import Category,Food,User,CartItem,Order,OrderItem, Wishlist
 from django.contrib.auth.hashers import make_password
 
 
@@ -180,4 +180,18 @@ class MenuCategorySerializer(serializers.ModelSerializer):
             "id",
             "category_name",
             "foods",
+        ]
+
+
+
+
+class WishlistSerializer(serializers.ModelSerializer):
+
+    food = FoodSerializer(read_only=True)
+
+    class Meta:
+        model = Wishlist
+        fields = [
+            "id",
+            "food",
         ]

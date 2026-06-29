@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer,OrderSerializer
-from .models import Category,Food,User,Cart,CartItem,OrderItem,Order
+from .serializers import  CategorySerializer,FoodSerializer,RegisterSerializer,LoginSerializer,CartItemSerializer,OrderSerializer, WishlistSerializer
+from .models import Category,Food,User,Cart,CartItem,OrderItem,Order, Wishlist
 from django.shortcuts import get_object_or_404
 from .Pagination import FoodPagination, OrderReportPagination
 import random
@@ -1947,3 +1947,68 @@ def menu(request):
     )
 
     return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_to_wishlist(request, food_id):
+
+    food = get_object_or_404(
+        Food,
+        id=food_id
+    )
+
+    wishlist, created = Wishlist.objects.get_or_create(
+        user=request.user,
+        food=food
+    )
+
+    if created:
+        return Response({
+            "success": True,
+            "message": "Added to wishlist."
+        })
+
+    return Response({
+        "success": False,
+        "message": "Already in wishlist."
+    })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def wishlist_list(request):
+
+    wishlist = Wishlist.objects.filter(
+        user=request.user
+    )
+
+    serializer = WishlistSerializer(
+        wishlist,
+        many=True
+    )
+
+    return Response(serializer.data)
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def remove_wishlist(request, food_id):
+
+    Wishlist.objects.filter(
+        user=request.user,
+        food_id=food_id
+    ).delete()
+
+    return Response({
+        "message": "Removed from wishlist."
+    })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def check_wishlist(request, food_id):
+
+    exists = Wishlist.objects.filter(
+        user=request.user,
+        food_id=food_id
+    ).exists()
+
+    return Response({
+        "is_wishlisted": exists
+    })
