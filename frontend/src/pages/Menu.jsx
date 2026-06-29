@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import FoodCard from "../components/FoodCard";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
-
 const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
-const [activeCategory, setActiveCategory] = useState(null);
-const [hoverClear, setHoverClear] = useState(false);
+const [selectedCategory, setSelectedCategory] = useState("All");
+  const [hoverClear, setHoverClear] = useState(false);
+
+  const [sortBy, setSortBy] = useState("Default");
+  const [availableOnly, setAvailableOnly] = useState(false);
+
   const fetchMenu = async () => {
     try {
       const response = await axios.get(
@@ -25,26 +28,43 @@ const [hoverClear, setHoverClear] = useState(false);
   useEffect(() => {
     fetchMenu();
   }, []);
-const hasFood = categories.some((category) =>
-  category.foods.some((food) =>
-    food.item_name
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  )
-);
 
+  const totalResults = useMemo(() => {
+    return categories.reduce((total, category) => {
+      const foods = category.foods.filter(
+        (food) =>
+          food.item_name
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          category.category_name
+            .toLowerCase()
+            .includes(search.toLowerCase())
+      );
 
-const totalResults = categories.reduce((total, category) => {
+      return total + foods.length;
+    }, 0);
+  }, [categories, search]);
 
-  const filteredFoods = category.foods.filter((food) =>
-    food.item_name
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  const hasFood = totalResults > 0;
 
-  return total + filteredFoods.length;
+//   const resetFilters = () => {
+//     setSearch("");
+//     setSortBy("Default");
+//     setAvailableOnly(false);
+   
+//   };
 
-}, 0);
+  const resetFilters = () => {
+
+    setSearch("");
+
+    setSortBy("Default");
+
+    setAvailableOnly(false);
+
+    setSelectedCategory("All");
+
+  };
 
   return (
     <>
@@ -53,209 +73,431 @@ const totalResults = categories.reduce((total, category) => {
       <div className="container py-5">
 
         <h2 className="fw-bold text-center mb-2">
-    Browse Our Menu
-</h2>
+          Browse Our Menu
+        </h2>
 
-<p className="text-center text-muted mb-5">
-    Explore delicious foods by category
-</p>
+        <p className="text-center text-muted mb-5">
+          Explore delicious foods by category
+        </p>
 
-        {/* Sticky Search & Category Buttons */}
+        <div
+          className="sticky-top bg-white py-4 mb-5 rounded-4 shadow"
+          style={{
+            zIndex: 1000,
+            border: "1px solid #eee",
+          }}
+        >
 
-       <div
-  className="sticky-top bg-white py-4 mb-5 rounded-4 shadow"
-  style={{
-    zIndex: 1000,
-    border: "1px solid #eee",
-  }}
->
+          {/* Search */}
 
-<div className="position-relative mb-3">
+          <div className="position-relative mb-3">
 
-  {/* Search Icon */}
-  <FaSearch
-    className="position-absolute text-secondary"
-    style={{
-      top: "50%",
-      left: "15px",
-      transform: "translateY(-50%)",
-      zIndex: 2,
-    }}
-  />
+            <FaSearch
+              className="position-absolute text-secondary"
+              style={{
+                top: "50%",
+                left: "18px",
+                transform: "translateY(-50%)",
+                zIndex: 2,
+              }}
+            />
 
-  {/* Input */}
-  <input
-    type="text"
-    className="form-control ps-5 pe-5"
-    placeholder="Search your favourite food..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    style={{
-      height: "55px",
-      lineHeight: "55px",
-      borderRadius: "30px",
-      fontSize: "17px",
-    }}
-  />
+            <input
+              type="text"
+              className="form-control ps-5 pe-5"
+              placeholder="Search burgers, pizza, drinks..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+              style={{
+                height: "55px",
+                borderRadius: "30px",
+                fontSize: "16px",
+              }}
+            />
 
-  {/* Clear Button */}
-  {search && (
-    <FaTimes
-      onMouseEnter={() => setHoverClear(true)}
-      onMouseLeave={() => setHoverClear(false)}
-      onClick={() => setSearch("")}
-      style={{
-        position: "absolute",
-        top: "50%",
-        right: "18px",
-        transform: "translateY(-50%)",
-        cursor: "pointer",
-        fontSize: "16px",
-        color: hoverClear ? "#dc3545" : "#6c757d",
-        transition: "0.2s",
-      }}
-    />
-  )}
-
-</div>
-
-{/* Search Result Count */}
-{search && (
-  <p
-    className="text-muted mb-3"
-    style={{ fontSize: "15px" }}
-  >
-    {/* <FaSearch className="me-2 text-primary" /> */}
-
-    Showing <strong>{totalResults}</strong>{" "}
-    {totalResults === 1 ? "item" : "items"} matching{" "}
-    <strong>"{search}"</strong>
-  </p>
-)}
-
-          <div className="d-flex flex-wrap gap-2">
-
-            {categories.map((category) => (
-
-            <button
-  key={category.id}
-  className={`btn rounded-pill px-4 py-2 shadow-sm ${
-    activeCategory === category.id
-      ? "btn-primary"
-      : "btn-outline-primary"
-  }`}
-  style={{
-    transition: "all 0.3s ease",
-    transform:
-      activeCategory === category.id
-        ? "translateY(-2px)"
-        : "translateY(0)",
-  }}
-  onClick={() => {
-    setActiveCategory(category.id);
-
-    document
-      .getElementById(`category-${category.id}`)
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-  }}
->
-  {category.category_name}
-</button>
-
-            ))}
+            {search && (
+              <FaTimes
+                onMouseEnter={() =>
+                  setHoverClear(true)
+                }
+                onMouseLeave={() =>
+                  setHoverClear(false)
+                }
+                onClick={() =>
+                  setSearch("")
+                }
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  right: "18px",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  color: hoverClear
+                    ? "#dc3545"
+                    : "#6c757d",
+                  transition: "0.2s",
+                }}
+              />
+            )}
 
           </div>
 
-        </div>
+          {search && (
+            <div className="d-flex justify-content-between align-items-center mb-3">
 
-      {/* Categories */}
+              <p
+                className="text-muted mb-0"
+                style={{
+                  fontSize: "15px",
+                }}
+              >
+                Showing
+                {" "}
+                <strong>
+                  {totalResults}
+                </strong>
+                {" "}
+                {totalResults === 1
+                  ? "item"
+                  : "items"}
+                {" "}
+                matching
+                {" "}
+                <strong>
+                  "{search}"
+                </strong>
+              </p>
 
-{!hasFood ? (
+           
 
+            </div>
+          )}
 
-<div className="text-center py-5">
+          {/* Filters */}
 
-  <img
-    src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png"
-    alt="No Food"
-    style={{
-      width: "130px",
-      opacity: 0.8,
-    }}
-  />
+          <div className="row g-3 mb-4">
+            <div className="col-md-4">
 
-  <h3 className="fw-bold mt-4">
-    No Food Found
-  </h3>
+  <label className="form-label fw-semibold">
+    Category
+  </label>
 
-  <p className="text-muted">
-    We couldn't find any food matching
-    <strong> "{search}" </strong>
-  </p>
+  <select
+    className="form-select"
+    value={selectedCategory}
+    onChange={(e) =>
+      setSelectedCategory(e.target.value)
+    }
+  >
+
+    <option value="All">
+      All Categories
+    </option>
+
+    {categories.map((category) => (
+        
+
+      <option
+        key={category.id}
+        value={category.category_name}
+      >
+        {category.category_name}
+      </option>
+
+    ))}
+
+  </select>
 
 </div>
 
-) : (
+            <div className="col-md-4">
 
-  categories.map((category) => {
+              <label className="form-label fw-semibold">
+                Sort By
+              </label>
 
-    const filteredFoods = category.foods.filter((food) =>
-      food.item_name
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
- 
+              <select
+                className="form-select"
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(
+                    e.target.value
+                  )
+                }
+              >
 
-    if (filteredFoods.length === 0) return null;
+                <option>
+                  Default
+                </option>
 
-    return (
+                <option>
+                  Price Low to High
+                </option>
 
-      <div
-        key={category.id}
-        id={`category-${category.id}`}
-        className="mb-5"
-      >
+                <option>
+                  Price High to Low
+                </option>
 
-        <h3
-  className="fw-bold mb-4"
-  style={{
-    color: "#0d6efd",
-    borderLeft: "5px solid #0d6efd",
-    paddingLeft: "12px",
-  }}
->
-          {category.category_name}
-        </h3>
+                <option>
+                  A-Z
+                </option>
 
-       <div className="row justify-content-center">
+                <option>
+                  Z-A
+                </option>
 
-          {filteredFoods.map((food) => (
+              </select>
 
-            <div
-              className="col-lg-4 col-md-6 mb-4"
-              key={food.id}
-            >
-              <FoodCard food={food} />
             </div>
 
-          ))}
+            <div className="col-md-4 d-flex align-items-end">
+
+              <div className="form-check">
+
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  checked={availableOnly}
+                  onChange={(e) =>
+                    setAvailableOnly(
+                      e.target.checked
+                    )
+                  }
+                />
+
+                <label className="form-check-label fw-semibold">
+                  Available Only
+                </label>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Category Buttons */}
+
+          {/* <div className="d-flex flex-wrap gap-2">
+
+            {categories.map((category) => (
+
+              <button
+                key={category.id}
+                className={`btn rounded-pill px-4 py-2 shadow-sm ${
+                  activeCategory === category.id
+                    ? "btn-primary"
+                    : "btn-outline-primary"
+                }`}
+                style={{
+                  transition:
+                    "all .3s ease",
+                  transform:
+                    activeCategory ===
+                    category.id
+                      ? "translateY(-2px)"
+                      : "translateY(0)",
+                }}
+                onClick={() => {
+
+                  setActiveCategory(
+                    category.id
+                  );
+
+                  document
+                    .getElementById(
+                      `category-${category.id}`
+                    )
+                    ?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+
+                }}
+              >
+
+                {category.category_name}
+
+              </button>
+
+            ))}
+
+          </div> */}
 
         </div>
 
+                {/* Menu */}
+
+        {!hasFood ? (
+
+          <div className="text-center py-5">
+
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png"
+              alt="No Food"
+              style={{
+                width: "130px",
+                opacity: 0.8,
+              }}
+            />
+
+            <h3 className="fw-bold mt-4">
+              No Food Found
+            </h3>
+
+            <p className="text-muted">
+              We couldn't find any food matching
+              <strong> "{search}" </strong>
+            </p>
+
+            <button
+              className="btn btn-primary mt-3"
+              onClick={resetFilters}
+            >
+              Show All Foods
+            </button>
+
+          </div>
+
+        ) : (
+
+          categories.map((category) => {
+            if (
+  selectedCategory !== "All" &&
+  category.category_name !== selectedCategory
+) {
+  return null;
+}
+
+            let filteredFoods = category.foods.filter(
+              (food) =>
+                food.item_name
+                  .toLowerCase()
+                  .includes(search.toLowerCase()) ||
+
+                category.category_name
+                  .toLowerCase()
+                  .includes(search.toLowerCase())
+            );
+
+            // Available Only
+
+            if (availableOnly) {
+
+              filteredFoods = filteredFoods.filter(
+                (food) => food.is_available
+              );
+
+            }
+
+            // Sorting
+
+            if (sortBy === "Price Low to High") {
+
+              filteredFoods.sort(
+                (a, b) =>
+                  Number(a.item_price) -
+                  Number(b.item_price)
+              );
+
+            }
+
+            if (sortBy === "Price High to Low") {
+
+              filteredFoods.sort(
+                (a, b) =>
+                  Number(b.item_price) -
+                  Number(a.item_price)
+              );
+
+            }
+
+            if (sortBy === "A-Z") {
+
+              filteredFoods.sort(
+                (a, b) =>
+                  a.item_name.localeCompare(
+                    b.item_name
+                  )
+              );
+
+            }
+
+            if (sortBy === "Z-A") {
+
+              filteredFoods.sort(
+                (a, b) =>
+                  b.item_name.localeCompare(
+                    a.item_name
+                  )
+              );
+
+            }
+
+            if (filteredFoods.length === 0) {
+
+              return null;
+
+            }
+
+            return (
+
+              <div
+                key={category.id}
+                id={`category-${category.id}`}
+                className="mb-5"
+                style={{
+                  scrollMarginTop: "140px",
+                }}
+              >
+
+                <h3
+                  className="fw-bold mb-4"
+                  style={{
+                    color: "#0d6efd",
+                    borderLeft:
+                      "5px solid #0d6efd",
+                    paddingLeft: "12px",
+                  }}
+                >
+                  {category.category_name}
+                </h3>
+
+                <div className="row g-4 justify-content-center">
+
+                  {filteredFoods.map((food) => (
+
+                    <div
+                      key={food.id}
+                      className="col-lg-4 col-md-6"
+                    >
+
+                      <FoodCard
+                        food={food}
+                      />
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+              </div>
+
+            );
+
+          })
+
+        )}
+
       </div>
 
-    );
-
-  })
-
-)}
-
-      </div>
     </>
+
   );
+
 };
 
 export default Menu;

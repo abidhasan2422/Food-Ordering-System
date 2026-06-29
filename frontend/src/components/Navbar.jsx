@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaSignInAlt,
-  FaTruck,
+
   FaUserShield,
   FaUtensils,
   FaShoppingCart,
@@ -10,7 +10,7 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import "../styles/layout.css";
-
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { CartContext } from "./CartContext";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
@@ -73,12 +73,7 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-            <li className="nav-item mx-1">
-              <Link className="nav-link" to="#">
-                {" "}
-                <FaTruck className="me-2" /> Track
-              </Link>
-            </li>
+           
 
             {token ? (
               <>
@@ -109,6 +104,14 @@ const Navbar = () => {
 )}
                   </Link>
                 </li>
+
+
+                 <li className="nav-item mx-1">
+              <Link className="nav-link" to="#">
+                {" "}
+                <FaRegHeart className="me-2" /> Wishlist
+              </Link>
+            </li>
                 <li className="nav-item mx-1">
                   <Link className="nav-link" to="/my-orders">
                     {" "}
