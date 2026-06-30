@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import userApi from "../utils/userApi";
 import FoodCard from "../components/FoodCard";
+ import PublicLayout from "../components/PublicLayout";
 
 const Wishlist = () => {
 
@@ -44,6 +45,7 @@ const Wishlist = () => {
     }
 
     return (
+       <PublicLayout> 
         <div className="container py-5">
 
             <div className="d-flex align-items-center mb-4">
@@ -105,6 +107,7 @@ const Wishlist = () => {
             }
 
         </div>
+        </PublicLayout>
     );
 
 };
