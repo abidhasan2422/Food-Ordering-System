@@ -3,6 +3,8 @@ import '../styles/search.css'
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import FoodCard from "../components/FoodCard";
+
 
 const SearchPage = () => {
   const [foods, setFoods] = useState([]);
@@ -43,23 +45,10 @@ const SearchPage = () => {
       <div className="row">
         {foods.map((food) => (
   <div
-    className="col-md-4 mb-4"
+    className="col-lg-3 col-md-4 col-sm-6 mb-4"
     key={food.id}
   >
-    <div className="card">
-      <img
-        src={`http://127.0.0.1:8000${food.image}`}
-        alt={food.item_name}
-      />
-
-      <div className="card-body">
-        <h5>{food.item_name}</h5>
-
-        <p>
-          ৳{food.item_price}
-        </p>
-      </div>
-    </div>
+    <FoodCard food={food} /> 
   </div>
 ))}
       </div>
