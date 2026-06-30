@@ -4,8 +4,7 @@ import '../styles/home.css'
 import { useNavigate ,Link } from "react-router-dom";
 import  { useState,useEffect } from "react";
 import { FaShoppingBasket } from "react-icons/fa";
-
-
+import FoodCard from "../components/FoodCard";
 const Home = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -65,55 +64,10 @@ useEffect(() => {
   <div className="row">
     {foods.map((food) => (
       <div
-        className="col-md-4 mb-4"
+        className="col-lg-3 col-md-4 col-sm-6 mb-4"
         key={food.id}
       >
-        <div className="food-card">
-
-          <img
-            src={`http://127.0.0.1:8000${food.image}`}
-            alt={food.item_name}
-            className="food-image"
-          />
-
-          <div className="food-body">
-
-            <h5 className="food-title">
-              {food.item_name}
-            </h5>
-
-            <p className="food-description">
-              {food.item_description}
-            </p>
-
-            <p className="food-price">
-              ৳{food.item_price}
-            </p>
-            <p>
-              {food.is_available ? (
-
-                 <Link to={`/food/${food.id}`} className="btn btn-outline-primary btn-sm">
-                  <i className="fas fa-shopping-basket me-1"></i>
-                   Order Now
-                  </Link>
-
-                    ) : (
-
-                      <button
-                    className="btn btn-outline-secondary btn-sm"
-                    disabled
-                    title="This food item is currently unavailable"
-                  >
-                    <i className="fas fa-times-circle me-1"></i>
-                    Unavailable
-                  </button>
-
-                    )}
-            </p>
-
-          </div>
-
-        </div>
+        <FoodCard food={food} />
       </div>
     ))}
   </div>
