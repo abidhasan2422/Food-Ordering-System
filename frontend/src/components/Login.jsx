@@ -3,6 +3,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import PublicLayout from "./PublicLayout";
 import "../styles/login.css";
+import { toast,ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +42,7 @@ const handleSubmit = async (e) => {
     const data = await response.json();
         console.log(data);
     if (response.ok) {
-      alert("Login Successful");
+     toast.success("Login Successful");
 
       // Save JWT tokens to LocalStorage
       localStorage.setItem("access_token", data.access);
@@ -59,13 +61,24 @@ const handleSubmit = async (e) => {
       
 
 
-    } else {
+    }
+       else if (response.status === 429) {
+
+      toast.warning(
+        
+        "Too many login attempts. Please try again later."
+      );
+
+    }
+  
+    
+    else {
       // Handles the error object returned from your Django view
-      alert(data.error || "Invalid Credentials");
+      toast.warning(data.error || "Invalid Credentials");
     }
   } catch (error) {
     console.log(error);
-    alert("Something went wrong with the server connection");
+    toast.warning("Something went wrong with the server connection");
   }
 };
 
@@ -154,7 +167,12 @@ const handleSubmit = async (e) => {
           </div>
         </div>
       </div>
+      <ToastContainer
+  position="top-right"
+  autoClose={3000}
+/>
     </PublicLayout>
+    
   );
 };
 

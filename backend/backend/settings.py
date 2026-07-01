@@ -130,6 +130,20 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+
+    "DEFAULT_THROTTLE_RATES": {
+
+        "user_login": "5/min",
+        
+        "admin_login":"3/min",
+
+        "register": "3/min",
+
+        "search": "60/min",
+
+        "wishlist": "20/min",
+
+    }
 }
 
 SPECTACULAR_SETTINGS = {
@@ -148,21 +162,4 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD':          'id',        
     'USER_ID_CLAIM':          'user_id',   
-}
-REST_FRAMEWORK = {
-
-    "DEFAULT_THROTTLE_RATES": {
-
-        "user_login": "5/min",
-        
-        "admin_login":"3/min",
-
-        "register": "3/min",
-
-        "search": "60/min",
-
-        "wishlist": "20/min",
-
-    }
-
 }

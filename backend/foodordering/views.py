@@ -289,6 +289,7 @@ def register(request):
 
 
 @api_view(['POST'])
+@throttle_classes([UserLoginThrottle])
 def login_user(request):
     identifier = request.data.get('identifier', '').strip()
     password   = request.data.get('password', '').strip()
