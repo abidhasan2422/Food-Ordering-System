@@ -149,3 +149,20 @@ SIMPLE_JWT = {
     'USER_ID_FIELD':          'id',        
     'USER_ID_CLAIM':          'user_id',   
 }
+REST_FRAMEWORK = {
+
+    "DEFAULT_THROTTLE_RATES": {
+
+        "user_login": "5/min",
+        
+        "admin_login":"3/min",
+
+        "register": "3/min",
+
+        "search": "60/min",
+
+        "wishlist": "20/min",
+
+    }
+
+}

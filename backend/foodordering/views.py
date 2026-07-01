@@ -17,8 +17,12 @@ from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from django.db.models.functions import TruncDate
+from .throttles import UserLoginThrottle,AdminLoginThrottle,RegisterThrottle,SearchThrottle,WishlistThrottle
+from rest_framework.decorators import throttle_classes
+
 
 @api_view(['POST'])
+@throttle_classes([AdminLoginThrottle])
 def admin_login_api(request):
 
     email = request.data.get('email', '').strip()
@@ -79,6 +83,7 @@ def admin_login_api(request):
         status=status.HTTP_200_OK
     )
 @api_view(["POST"])
+@permission_classes([IsAdminUser])
 def add_category(request):
 
     serializer = CategorySerializer(
@@ -100,6 +105,7 @@ def add_category(request):
     })
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def get_categories(request):
 
     categories = Category.objects.all().order_by('-id')
@@ -112,6 +118,7 @@ def get_categories(request):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@permission_classes([IsAdminUser])
 def delete_category(request,id):
     category= get_object_or_404(Category,id=id)
     category.delete()
@@ -120,6 +127,7 @@ def delete_category(request,id):
     })
 
 @api_view(['PUT'])
+@permission_classes([IsAdminUser])
 def update_category(request, id):
 
     category = get_object_or_404(
@@ -230,6 +238,7 @@ def update_food(
     )
 
 @api_view(['GET'])
+@throttle_classes([SearchThrottle])
 def search_food(request):
     keyword = request.GET.get('keyword', '')
 
@@ -262,6 +271,7 @@ def random_foods(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@throttle_classes([RegisterThrottle])
 def register(request):
     serializer = RegisterSerializer(data=request.data)
 
@@ -1950,6 +1960,7 @@ def menu(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
+@throttle_classes([WishlistThrottle])
 def add_to_wishlist(request, food_id):
 
     food = get_object_or_404(
