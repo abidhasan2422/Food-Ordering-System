@@ -39,7 +39,7 @@ const AdminLogin = () => {
     const data = await response.json();
 
 if (response.ok) {
-
+  toast.success("Login Successful");
   localStorage.setItem("admin_access", data.access);
   localStorage.setItem("admin_refresh", data.refresh);
 
@@ -48,16 +48,30 @@ if (response.ok) {
     localStorage.getItem("admin_access")
   );
 
-  // setTimeout(() => {
-  //   navigate("/admin-dashboard");
-  // }, 2000);
-  console.log("Navigating to dashboard");
+ 
+  //console.log("Navigating to dashboard");
+  setTimeout(() => {
+
   navigate("/admin-dashboard");
 
-      //console.log(data);
-    } else {
+}, 1500);
+
+    } 
+    
+
+else if (response.status === 429) {
+
+      toast.warning(
+        
+        "Too many login attempts. Please try again later."
+      );
+    }
+
+    else {
       toast.error(data.message);
     }
+
+
   } catch (error) {
     console.log(error);
 
