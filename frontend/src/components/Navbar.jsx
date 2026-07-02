@@ -13,7 +13,7 @@ import "../styles/layout.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { CartContext } from "./CartContext";
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import userApi from "../utils/userApi";
 
 const Navbar = () => {
   const { cartCount  } = useContext(CartContext);
@@ -26,11 +26,7 @@ const Navbar = () => {
       if (!token) return;
 
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/cart/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await userApi.get("cart/");
 
         //setCartCount(response.data.length);
       } catch (error) {
@@ -46,7 +42,7 @@ const Navbar = () => {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user");
 
-    navigate("/login");
+    navigate("/");
   };
   const token = localStorage.getItem("access_token");
   return (

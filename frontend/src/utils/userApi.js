@@ -75,8 +75,8 @@ api.interceptors.response.use(
         );
         localStorage.removeItem("user");
 
-        window.location.href =
-          "/login";
+        //window.location.href ="/login";
+        return Promise.reject(err);
       }
     }
 

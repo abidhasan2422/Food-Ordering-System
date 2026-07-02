@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PublicLayout from "./PublicLayout";
 import "../styles/login.css";
 import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -50,7 +51,7 @@ const handleSubmit = async (e) => {
       
       //  Save user profile info
       localStorage.setItem("user", JSON.stringify(data.user));
-
+       navigate("/menu");
       // Clear Form
       setFormData({
         identifier: "",
