@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import userApi from "../utils/userApi";
 import FoodCard from "../components/FoodCard";
  import PublicLayout from "../components/PublicLayout";
@@ -15,25 +15,46 @@ const Wishlist = () => {
         fetchWishlist();
     }, []);
 
+    // const fetchWishlist = async () => {
+    //     try {
+
+    //         const response = await userApi.get("wishlist/");
+
+    //         setWishlist(response.data);
+
+    //     } catch (error) {
+
+    //         console.log(error);
+
+    //         toast.error("Failed to load wishlist.");
+
+    //     } finally {
+
+    //         setLoading(false);
+
+    //     }
+    // };
+
     const fetchWishlist = async () => {
-        try {
+  try {
+    const response = await userApi.get("wishlist/");
+    setWishlist(response.data);
 
-            const response = await userApi.get("wishlist/");
+  } catch (error) {
+    console.error(error);
 
-            setWishlist(response.data);
+    if (error.response?.status === 401) {
+      toast.info("Please login to view your wishlist.");
+    } else if (error.response?.status === 404) {
+      toast.error("Wishlist not found.");
+    } else {
+      toast.error("Unable to load your wishlist. Please try again.");
+    }
 
-        } catch (error) {
-
-            console.log(error);
-
-            toast.error("Failed to load wishlist.");
-
-        } finally {
-
-            setLoading(false);
-
-        }
-    };
+  } finally {
+    setLoading(false);
+  }
+};
 
     if (loading) {
         return (
@@ -107,6 +128,11 @@ const Wishlist = () => {
             }
 
         </div>
+
+             <ToastContainer
+         position="top-right"
+         autoClose={3000}
+       />
         </PublicLayout>
     );
 
