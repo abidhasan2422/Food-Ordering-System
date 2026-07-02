@@ -157,7 +157,7 @@ const Checkout = () => {
               <div className="card-body p-4">
                 <h3 className="fw-bold mb-4">Delivery Information</h3>
 
-                <label className="form-label fw-semibold">Full Name</label>
+                <label className="form-label fw-semibold">Full Name <span className="text-danger">*</span> </label>
 
                 <input
                   type="text"
@@ -168,7 +168,7 @@ const Checkout = () => {
                   value={formData.full_name}
                 />
 
-                <label className="form-label fw-semibold">Phone Number</label>
+                <label className="form-label fw-semibold">Phone Number <span className="text-danger">*</span></label>
 
                 <input
                   type="tel"
@@ -179,7 +179,7 @@ const Checkout = () => {
                   value={formData.phone}
                 />
 
-                <label className="form-label fw-semibold">Email Address</label>
+                <label className="form-label fw-semibold">Email Address <span className="text-danger">*</span></label>
 
                 <input
                   type="email"
@@ -190,7 +190,7 @@ const Checkout = () => {
                   value={formData.email}
                 />
 
-                <label className="form-label fw-semibold">Delivery Area</label>
+                <label className="form-label fw-semibold">Delivery Area <span className="text-danger">*</span></label>
 
                 <select
                   className="form-select mb-3"
@@ -198,7 +198,7 @@ const Checkout = () => {
                   onChange={handleChange}
                   name="area"
                 >
-                  <option value="">Select Area</option>
+                  <option value="">Select Area </option>
 
                   <option value="dhaka">Dhaka City</option>
 
@@ -207,6 +207,7 @@ const Checkout = () => {
 
                 <label className="form-label fw-semibold">
                   Delivery Address
+                  <span className="text-danger">*</span>
                 </label>
 
                 <textarea
@@ -218,7 +219,7 @@ const Checkout = () => {
                   value={formData.address}
                 ></textarea>
 
-                <label className="form-label fw-semibold">City</label>
+                <label className="form-label fw-semibold">City  <span className="text-danger">*</span> </label>
 
                 <input
                   type="text"
