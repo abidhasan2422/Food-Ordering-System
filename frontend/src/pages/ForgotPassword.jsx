@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import userApi from "../utils/userApi";
 
 const ForgotPassword = () => {
@@ -23,7 +23,7 @@ const ForgotPassword = () => {
                 }
             );
 
-            toast.success(response.data.message);
+            toast.success("A password reset link has been sent to your email.");
 
             setEmail("");
 
@@ -122,7 +122,10 @@ const ForgotPassword = () => {
                 </div>
 
             </div>
-
+           <ToastContainer
+  position="top-right"
+  autoClose={3000}
+/>
         </div>
 
     );

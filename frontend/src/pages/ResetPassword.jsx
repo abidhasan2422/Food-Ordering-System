@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FaLock } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import userApi from "../utils/userApi";
+
 
 const ResetPassword = () => {
 
@@ -81,6 +82,7 @@ const ResetPassword = () => {
     };
 
     return (
+     
 
         <div className="container py-5">
 
@@ -176,9 +178,13 @@ const ResetPassword = () => {
                 </div>
 
             </div>
-
+            <ToastContainer
+  position="top-right"
+  autoClose={3000}
+/>
         </div>
 
+   
     );
 
 };

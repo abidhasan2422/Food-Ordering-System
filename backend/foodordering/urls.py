@@ -176,6 +176,11 @@ path(
         views.check_wishlist,
         name="check_wishlist"
     ),
+    path(
+    "reset-password/",
+    views.reset_password,
+    name="reset_password"
+),
 
 
 

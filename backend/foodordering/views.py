@@ -2032,9 +2032,9 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from .serializers import ForgotPasswordSerializer
-
-
+from .serializers import ForgotPasswordSerializer,ResetPasswordSerializer
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 @api_view(["POST"])
 def forgot_password(request):
 
@@ -2088,3 +2088,56 @@ If you didn't request this, ignore this email.
         })
 
     return Response(serializer.errors, status=400)
+
+
+
+
+
+
+@api_view(["POST"])
+def reset_password(request):
+
+    serializer = ResetPasswordSerializer(
+        data=request.data
+    )
+
+    if serializer.is_valid():
+
+        uid = serializer.validated_data["uid"]
+        token = serializer.validated_data["token"]
+        new_password = serializer.validated_data["new_password"]
+
+        try:
+
+            uid = force_str(
+                urlsafe_base64_decode(uid)
+            )
+
+            user = User.objects.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+
+            return Response({
+                "success": False,
+                "message": "Invalid reset link."
+            }, status=400)
+
+        if not default_token_generator.check_token(user, token):
+
+            return Response({
+                "success": False,
+                "message": "Reset link has expired or is invalid."
+            }, status=400)
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({
+            "success": True,
+            "message": "Password reset successfully."
+        })
+
+    return Response(
+        serializer.errors,
+        status=400
+    )
