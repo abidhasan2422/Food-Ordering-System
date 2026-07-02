@@ -31,6 +31,7 @@ import EditProfile from "./pages/EditProfile";
 import ChangePassword from "./pages/ChangePassword";
 import Menu from "./pages/Menu";
 import Wishlist from "./pages/Wishlist";
+import ForgotPassword from "./pages/ForgotPassword";
 const App = () => {
   return (
     <CartProvider>
@@ -67,6 +68,8 @@ const App = () => {
           <Route path="/change_password" element={  <UserProtectedRoute>  <ChangePassword /> </UserProtectedRoute>  } />
           <Route path="/menu" element={<Menu />} />
           <Route path="/wishlist" element={  <UserProtectedRoute>  <Wishlist /> </UserProtectedRoute>  } />
+          <Route path="/forget-password" element={  <UserProtectedRoute>  <ForgotPassword /> </UserProtectedRoute>  } />
+
 
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
         <Route path="/admin/restaurant/list" element={<RestaurantList />} /> 
