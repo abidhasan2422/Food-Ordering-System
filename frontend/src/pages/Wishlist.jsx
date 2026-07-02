@@ -35,6 +35,22 @@ const Wishlist = () => {
     //     }
     // };
 
+const removeFromWishlist = async (foodId) => {
+  try {
+    const response = await userApi.delete(`wishlist/remove/${foodId}/`);
+
+    
+    setWishlist((prev) =>
+      prev.filter((item) => item.food.id !== foodId)
+    );
+
+    toast.success(response.data.message);
+
+  } catch (error) {
+    toast.error("Failed to remove item.");
+  }
+};
+
     const fetchWishlist = async () => {
   try {
     const response = await userApi.get("wishlist/");
@@ -116,7 +132,9 @@ const Wishlist = () => {
                                     className="col-lg-3 col-md-4 col-sm-6 mb-4"
                                     key={item.id}
                                 >
-                                    <FoodCard food={item.food} />
+                                    <FoodCard food={item.food} 
+                                      onRemove={removeFromWishlist}
+                                    />
                                 </div>
 
                             ))

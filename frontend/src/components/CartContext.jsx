@@ -19,16 +19,14 @@ const CartProvider = ({ children }) => {
 
     try {
 
-      const response = await userApi.get(
-        "cart/");
-      console.log("Cart API:", response.data);
+      const response = await userApi.get("cart/");
       const totalQty =
         response.data.reduce(
           (sum, item) =>
             sum + item.quantity,
           0
         );
-      console.log("Cart Count:", totalQty);
+      
       setCartCount(totalQty);
 
     } catch (error) {

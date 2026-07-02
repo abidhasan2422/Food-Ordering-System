@@ -4,7 +4,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import userApi from "../utils/userApi";
 
-const FoodCard = ({food}) => {
+const FoodCard = ({food , onRemove }) => {
 const [isWishlisted, setIsWishlisted] = useState(false);
 useEffect(() => {
     checkWishlist();
@@ -33,8 +33,9 @@ const toggleWishlist = async () => {
             );
 
             setIsWishlisted(false);
-
-            toast.success(response.data.message);
+            if (onRemove) {
+                onRemove(food.id);
+                    }
 
         } else {
 
