@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { useLocation,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
 import userApi from "../utils/userApi";
+import { toast,ToastContainer } from "react-toastify";
 
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const food = location.state?.food;
-const quantity = location.state?.quantity || 1;
+  const quantity = location.state?.quantity || 1;
 
-const cartItems =
-  location.state?.cartItems || [];
+  const cartItems = location.state?.cartItems || [];
 
-//   const [area, setArea] = useState("");
+  //   const [area, setArea] = useState("");
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -21,88 +21,122 @@ const cartItems =
     email: "",
     address: "",
     city: "",
-    area:"",
+    area: "",
     notes: "",
   });
-const handleOrder = async () => {
+  const handleOrder = async () => {
+    const orderData = {
+      full_name: formData.full_name,
+      phone: formData.phone,
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      area: formData.area,
+      notes: formData.notes,
 
+      subtotal: subtotal,
+      delivery_charge: deliveryCharge,
+      total_amount: total,
+    };
 
-  const orderData = {
-    full_name: formData.full_name,
-    phone: formData.phone,
-    email: formData.email,
-    address: formData.address,
-    city: formData.city,
-    area: formData.area,
-    notes: formData.notes,
+    // Buy Now
+    if (food) {
+      orderData.food_id = food.id;
+      orderData.quantity = quantity;
+    }
 
-    subtotal: subtotal,
-    delivery_charge: deliveryCharge,
-    total_amount: total,
+    // form  validation
+    if (!formData.full_name.trim()) {
+      toast.error("Full name is required.");
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      toast.error("Phone number is required.");
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      toast.error("Email address is required.");
+      return;
+    }
+
+    if (!formData.address.trim()) {
+      toast.error("Delivery address is required.");
+      return;
+    }
+
+    if (!formData.city) {
+      toast.error("Please select your city.");
+      return;
+    }
+
+    if (!formData.area) {
+      toast.error("Please select your delivery area.");
+      return;
+    }
+    try {
+      const response = await userApi.post(
+        food ? "order/create/" : "order/create-from-cart/",
+        orderData,
+      );
+
+      console.log(response.data);
+
+      toast.success("Order placed successfully", {
+        autoClose: 1500,
+        onClose: () => navigate("/order-success"),
+      });
+    } catch (error) {
+      // catch (error) {
+
+      //   console.log(error);
+
+      //   console.log(
+      //     error.response?.data
+      //   );
+
+      // }
+      console.error(error);
+
+      if (error.response?.status === 400) {
+        toast.error("Please check your information and try again.");
+      } else if (error.response?.status === 401) {
+        toast.info("Please login to place your order.", {
+          autoClose: 1500,
+          onClose: () => navigate("/login"),
+        });
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
+    }
   };
 
-  // Buy Now
-  if (food) {
-    orderData.food_id = food.id;
-    orderData.quantity = quantity;
+  if (!food && cartItems.length === 0) {
+    return (
+      <PublicLayout>
+        <div className="container py-5 text-center">
+          <h3>No food selected.</h3>
+        </div>
+      </PublicLayout>
+    );
   }
 
- 
-  try {
-
-    const response = await userApi.post(
-  food
-    ? "order/create/"
-    : "order/create-from-cart/",
-  orderData
-);
-
-    console.log(response.data);
-
-    alert("Order placed successfully");
-
-    navigate("/order-success");
-
-  } catch (error) {
-
-    console.log(error);
-
-    console.log(
-      error.response?.data
-    );
-
-  }
-
-};
-
-if (!food && cartItems.length === 0) {
-  return (
-    <PublicLayout>
-      <div className="container py-5 text-center">
-        <h3>No food selected.</h3>
-      </div>
-    </PublicLayout>
-  );
-}
-
- const subtotal = food
-  ? Number(food.item_price) * quantity
-  : cartItems.reduce(
-      (sum, item) =>
-        sum +
-        Number(item.item_price) *
-          item.quantity,
-      0
-    );
+  const subtotal = food
+    ? Number(food.item_price) * quantity
+    : cartItems.reduce(
+        (sum, item) => sum + Number(item.item_price) * item.quantity,
+        0,
+      );
 
   const deliveryCharge =
     subtotal >= 1000
       ? 0
       : formData.area === "dhaka"
-      ? 60
-      : formData.area === "outside"
-      ? 120
-      : 0;
+        ? 60
+        : formData.area === "outside"
+          ? 120
+          : 0;
 
   const total = subtotal + deliveryCharge;
 
@@ -116,22 +150,14 @@ if (!food && cartItems.length === 0) {
   return (
     <PublicLayout>
       <div className="container py-5">
-
         <div className="row g-4">
-
           {/* Delivery Information */}
           <div className="col-lg-7">
-
             <div className="card border-0 shadow-sm">
               <div className="card-body p-4">
+                <h3 className="fw-bold mb-4">Delivery Information</h3>
 
-                <h3 className="fw-bold mb-4">
-                  Delivery Information
-                </h3>
-
-                <label className="form-label fw-semibold">
-                  Full Name
-                </label>
+                <label className="form-label fw-semibold">Full Name</label>
 
                 <input
                   type="text"
@@ -142,9 +168,7 @@ if (!food && cartItems.length === 0) {
                   value={formData.full_name}
                 />
 
-                <label className="form-label fw-semibold">
-                  Phone Number
-                </label>
+                <label className="form-label fw-semibold">Phone Number</label>
 
                 <input
                   type="tel"
@@ -152,12 +176,10 @@ if (!food && cartItems.length === 0) {
                   className="form-control mb-3"
                   placeholder="Enter phone number"
                   onChange={handleChange}
-                    value={formData.phone}
+                  value={formData.phone}
                 />
 
-                <label className="form-label fw-semibold">
-                  Email Address
-                </label>
+                <label className="form-label fw-semibold">Email Address</label>
 
                 <input
                   type="email"
@@ -165,31 +187,22 @@ if (!food && cartItems.length === 0) {
                   className="form-control mb-3"
                   placeholder="Enter email address"
                   onChange={handleChange}
-                    value={formData.email}
+                  value={formData.email}
                 />
 
-                <label className="form-label fw-semibold">
-                  Delivery Area
-                </label>
+                <label className="form-label fw-semibold">Delivery Area</label>
 
                 <select
                   className="form-select mb-3"
-             
-                    value={formData.area}
+                  value={formData.area}
                   onChange={handleChange}
                   name="area"
                 >
-                  <option value="">
-                    Select Area
-                  </option>
+                  <option value="">Select Area</option>
 
-                  <option value="dhaka">
-                    Dhaka City
-                  </option>
+                  <option value="dhaka">Dhaka City</option>
 
-                  <option value="outside">
-                    Outside Dhaka
-                  </option>
+                  <option value="outside">Outside Dhaka</option>
                 </select>
 
                 <label className="form-label fw-semibold">
@@ -202,12 +215,10 @@ if (!food && cartItems.length === 0) {
                   className="form-control mb-3"
                   placeholder="Enter delivery address"
                   onChange={handleChange}
-                    value={formData.address}
+                  value={formData.address}
                 ></textarea>
 
-                <label className="form-label fw-semibold">
-                  City
-                </label>
+                <label className="form-label fw-semibold">City</label>
 
                 <input
                   type="text"
@@ -218,9 +229,7 @@ if (!food && cartItems.length === 0) {
                   value={formData.city}
                 />
 
-                <label className="form-label fw-semibold">
-                  Order Notes
-                </label>
+                <label className="form-label fw-semibold">Order Notes</label>
 
                 <textarea
                   name="notes"
@@ -233,9 +242,7 @@ if (!food && cartItems.length === 0) {
 
                 <hr className="my-4" />
 
-                <h5 className="fw-bold mb-3">
-                  Payment Method
-                </h5>
+                <h5 className="fw-bold mb-3">Payment Method</h5>
 
                 <div className="form-check">
                   <input
@@ -245,9 +252,7 @@ if (!food && cartItems.length === 0) {
                     readOnly
                   />
 
-                  <label className="form-check-label">
-                    Cash On Delivery
-                  </label>
+                  <label className="form-check-label">Cash On Delivery</label>
                 </div>
 
                 <button
@@ -257,139 +262,107 @@ if (!food && cartItems.length === 0) {
                   <i className="fas fa-check-circle me-2"></i>
                   Confirm Order
                 </button>
-
               </div>
             </div>
-
           </div>
 
-        {/* Order Summary */}
-<div className="col-lg-5">
+          {/* Order Summary */}
+          <div className="col-lg-5">
+            <div className="card border-0 shadow sticky-top">
+              <div className="card-body p-4">
+                <h3 className="fw-bold mb-4">Order Summary</h3>
 
-  <div className="card border-0 shadow sticky-top">
-    <div className="card-body p-4">
+                {food ? (
+                  <>
+                    <img
+                      src={`http://127.0.0.1:8000${food.image}`}
+                      alt={food.item_name}
+                      className="img-fluid rounded mb-3"
+                      style={{
+                        height: "220px",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
 
-      <h3 className="fw-bold mb-4">
-        Order Summary
-      </h3>
+                    <h5 className="fw-bold">{food.item_name}</h5>
 
-      {food ? (
+                    <p className="mb-2">
+                      <strong>Price:</strong> ৳{food.item_price}
+                    </p>
 
-        <>
-          <img
-            src={`http://127.0.0.1:8000${food.image}`}
-            alt={food.item_name}
-            className="img-fluid rounded mb-3"
-            style={{
-              height: "220px",
-              width: "100%",
-              objectFit: "cover",
-            }}
-          />
+                    <p className="mb-2">
+                      <strong>Quantity:</strong> {quantity}
+                    </p>
+                  </>
+                ) : (
+                  cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="d-flex justify-content-between align-items-center border-bottom py-3"
+                    >
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={`http://127.0.0.1:8000${item.image}`}
+                          alt={item.item_name}
+                          width="60"
+                          height="60"
+                          className="rounded me-3"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
 
-          <h5 className="fw-bold">
-            {food.item_name}
-          </h5>
+                        <div>
+                          <h6 className="mb-1">{item.item_name}</h6>
 
-          <p className="mb-2">
-            <strong>Price:</strong> ৳{food.item_price}
-          </p>
+                          <small className="text-muted">
+                            Qty: {item.quantity}
+                          </small>
+                        </div>
+                      </div>
 
-          <p className="mb-2">
-            <strong>Quantity:</strong> {quantity}
-          </p>
-        </>
+                      <strong>
+                        ৳{(Number(item.item_price) * item.quantity).toFixed(2)}
+                      </strong>
+                    </div>
+                  ))
+                )}
 
-      ) : (
+                <hr />
 
-        cartItems.map((item) => (
-          <div
-            key={item.id}
-            className="d-flex justify-content-between align-items-center border-bottom py-3"
-          >
-            <div className="d-flex align-items-center">
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Subtotal</span>
+                  <span>৳{subtotal}</span>
+                </div>
 
-              <img
-                src={`http://127.0.0.1:8000${item.image}`}
-                alt={item.item_name}
-                width="60"
-                height="60"
-                className="rounded me-3"
-                style={{
-                  objectFit: "cover",
-                }}
-              />
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Delivery Charge</span>
 
-              <div>
+                  <span className="badge bg-warning text-dark">
+                    ৳{deliveryCharge}
+                  </span>
+                </div>
 
-                <h6 className="mb-1">
-                  {item.item_name}
-                </h6>
+                {subtotal >= 1000 && (
+                  <div className="alert alert-success mt-3 mb-3">
+                    Congratulations! Free Delivery Applied
+                  </div>
+                )}
 
-                <small className="text-muted">
-                  Qty: {item.quantity}
-                </small>
+                <hr />
 
+                <div className="bg-light rounded p-3 text-center">
+                  <small className="text-muted">Total Amount</small>
+
+                  <h2 className="text-success fw-bold mb-0">৳{total}</h2>
+                </div>
               </div>
-
             </div>
-
-            <strong>
-              ৳
-              {(
-                Number(item.item_price) *
-                item.quantity
-              ).toFixed(2)}
-            </strong>
-
           </div>
-        ))
-
-      )}
-
-      <hr />
-
-      <div className="d-flex justify-content-between mb-2">
-        <span>Subtotal</span>
-        <span>৳{subtotal}</span>
-      </div>
-
-      <div className="d-flex justify-content-between mb-2">
-        <span>Delivery Charge</span>
-
-        <span className="badge bg-warning text-dark">
-          ৳{deliveryCharge}
-        </span>
-      </div>
-
-      {subtotal >= 1000 && (
-        <div className="alert alert-success mt-3 mb-3">
-           Congratulations! Free Delivery Applied
         </div>
-      )}
-
-      <hr />
-
-      <div className="bg-light rounded p-3 text-center">
-
-        <small className="text-muted">
-          Total Amount
-        </small>
-
-        <h2 className="text-success fw-bold mb-0">
-          ৳{total}
-        </h2>
-
       </div>
-
-    </div>
-  </div>
-
-</div>
-
-        </div>
-
-      </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </PublicLayout>
   );
 };
