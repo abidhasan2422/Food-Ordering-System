@@ -83,7 +83,7 @@ fetchCartCount();
 
                 <button
                   className="btn btn-primary mt-2"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/menu")}
                 >
                   Continue Shopping
                 </button>
