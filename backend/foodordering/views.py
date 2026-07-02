@@ -2024,3 +2024,67 @@ def check_wishlist(request, food_id):
     return Response({
         "is_wishlisted": exists
     })
+
+
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from .serializers import ForgotPasswordSerializer
+
+
+@api_view(["POST"])
+def forgot_password(request):
+
+    serializer = ForgotPasswordSerializer(data=request.data)
+
+    if serializer.is_valid():
+
+        email = serializer.validated_data["email"]
+
+        try:
+
+            user = User.objects.get(email=email)
+
+        except User.DoesNotExist:
+
+            return Response({
+                "success": False,
+                "message": "No account found with this email."
+            }, status=404)
+
+        uid = urlsafe_base64_encode(
+            force_bytes(user.pk)
+        )
+
+        token = default_token_generator.make_token(user)
+
+        current_site = get_current_site(request)
+
+        reset_link = (
+            f"http://localhost:3000/reset-password/{uid}/{token}/"
+        )
+
+        send_mail(
+            subject="Password Reset",
+            message=f"""
+Hello {user.first_name},
+
+Click the link below to reset your password:
+
+{reset_link}
+
+If you didn't request this, ignore this email.
+""",
+            from_email=None,
+            recipient_list=[email],
+        )
+
+        return Response({
+            "success": True,
+            "message": "Password reset link sent successfully."
+        })
+
+    return Response(serializer.errors, status=400)

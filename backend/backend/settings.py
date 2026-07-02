@@ -163,3 +163,16 @@ SIMPLE_JWT = {
     'USER_ID_FIELD':          'id',        
     'USER_ID_CLAIM':          'user_id',   
 }
+
+# Email Configuration
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "likhon2422@gmail.com"
+EMAIL_HOST_PASSWORD = "budj tgos xawt dtah"
+
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
