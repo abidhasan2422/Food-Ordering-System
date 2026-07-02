@@ -51,7 +51,7 @@ const handleSubmit = async (e) => {
       
       //  Save user profile info
       localStorage.setItem("user", JSON.stringify(data.user));
-       navigate("/menu");
+       navigate("/login");
       // Clear Form
       setFormData({
         identifier: "",

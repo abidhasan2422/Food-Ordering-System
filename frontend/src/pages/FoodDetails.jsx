@@ -5,6 +5,7 @@ import userApi from "../utils/userApi";
 // import Checkout from './Checkout';
 import { useContext } from "react";
 import { CartContext } from "../components/CartContext";
+import { toast,ToastContainer } from "react-toastify";
 
 
 const FoodDetails = () => {
@@ -14,22 +15,38 @@ const FoodDetails = () => {
   const [food, setFood] = useState(null);
 
   const addToCart = async () => {
-    try {
+  const token = localStorage.getItem("access_token");
 
-      await userApi.post(
-        "cart/add/",
-        {
-          food_id: food.id,
-        },
-        
-      );
-      await fetchCartCount();
-      navigate("/cart");
-    } catch (error) {
-      console.log(error.response?.data);
-      console.log(error);
-    }
-  };
+  if (!token) {
+    toast.info("Please login to add items to your cart.",{
+    autoClose:1500,
+    onClose:() => navigate("/login"),
+    });
+
+    
+    return;
+  }
+
+  try {
+    await userApi.post("cart/add/", {
+      food_id: food.id,
+    });
+
+    await fetchCartCount();
+
+    toast.success("Item added to cart successfully!",{
+      autoClose:1000,
+      onClose:() => navigate("/cart"),
+    });
+
+    
+
+  } catch (error) {
+    console.log(error.response?.data);
+
+    toast.error("Failed to add item to cart.");
+  }
+};
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/foods/${id}/`)
@@ -38,20 +55,24 @@ const FoodDetails = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
-
-
- 
-
 const buyNow = () => {
-  navigate(
-    "/checkout",
-    {
-      state: {
-        food: food,
-        quantity: 1
-      }
-    }
-  );
+  const token = localStorage.getItem("access_token");
+
+  if (!token) {
+    toast.info("Please login to continue with your purchase.", {
+      autoClose: 1500,
+      onClose: () => navigate("/login"),
+    });
+
+    return;
+  }
+
+  navigate("/checkout", {
+    state: {
+      food,
+      quantity: 1,
+    },
+  });
 };
   if (!food) {
     return <h2 className="text-center mt-5">Loading...</h2>;
@@ -120,6 +141,10 @@ const buyNow = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+  position="top-right"
+  autoClose={3000}
+/>
     </PublicLayout>
   );
 };
