@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import userApi from "../utils/userApi";
 
 export const CartContext = createContext();
 
@@ -19,22 +19,16 @@ const CartProvider = ({ children }) => {
 
     try {
 
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/cart/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      const response = await userApi.get(
+        "cart/");
+      console.log("Cart API:", response.data);
       const totalQty =
         response.data.reduce(
           (sum, item) =>
             sum + item.quantity,
           0
         );
-
+      console.log("Cart Count:", totalQty);
       setCartCount(totalQty);
 
     } catch (error) {

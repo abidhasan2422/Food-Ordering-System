@@ -3,11 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
 import userApi from "../utils/userApi";
 import { toast,ToastContainer } from "react-toastify";
-
+import { useContext } from "react";
+import { CartContext } from "../components/CartContext";
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+ const { fetchCartCount } = useContext(CartContext);
   const food = location.state?.food;
   const quantity = location.state?.quantity || 1;
 
@@ -82,21 +83,13 @@ const Checkout = () => {
       );
 
       console.log(response.data);
-
+       await fetchCartCount();
       toast.success("Order placed successfully", {
         autoClose: 1500,
         onClose: () => navigate("/order-success"),
       });
     } catch (error) {
-      // catch (error) {
-
-      //   console.log(error);
-
-      //   console.log(
-      //     error.response?.data
-      //   );
-
-      // }
+     
       console.error(error);
 
       if (error.response?.status === 400) {
