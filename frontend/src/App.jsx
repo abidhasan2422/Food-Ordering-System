@@ -68,7 +68,7 @@ const App = () => {
           <Route path="/change_password" element={  <UserProtectedRoute>  <ChangePassword /> </UserProtectedRoute>  } />
           <Route path="/menu" element={<Menu />} />
           <Route path="/wishlist" element={  <UserProtectedRoute>  <Wishlist /> </UserProtectedRoute>  } />
-          <Route path="/forget-password" element={  <UserProtectedRoute>  <ForgotPassword /> </UserProtectedRoute>  } />
+          <Route path="/forgot-password" element={  <ForgotPassword />   } />
 
 
           {/*<Route path="/admin/restaurant/add" element={<AddRestaurant />} />
