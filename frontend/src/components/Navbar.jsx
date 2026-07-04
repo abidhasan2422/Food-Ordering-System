@@ -7,10 +7,7 @@ import {
   FaUtensils,
   FaShoppingCart,
   FaBox,
-  FaUserCircle,
-
-  
-  
+  FaUserCircle, 
   FaUserEdit,
   FaLock,
   FaSignOutAlt,
@@ -123,7 +120,7 @@ const Navbar = () => {
   </Link>
 </li>
 
-<li className="nav-item dropdown mx-1">
+{/* <li className="nav-item dropdown mx-1">
   <Link
     className="nav-link dropdown-toggle"
     to="/profile"
@@ -175,6 +172,61 @@ const Navbar = () => {
       </button>
     </li>
   </ul>
+</li> */}
+
+
+<li className="nav-item dropdown mx-1">
+
+  <button
+    className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
+    id="profileDropdown"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <FaUserCircle className="me-2" />
+    Profile
+  </button>
+
+  <ul
+    className="dropdown-menu dropdown-menu-end"
+    aria-labelledby="profileDropdown"
+  >
+
+    <li>
+      <Link className="dropdown-item" to="/profile">
+        <FaUserCircle className="me-2" />
+        My Profile
+      </Link>
+    </li>
+
+    <li>
+      <Link className="dropdown-item" to="/edit-profile">
+        <FaUserEdit className="me-2" />
+        Edit Profile
+      </Link>
+    </li>
+
+    <li>
+      <Link className="dropdown-item" to="/change_password">
+        <FaLock className="me-2" />
+        Change Password
+      </Link>
+    </li>
+
+    <li><hr className="dropdown-divider" /></li>
+
+    <li>
+      <button
+        className="dropdown-item text-danger"
+        onClick={handleLogout}
+      >
+        <FaSignOutAlt className="me-2" />
+        Logout
+      </button>
+    </li>
+
+  </ul>
+
 </li>
               </>
             ) : (

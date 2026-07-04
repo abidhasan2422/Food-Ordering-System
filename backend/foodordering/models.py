@@ -110,7 +110,35 @@ class Order(models.Model):
     ("Cancelled", "Cancelled"),
 )
 
-   
+    PAYMENT_STATUS_CHOICES = (
+    ("Pending", "Pending"),
+    ("Paid", "Paid"),
+    ("Failed", "Failed"),
+    ("Refunded", "Refunded"),
+)
+    PAYMENT_METHOD_CHOICES = (
+    ("COD", "Cash on Delivery"),
+    ("SSLCOMMERZ", "SSLCOMMERZ")
+)
+
+    payment_status = models.CharField(
+    max_length=20,
+    choices=PAYMENT_STATUS_CHOICES,
+    default="Pending"
+)
+    transaction_id = models.CharField(
+    max_length=100,
+    blank=True,
+    null=True
+)
+    
+ 
+
+    payment_method = models.CharField(
+    max_length=20,
+    choices=PAYMENT_METHOD_CHOICES,
+    default="COD"
+)
     full_name = models.CharField(max_length=100)
 
     phone = models.CharField(max_length=20)
@@ -145,10 +173,6 @@ class Order(models.Model):
         decimal_places=2
     )
 
-    payment_method = models.CharField(
-        max_length=20,
-        default="COD"
-    )
 
     status = models.CharField(
         max_length=20,
@@ -159,6 +183,11 @@ class Order(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+    updated_at = models.DateTimeField(
+    auto_now=True
+    )
+    def __str__(self):
+     return f"Order {self.id} - {self.full_name}"
 
 class OrderItem(models.Model):
 

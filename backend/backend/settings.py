@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'corsheaders',
     "drf_spectacular",
      'rest_framework_simplejwt',
+     'payment'
     
 
 ]
