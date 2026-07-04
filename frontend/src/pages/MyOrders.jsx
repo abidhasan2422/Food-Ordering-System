@@ -59,16 +59,24 @@ const MyOrders = () => {
               "
               >
                 <div>
-                  <h5>Order #{order.order_number}</h5>
+  <h5 className="mb-1 fw-bold">
+    Order #{order.order_number}
+  </h5>
 
-                  <small
-                    className="
-                    text-muted
-                  "
-                  >
-                    {order.created_at}
-                  </small>
-                </div>
+  <small className="text-muted">
+    Ordered on{" "}
+    {new Date(order.created_at).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })}{" "}
+    at{" "}
+    {new Date(order.created_at).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
+  </small>
+</div>
 
                 <span
   className={

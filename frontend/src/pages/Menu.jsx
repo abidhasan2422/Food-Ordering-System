@@ -47,12 +47,7 @@ const [selectedCategory, setSelectedCategory] = useState("All");
 
   const hasFood = totalResults > 0;
 
-//   const resetFilters = () => {
-//     setSearch("");
-//     setSortBy("Default");
-//     setAvailableOnly(false);
-   
-//   };
+
 
   const resetFilters = () => {
 
@@ -278,53 +273,7 @@ const [selectedCategory, setSelectedCategory] = useState("All");
 
           </div>
 
-          {/* Category Buttons */}
-
-          {/* <div className="d-flex flex-wrap gap-2">
-
-            {categories.map((category) => (
-
-              <button
-                key={category.id}
-                className={`btn rounded-pill px-4 py-2 shadow-sm ${
-                  activeCategory === category.id
-                    ? "btn-primary"
-                    : "btn-outline-primary"
-                }`}
-                style={{
-                  transition:
-                    "all .3s ease",
-                  transform:
-                    activeCategory ===
-                    category.id
-                      ? "translateY(-2px)"
-                      : "translateY(0)",
-                }}
-                onClick={() => {
-
-                  setActiveCategory(
-                    category.id
-                  );
-
-                  document
-                    .getElementById(
-                      `category-${category.id}`
-                    )
-                    ?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-
-                }}
-              >
-
-                {category.category_name}
-
-              </button>
-
-            ))}
-
-          </div> */}
+    
 
         </div>
 
