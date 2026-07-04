@@ -8,6 +8,12 @@ import {
   FaShoppingCart,
   FaBox,
   FaUserCircle,
+
+  
+  
+  FaUserEdit,
+  FaLock,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import "../styles/layout.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
@@ -109,29 +115,67 @@ const Navbar = () => {
                 <FaRegHeart className="me-2" /> Wishlist
               </Link>
             </li>
-                <li className="nav-item mx-1">
-                  <Link className="nav-link" to="/my-orders">
-                    {" "}
-                    <FaBox className="me-2" />
-                    My Orders
-                  </Link>
-                </li>
-                <li className="nav-item mx-1">
-                  <Link className="nav-link" to="/profile">
-                    {" "}
-                    <FaUserCircle className="me-2" />
-                    Profile
-                  </Link>
-                </li>
 
                 <li className="nav-item mx-1">
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </li>
+  <Link className="nav-link" to="/my-orders">
+    <FaBox className="me-2" />
+    My Orders
+  </Link>
+</li>
+
+<li className="nav-item dropdown mx-1">
+  <Link
+    className="nav-link dropdown-toggle"
+    to="/profile"
+    id="profileDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <FaUserCircle className="me-2" />
+    Profile
+  </Link>
+
+  <ul
+    className="dropdown-menu dropdown-menu-end"
+    aria-labelledby="profileDropdown"
+  >
+    <li>
+      <Link className="dropdown-item" to="/profile">
+        <FaUserCircle className="me-2" />
+        My Profile
+      </Link>
+    </li>
+
+    <li>
+      <Link className="dropdown-item" to="/edit-profile">
+        <FaUserEdit className="me-2" />
+        Edit Profile
+      </Link>
+    </li>
+
+    <li>
+      <Link className="dropdown-item" to="/change_password">
+        <FaLock className="me-2" />
+        Change Password
+      </Link>
+    </li>
+
+    <li>
+      <hr className="dropdown-divider" />
+    </li>
+
+    <li>
+      <button
+        className="dropdown-item text-danger"
+        onClick={handleLogout}
+      >
+        <FaSignOutAlt className="me-2" />
+        Logout
+      </button>
+    </li>
+  </ul>
+</li>
               </>
             ) : (
               <>
