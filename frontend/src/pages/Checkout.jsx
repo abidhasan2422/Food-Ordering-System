@@ -16,6 +16,8 @@ const Checkout = () => {
 
   //   const [area, setArea] = useState("");
 
+  const [paymentMethod, setPaymentMethod] = useState('COD');
+
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -143,122 +145,156 @@ const Checkout = () => {
   return (
     <PublicLayout>
       <div className="container py-5">
-        <div className="row g-4">
-          {/* Delivery Information */}
-          <div className="col-lg-7">
-            <div className="card border-0 shadow-sm">
-              <div className="card-body p-4">
-                <h3 className="fw-bold mb-4">Delivery Information</h3>
+  <div className="row g-4">
+    {/* Delivery Information */}
+    <div className="col-lg-7">
+      <div className="card border-0 shadow-sm">
+        <div className="card-body p-4">
+          <h3 className="fw-bold mb-4">Delivery Information</h3>
 
-                <label className="form-label fw-semibold">Full Name <span className="text-danger">*</span> </label>
+          <label className="form-label fw-semibold">Full Name <span className="text-danger">*</span></label>
+          <input
+            type="text"
+            name="full_name"
+            className="form-control mb-3"
+            placeholder="Enter your full name"
+            onChange={handleChange}
+            value={formData.full_name}
+          />
 
-                <input
-                  type="text"
-                  name="full_name"
-                  className="form-control mb-3"
-                  placeholder="Enter your full name"
-                  onChange={handleChange}
-                  value={formData.full_name}
-                />
+          <label className="form-label fw-semibold">Phone Number <span className="text-danger">*</span></label>
+          <input
+            type="text"
+            name="phone"
+            className="form-control mb-3"
+            placeholder="Enter phone number"
+            onChange={handleChange}
+            value={formData.phone}
+          />
 
-                <label className="form-label fw-semibold">Phone Number <span className="text-danger">*</span></label>
+          <label className="form-label fw-semibold">Email Address <span className="text-danger">*</span></label>
+          <input
+            type="email"
+            name="email"
+            className="form-control mb-3"
+            placeholder="Enter email address"
+            onChange={handleChange}
+            value={formData.email}
+          />
 
-                <input
-                  type="tel"
-                  name="phone"
-                  className="form-control mb-3"
-                  placeholder="Enter phone number"
-                  onChange={handleChange}
-                  value={formData.phone}
-                />
+          <label className="form-label fw-semibold">Delivery Area <span className="text-danger">*</span></label>
+          <select
+            className="form-select mb-3"
+            value={formData.area}
+            onChange={handleChange}
+            name="area"
+          >
+            <option value="">Select Area</option>
+            <option value="dhaka">Dhaka City</option>
+            <option value="outside">Outside Dhaka</option>
+          </select>
 
-                <label className="form-label fw-semibold">Email Address <span className="text-danger">*</span></label>
+          <label className="form-label fw-semibold">Delivery Address <span className="text-danger">*</span></label>
+          <textarea
+            name="address"
+            rows="3"
+            className="form-control mb-3"
+            placeholder="Enter delivery address"
+            onChange={handleChange}
+            value={formData.address}
+          ></textarea>
 
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control mb-3"
-                  placeholder="Enter email address"
-                  onChange={handleChange}
-                  value={formData.email}
-                />
+          <label className="form-label fw-semibold">City <span className="text-danger">*</span></label>
+          <input
+            type="text"
+            name="city"
+            className="form-control mb-3"
+            placeholder="Enter city"
+            onChange={handleChange}
+            value={formData.city}
+          />
 
-                <label className="form-label fw-semibold">Delivery Area <span className="text-danger">*</span></label>
+          <label className="form-label fw-semibold">Order Notes</label>
+          <textarea
+            name="notes"
+            rows="3"
+            className="form-control mb-4"
+            placeholder="Any special instructions..."
+            onChange={handleChange}
+            value={formData.notes}
+          ></textarea>
 
-                <select
-                  className="form-select mb-3"
-                  value={formData.area}
-                  onChange={handleChange}
-                  name="area"
-                >
-                  <option value="">Select Area </option>
+          {/* <hr className="my-4" /> */}
 
-                  <option value="dhaka">Dhaka City</option>
-
-                  <option value="outside">Outside Dhaka</option>
-                </select>
-
-                <label className="form-label fw-semibold">
-                  Delivery Address
-                  <span className="text-danger">*</span>
-                </label>
-
-                <textarea
-                  name="address"
-                  rows="3"
-                  className="form-control mb-3"
-                  placeholder="Enter delivery address"
-                  onChange={handleChange}
-                  value={formData.address}
-                ></textarea>
-
-                <label className="form-label fw-semibold">City  <span className="text-danger">*</span> </label>
-
-                <input
-                  type="text"
-                  name="city"
-                  className="form-control mb-3"
-                  placeholder="Enter city"
-                  onChange={handleChange}
-                  value={formData.city}
-                />
-
-                <label className="form-label fw-semibold">Order Notes</label>
-
-                <textarea
-                  name="notes"
-                  rows="3"
-                  className="form-control"
-                  placeholder="Any special instructions..."
-                  onChange={handleChange}
-                  value={formData.notes}
-                ></textarea>
-
-                <hr className="my-4" />
-
-                <h5 className="fw-bold mb-3">Payment Method</h5>
-
-                <div className="form-check">
+          {/* Payment Selection Options */}
+          <div className="payment-options">
+            <h5 className="fw-bold mb-3">Select Payment Method</h5>
+            
+            <div className="d-flex flex-column gap-3">
+              {/* Cash On Delivery Card */}
+              <div
+                className={`card p-3 shadow-sm ${paymentMethod === 'COD' ? 'border-primary   bg-light' : 'border-light'}`}
+                onClick={() => setPaymentMethod('COD')}
+                style={{ cursor: 'pointer', transition: '0.2s ease-in-out' }}
+              >
+                <div className="form-check m-0 d-flex align-items-center gap-2">
                   <input
-                    className="form-check-input"
+                    className="form-check-input mt-0"
                     type="radio"
-                    checked
-                    readOnly
+                    name="paymentGroup"
+                    id="cod"
+                    value="COD"
+                    checked={paymentMethod === 'COD'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                   />
-
-                  <label className="form-check-label">Cash On Delivery</label>
+                  <label className="form-check-label fw-bold mb-0" htmlFor="cod" style={{ cursor: 'pointer' }}>
+                    Cash On Delivery
+                  </label>
                 </div>
+                <small className="text-muted mt-2 ms-4 d-block">
+                  Pay with cash when your food arrives.
+                </small>
+              </div>
 
-                <button
-                  className="btn btn-success btn-lg w-100 mt-4"
-                  onClick={handleOrder}
-                >
-                  <i className="fas fa-check-circle me-2"></i>
-                  Confirm Order
-                </button>
+              {/* SSLCOMMERZ Card */}
+              <div
+                className={`card p-3 shadow-sm ${paymentMethod === 'SSLCOMMERZ' ? 'border-primary   bg-light' : 'border-light'}`}
+                onClick={() => setPaymentMethod('SSLCOMMERZ')}
+                style={{ cursor: 'pointer', transition: '0.2s ease-in-out' }}
+              >
+                <div className="form-check m-0 d-flex align-items-center gap-2">
+                  <input
+                    className="form-check-input mt-0"
+                    type="radio"
+                    name="paymentGroup"
+                    id="ssl"
+                    value="SSLCOMMERZ"
+                    checked={paymentMethod === 'SSLCOMMERZ'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  <label className="form-check-label fw-bold mb-0" htmlFor="ssl" style={{ cursor: 'pointer' }}>
+                    Pay Online (SSLCOMMERZ)
+                  </label>
+                </div>
+                <small className="text-muted mt-2 ms-4 d-block">
+                  Securely pay via bKash, Nagad, Visa, or Mastercard.
+                </small>
               </div>
             </div>
           </div>
+
+          {/* Final Primary Action Button */}
+          <button
+            className="btn btn-success btn-lg w-100 mt-4"
+            onClick={handleOrder}
+          >
+            <i className="fas fa-check-circle me-2"></i>
+            Confirm Order
+          </button>
+          
+        </div>
+      </div>
+    </div>
 
           {/* Order Summary */}
           <div className="col-lg-5">
