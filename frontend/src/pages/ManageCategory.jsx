@@ -42,24 +42,19 @@ const [editCategoryName,
     fetchCategories();
   }, []);
 
-  const fetchCategories = async () => {
+//  
+const fetchCategories = async () => {
+  try {
+    const response = await adminApi.get("categories/");
 
-    try {
+    const data = response.data;
 
-     const response = await fetch(
-  "http://127.0.0.1:8000/api/categories/"
-);
+    setCategories(data);
 
-const data = await response.json();
-
-setCategories(data); 
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const filteredCategories =
     categories.filter((category) =>
