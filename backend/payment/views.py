@@ -12,8 +12,13 @@ def payment_initiate(request):
 
     serializer = OrderSerializer(data=request.data)
     if serializer.is_valid():
+        order = serializer.save(
+            user= request.user,
+            payment_status = "Pending"
+        )
         return Response({
-            "message":"Data is valid"
+            "message": "Order Created Successfully",
+            "order_id": order.id
         })
 
     return Response(serializer.errors, status=400)
