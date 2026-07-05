@@ -55,7 +55,7 @@ const ManageOrderDetails = () => {
         <div className="row">
           {/* Order Information */}
 
-          <div className="col-md-6 mb-4">
+          {/* <div className="col-md-6 mb-4">
             <div className="card shadow-sm border-0">
               <div className="card-body">
                 <h4 className="mb-3">Order Information</h4>
@@ -69,22 +69,7 @@ const ManageOrderDetails = () => {
                   {new Date(order.created_at).toLocaleString()}
                 </p>
 
-                {/* <p
-  className={
-    order.status === "Pending"
-      ? "badge bg-warning text-dark"
-      : order.status === "Confirmed"
-      ? "badge bg-primary"
-      : order.status === "Processing"
-      ? "badge bg-info"
-      : order.status === "Delivered"
-      ? "badge bg-success"
-      : "badge bg-danger"
-  }
->
-
-   {order.status}
-</p> */}
+                
                 <p className="mb-0">
                   <strong>Status:</strong>
 
@@ -104,9 +89,103 @@ const ManageOrderDetails = () => {
                     {order.status}
                   </span>
                 </p>
+  {order.transaction_id && (
+        <p>
+          <strong>Transaction ID:</strong> {order.transaction_id}
+        </p>
+      )}
+
+      <p className="mb-0">
+        <strong>Status:</strong>
+
+        <span
+          className={
+            order.status === "Pending"
+              ? "badge bg-warning text-dark ms-2"
+              : order.status === "Confirmed"
+              ? "badge bg-primary ms-2"
+              : order.status === "Processing"
+              ? "badge bg-info ms-2"
+              : order.status === "Delivered"
+              ? "badge bg-success ms-2"
+              : "badge bg-danger ms-2"
+          }
+        >
+          {order.status}
+        </span>
+      </p>
+
               </div>
             </div>
-          </div>
+          </div> */}
+
+
+
+          <div className="col-md-6 mb-4">
+  <div className="card shadow-sm border-0">
+    <div className="card-body">
+      <h4 className="mb-3">Order Information</h4>
+
+      <p>
+        <strong>Order ID:</strong> {order.order_number}
+      </p>
+
+      <p>
+        <strong>Date:</strong>{" "}
+        {new Date(order.created_at).toLocaleString()}
+      </p>
+
+      <p>
+        <strong>Payment Method:</strong> {order.payment_method}
+      </p>
+
+      <p>
+        <strong>Payment Status:</strong>{" "}
+        <span
+          className={
+            order.payment_status === "Paid"
+              ? "badge bg-success"
+              : order.payment_status === "Pending"
+              ? "badge bg-warning text-dark"
+              : order.payment_status === "Failed"
+              ? "badge bg-danger"
+              : "badge bg-secondary"
+          }
+        >
+          {order.payment_status}
+        </span>
+      </p>
+
+      {order.transaction_id && (
+        <p>
+          <strong>Transaction ID:</strong> {order.transaction_id}
+        </p>
+      )}
+
+      <p className="mb-0">
+        <strong>Status:</strong>
+
+        <span
+          className={
+            order.status === "Pending"
+              ? "badge bg-warning text-dark ms-2"
+              : order.status === "Confirmed"
+              ? "badge bg-primary ms-2"
+              : order.status === "Processing"
+              ? "badge bg-info ms-2"
+              : order.status === "Delivered"
+              ? "badge bg-success ms-2"
+              : "badge bg-danger ms-2"
+          }
+        >
+          {order.status}
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
+
+
 
           {/* Customer */}
 

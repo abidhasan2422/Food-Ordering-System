@@ -45,19 +45,7 @@ const OrderDetails = () => {
   return (
     <PublicLayout>
       <div className="container py-5">
-        {/* <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold">
-            Order Details
-          </h2>
-
-          <Link
-            to="/my-orders"
-            className="btn btn-outline-secondary"
-          >
-            Back To Orders
-          </Link>
-          
-        </div> */}
+      
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold">Order Details</h2>
 

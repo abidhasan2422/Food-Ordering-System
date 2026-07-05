@@ -40,6 +40,7 @@ const Checkout = () => {
       subtotal: subtotal,
       delivery_charge: deliveryCharge,
       total_amount: total,
+      payment_method: paymentMethod,
     };
 
     // Buy Now
