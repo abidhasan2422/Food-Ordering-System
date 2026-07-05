@@ -9,7 +9,7 @@ import requests
 from django.conf import settings
 
 @api_view(["POST"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 
 def payment_initiate(request):
 
@@ -31,39 +31,48 @@ def payment_initiate(request):
         )
         payment_data = {
 
-    "store_id": settings.SSLCOMMERZ_STORE_ID,
+        "store_id": settings.SSLCOMMERZ_STORE_ID,
 
-    "store_passwd": settings.SSLCOMMERZ_STORE_PASSWORD,
+        "store_passwd": settings.SSLCOMMERZ_STORE_PASSWORD,
 
-    "total_amount": order.total_amount, 
+        "total_amount": order.total_amount, 
 
-    "currency": "BDT",
+        "currency": "BDT",
 
-    "tran_id":  f"FO-{order.id}",
+        "tran_id":  f"FO-{order.id}",
 
-    "cus_name": order.full_name,
+        "cus_name": order.full_name,
 
-    "cus_email": order.email,
+        "cus_email": order.email,
 
-    "cus_phone": order.phone,
+        "cus_phone": order.phone,
 
-    "cus_add1": order.address,
+        "cus_add1": order.address,
 
-    "cus_city": order.city,
+        "cus_city": order.city,
 
-    "success_url": "http://127.0.0.1:8000/api/payment/success/",
+        "success_url": "http://127.0.0.1:8000/api/payment/success/",
 
-    "fail_url": "http://127.0.0.1:8000/api/payment/fail/",
+        "fail_url": "http://127.0.0.1:8000/api/payment/fail/",
 
-    "cancel_url": "http://127.0.0.1:8000/api/payment/cancel/",
+        "cancel_url": "http://127.0.0.1:8000/api/payment/cancel/",
 
-    "ipn_url": "http://127.0.0.1:8000/api/payment/ipn/",
+        "ipn_url": "http://127.0.0.1:8000/api/payment/ipn/",
     
 }
+        response = requests.post(
+        settings.SSLCOMMERZ_API_URL,
+        data=payment_data
+        )
+        response_data = response.json()
+        gateway_url = response_data.get("GatewayPageURL")
 
+        print(response_data)  
+        print(response_data.get("status"))
+        print(response_data.get("GatewayPageURL"))       
                 
         return Response({
-            "message": "Order and OrderItem Created Successfully",
+            "GatewayPageURL": gateway_url,
             "order_id": order.id
         })
 

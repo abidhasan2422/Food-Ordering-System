@@ -103,6 +103,7 @@ const Checkout = () => {
       "payment/initiate/",
       orderData
     );
+    window.location.href = response.data.GatewayPageURL;
 
     // We will add this after implementing the backend
     // window.location.href = response.data.GatewayPageURL;
