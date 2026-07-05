@@ -4,10 +4,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from foodordering.serializers import OrderSerializer
+from foodordering.models import Food,OrderItem
+import requests 
+from django.conf import settings
 
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated])
-# Step 2: Validate data
+
 def payment_initiate(request):
 
     serializer = OrderSerializer(data=request.data)
@@ -16,8 +19,51 @@ def payment_initiate(request):
             user= request.user,
             payment_status = "Pending"
         )
+
+        food = Food.objects.get(
+            id=request.data.get("food_id")
+        )
+        OrderItem.objects.create(
+            order=order,
+            food=food,
+            quantity=request.data.get("quantity"),
+            price=food.item_price
+        )
+        payment_data = {
+
+    "store_id": settings.SSLCOMMERZ_STORE_ID,
+
+    "store_passwd": settings.SSLCOMMERZ_STORE_PASSWORD,
+
+    "total_amount": order.total_amount, 
+
+    "currency": "BDT",
+
+    "tran_id":  f"FO-{order.id}",
+
+    "cus_name": order.full_name,
+
+    "cus_email": order.email,
+
+    "cus_phone": order.phone,
+
+    "cus_add1": order.address,
+
+    "cus_city": order.city,
+
+    "success_url": "http://127.0.0.1:8000/api/payment/success/",
+
+    "fail_url": "http://127.0.0.1:8000/api/payment/fail/",
+
+    "cancel_url": "http://127.0.0.1:8000/api/payment/cancel/",
+
+    "ipn_url": "http://127.0.0.1:8000/api/payment/ipn/",
+    
+}
+
+                
         return Response({
-            "message": "Order Created Successfully",
+            "message": "Order and OrderItem Created Successfully",
             "order_id": order.id
         })
 
