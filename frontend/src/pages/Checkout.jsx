@@ -80,18 +80,36 @@ const Checkout = () => {
       return;
     }
     try {
-      const response = await userApi.post(
-        food ? "order/create/" : "order/create-from-cart/",
-        orderData,
-      );
 
-      console.log(response.data);
-       await fetchCartCount();
-      toast.success("Order placed successfully", {
-        autoClose: 1500,
-        onClose: () => navigate("/order-success"),
-      });
-    } catch (error) {
+  let response;
+
+  if (paymentMethod === "COD") {
+
+    response = await userApi.post(
+      food ? "order/create/" : "order/create-from-cart/",
+      orderData
+    );
+
+    await fetchCartCount();
+
+    toast.success("Order placed successfully", {
+      autoClose: 1500,
+      onClose: () => navigate("/order-success"),
+    });
+
+  } else if (paymentMethod === "SSLCOMMERZ") {
+
+    response = await userApi.post(
+      "payment/initiate/",
+      orderData
+    );
+
+    // We will add this after implementing the backend
+    // window.location.href = response.data.GatewayPageURL;
+
+  }
+
+} catch (error) {
      
       console.error(error);
 

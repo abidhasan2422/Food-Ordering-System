@@ -94,7 +94,7 @@ const OrderDetails = () => {
                 </p>
 
                 <p>
-                  <strong>Payment:</strong> {order.payment_method}
+                  <strong>Payment Method:</strong> {order.payment_method}
                 </p>
 
                 <p>
