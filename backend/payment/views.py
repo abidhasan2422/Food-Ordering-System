@@ -113,9 +113,8 @@ def payment_initiate(request):
                 price=food.item_price
             )
 
-        # -----------------------------
-        # Cart Checkout
-        # -----------------------------
+       
+
         else:
 
             cart = Cart.objects.get(
@@ -124,7 +123,9 @@ def payment_initiate(request):
 
             cart_items = cart.items.all()
 
+
             for item in cart_items:
+
 
                 OrderItem.objects.create(
                     order=order,

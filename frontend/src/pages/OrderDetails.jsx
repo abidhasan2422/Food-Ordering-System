@@ -21,6 +21,7 @@ const OrderDetails = () => {
        const response = await userApi.get(
   `order/${id}/`
 );
+console.log(order);
 
         setOrder(response.data);
       } catch (error) {
@@ -68,40 +69,68 @@ const OrderDetails = () => {
           <div className="card-body">
             <div className="row">
               <div className="col-md-6">
-                <h5 className="fw-bold mb-3">Order Information</h5>
+  <h5 className="fw-bold mb-3">Order Information</h5>
 
-                <p>
-                  <strong>Order ID:</strong> {order.order_number}
-                </p>
+  <p>
+    <strong>Order ID:</strong> {order.order_number}
+  </p>
 
-                <p>
-                  <strong>Status:</strong>{" "}
-                  <span
-                    className={
-                      order.status === "Pending"
-                        ? "badge bg-warning text-dark"
-                        : order.status === "Confirmed"
-                          ? "badge bg-primary"
-                          : order.status === "Processing"
-                            ? "badge bg-info text-dark"
-                            : order.status === "Delivered"
-                              ? "badge bg-success"
-                              : "badge bg-danger"
-                    }
-                  >
-                    {order.status}
-                  </span>
-                </p>
+  <p>
+    <strong>Status:</strong>{" "}
+    <span
+      className={
+        order.status === "Pending"
+          ? "badge bg-warning text-dark"
+          : order.status === "Confirmed"
+          ? "badge bg-primary"
+          : order.status === "Processing"
+          ? "badge bg-info text-dark"
+          : order.status === "Delivered"
+          ? "badge bg-success"
+          : "badge bg-danger"
+      }
+    >
+      {order.status}
+    </span>
+  </p>
 
-                <p>
-                  <strong>Payment Method:</strong> {order.payment_method}
-                </p>
+  <p>
+    <strong>Payment Method:</strong>{" "}
+    {order.payment_method === "SSLCOMMERZ"
+      ? "Online Payment (SSLCOMMERZ)"
+      : "Cash on Delivery"}
+  </p>
 
-                <p>
-                  <strong>Date:</strong>{" "}
-                  {new Date(order.created_at).toLocaleString()}
-                </p>
-              </div>
+  <p>
+    <strong>Payment Status:</strong>{" "}
+    <span
+      className={
+        order.payment_status === "Paid"
+          ? "badge bg-success"
+          : order.payment_status === "Pending"
+          ? "badge bg-warning text-dark"
+          : "badge bg-danger"
+      }
+    >
+      {order.payment_status}
+    </span>
+  </p>
+
+  {order.transaction_id && (
+    <p>
+      <strong>Transaction ID:</strong> {order.transaction_id}
+    </p>
+  )}
+
+  <p>
+    <strong>Total Amount:</strong> ৳{order.total_amount}
+  </p>
+
+  <p>
+    <strong>Date:</strong>{" "}
+    {new Date(order.created_at).toLocaleString()}
+  </p>
+</div>
 
               <div className="col-md-6">
                 <h5 className="fw-bold mb-3">Customer Information</h5>
@@ -302,6 +331,7 @@ const OrderDetails = () => {
 
             <table className="table table-bordered table-hover">
               <thead className="table-dark">
+                
                 <tr>
                   <th>#</th>
                   <th>Item</th>
@@ -309,7 +339,7 @@ const OrderDetails = () => {
                   <th>Price</th>
                 </tr>
               </thead>
-
+            
               <tbody>
                 {order.items.map((item, index) => (
                   <tr key={index}>
