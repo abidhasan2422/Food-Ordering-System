@@ -4,9 +4,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from foodordering.serializers import OrderSerializer
-from foodordering.models import Food,OrderItem
+from foodordering.models import Food, Order,OrderItem
 import requests 
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -78,8 +81,44 @@ def payment_initiate(request):
 
     return Response(serializer.errors, status=400)
 
+from django.shortcuts import redirect
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 def payment_success(request):
-    return JsonResponse({"message": "Payment Successful"})
+
+    tran_id = request.POST.get("tran_id")
+    payment_status = request.POST.get("status")
+    bank_tran_id = request.POST.get("bank_tran_id")
+
+    if not tran_id:
+        return JsonResponse(
+            {"message": "Transaction ID not found"},
+            status=400
+        )
+
+    if payment_status != "VALID":
+        return JsonResponse(
+            {"message": "Payment is not valid"},
+            status=400
+        )
+
+    order_id = tran_id.replace("FO-", "")
+
+    order = Order.objects.filter(id=order_id).first()
+
+    if not order:
+        return JsonResponse(
+            {"message": "Order not found"},
+            status=404
+        )
+
+    order.payment_status = "Paid"
+    order.transaction_id = bank_tran_id
+    order.save()
+
+    return redirect("http://localhost:3000/order-success/{order.id}")
 
 def payment_fail(request):
     return JsonResponse({"message": "Payment Failed"})

@@ -1,7 +1,8 @@
 import React,{useState} from "react";
-import { Link } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 
 const OrderSuccess = () => {
+  const {id} = useParams();
   return (
  <div className="container py-5">
 
@@ -45,17 +46,55 @@ const OrderSuccess = () => {
         Your order is being processed.
       </p>
 
-      <div className="mb-4">
+      <div className="border rounded p-3 bg-light mb-4">
 
-        <span className="me-2">
-          Status:
-        </span>
+  <div className="d-flex justify-content-between mb-2">
+    <strong>Order Status</strong>
 
-        <span className="badge bg-warning text-dark px-3 py-2">
-          Pending
-        </span>
+    <span
+      className={
+        order.status === "Pending"
+          ? "badge bg-warning text-dark"
+          : order.status === "Confirmed"
+          ? "badge bg-primary"
+          : order.status === "Processing"
+          ? "badge bg-info text-dark"
+          : order.status === "Delivered"
+          ? "badge bg-success"
+          : "badge bg-danger"
+      }
+    >
+      {order.status}
+    </span>
+  </div>
 
-      </div>
+  <div className="d-flex justify-content-between mb-2">
+    <strong>Payment Method</strong>
+    <span>{order.payment_method}</span>
+  </div>
+
+  <div className="d-flex justify-content-between mb-2">
+    <strong>Payment Status</strong>
+
+    <span
+      className={
+        order.payment_status === "Paid"
+          ? "badge bg-success"
+          : order.payment_status === "Pending"
+          ? "badge bg-warning text-dark"
+          : "badge bg-danger"
+      }
+    >
+      {order.payment_status}
+    </span>
+  </div>
+
+  <div className="d-flex justify-content-between">
+    <strong>Total Amount</strong>
+    <span>৳{order.total_amount}</span>
+  </div>
+
+</div>
 
       <div className="d-flex justify-content-center gap-3">
 

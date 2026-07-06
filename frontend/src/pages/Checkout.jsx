@@ -103,10 +103,11 @@ const Checkout = () => {
       "payment/initiate/",
       orderData
     );
+   if (response.data.GatewayPageURL) {
     window.location.href = response.data.GatewayPageURL;
-
-    // We will add this after implementing the backend
-    // window.location.href = response.data.GatewayPageURL;
+} else {
+    toast.error("Unable to initialize payment.");
+}
 
   }
 

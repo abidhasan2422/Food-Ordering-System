@@ -55,7 +55,7 @@ const App = () => {
           <Route path="/admin/food/manage" element={<AdminProtectedRoute> <ManageFood /> </AdminProtectedRoute>} />
           <Route path="/cart" element={  <UserProtectedRoute>  <Cart /> </UserProtectedRoute>  } />
           <Route path="/checkout" element={<UserProtectedRoute> <Checkout /> </UserProtectedRoute>} />
-          <Route path="/order-success" element={<UserProtectedRoute> <OrderSuccess /> </UserProtectedRoute>} />
+          <Route path="/order-success/:id" element={<UserProtectedRoute> <OrderSuccess /> </UserProtectedRoute>} />
           <Route path="/my-orders" element={<UserProtectedRoute> <MyOrders /></UserProtectedRoute>} />
           <Route path="/order/:id" element={<UserProtectedRoute> <OrderDetails /> </UserProtectedRoute>} />
           <Route path="/admin/orders" element={<AdminProtectedRoute> <ManageOrders /> </AdminProtectedRoute>} />
