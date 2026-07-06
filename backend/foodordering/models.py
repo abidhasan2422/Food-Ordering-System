@@ -114,6 +114,7 @@ class Order(models.Model):
     ("Pending", "Pending"),
     ("Paid", "Paid"),
     ("Failed", "Failed"),
+      ("Cancelled", "Cancelled"),
     ("Refunded", "Refunded"),
 )
     PAYMENT_METHOD_CHOICES = (

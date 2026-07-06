@@ -252,8 +252,35 @@ def payment_fail(request):
 
     return redirect(f"http://localhost:3000/order-failed/{order.id}")
 
+@csrf_exempt
 def payment_cancel(request):
-    return JsonResponse({"message": "Payment Cancelled"})
+
+    tran_id = request.POST.get("tran_id")
+
+    if not tran_id:
+        return JsonResponse(
+            {"message": "Transaction ID not found"},
+            status=400
+        )
+
+    order_id = tran_id.replace("FO-", "")
+
+    order = Order.objects.filter(
+        id=order_id
+    ).first()
+
+    if not order:
+        return JsonResponse(
+            {"message": "Order not found"},
+            status=404
+        )
+
+    order.payment_status = "Cancelled"
+    order.save()
+
+    return redirect(
+        f"http://localhost:3000/payment-cancel/{order.id}"
+    )
 
 def payment_ipn(request):
     return JsonResponse({"message": "Payment IPN Received"})
