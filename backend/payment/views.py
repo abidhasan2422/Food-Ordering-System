@@ -250,7 +250,7 @@ def payment_fail(request):
     order.payment_status = "Failed"
     order.save()
 
-    return redirect(f"http://localhost:3000/payment-failed/{order.id}")
+    return redirect(f"http://localhost:3000/order-failed/{order.id}")
 
 def payment_cancel(request):
     return JsonResponse({"message": "Payment Cancelled"})

@@ -126,6 +126,10 @@ if (!order) {
     <strong>Total Amount</strong>
     <span>৳{order.total_amount}</span>
   </div>
+  <div className="d-flex justify-content-between">
+    <strong>Date</strong>
+    <span>{new Date(order.created_at).toLocaleString()}</span>
+  </div>
 
 </div>
 
@@ -139,7 +143,7 @@ if (!order) {
         </Link>
 
         <Link
-          to="/"
+          to="/menu"
           className="btn btn-success px-4"
         >
           Continue Shopping
