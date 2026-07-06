@@ -34,6 +34,7 @@ import Wishlist from "./pages/Wishlist";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword"
 import PaymentFailed from "./pages/PaymentFailed"
+import PaymentCancel from "./pages/PaymentCancel"
 const App = () => {
   return (
     <CartProvider>
@@ -58,6 +59,7 @@ const App = () => {
           <Route path="/checkout" element={<UserProtectedRoute> <Checkout /> </UserProtectedRoute>} />
           <Route path="/order-success/:id" element={<UserProtectedRoute> <OrderSuccess /> </UserProtectedRoute>} />
           <Route path="/order-failed/:id" element={<UserProtectedRoute> <PaymentFailed /> </UserProtectedRoute>} />
+          <Route path="/payment-cancel/:id" element={<UserProtectedRoute> <PaymentCancel/> </UserProtectedRoute>} />
           <Route path="/my-orders" element={<UserProtectedRoute> <MyOrders /></UserProtectedRoute>} />
           <Route path="/order/:id" element={<UserProtectedRoute> <OrderDetails /> </UserProtectedRoute>} />
           <Route path="/admin/orders" element={<AdminProtectedRoute> <ManageOrders /> </AdminProtectedRoute>} />
