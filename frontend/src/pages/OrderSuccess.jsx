@@ -1,8 +1,41 @@
-import React,{useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link,useParams } from "react-router-dom";
+import userApi from "../utils/userApi";
 
 const OrderSuccess = () => {
   const {id} = useParams();
+
+    const [order, setOrder] = useState(null);
+ useEffect(() => {
+
+    const fetchOrder = async () => {
+
+        try {
+
+            const response = await userApi.get(
+                `order/${id}/`
+            );
+
+            setOrder(response.data);
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
+    fetchOrder();
+
+}, [id]);
+if (!order) {
+    return (
+        <div className="text-center mt-5">
+            <h4>Loading...</h4>
+        </div>
+    );
+}
   return (
  <div className="container py-5">
 
