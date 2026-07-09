@@ -282,5 +282,46 @@ def payment_cancel(request):
         f"http://localhost:3000/payment-cancel/{order.id}"
     )
 
+@csrf_exempt
 def payment_ipn(request):
-    return JsonResponse({"message": "Payment IPN Received"})
+
+    tran_id = request.POST.get("tran_id")
+    payment_status = request.POST.get("status")
+    bank_tran_id = request.POST.get("bank_tran_id")
+
+    if not tran_id:
+        return JsonResponse(
+            {"message": "Transaction ID not found"},
+            status=400
+        )
+
+    order_id = tran_id.replace("FO-", "")
+
+    order = Order.objects.filter(
+        id=order_id
+    ).first()
+
+    if not order:
+        return JsonResponse(
+            {"message": "Order not found"},
+            status=404
+        )
+
+    if payment_status == "VALID":
+
+        order.payment_status = "Paid"
+        order.transaction_id = bank_tran_id
+
+    elif payment_status == "FAILED":
+
+        order.payment_status = "Failed"
+
+    elif payment_status == "CANCELLED":
+
+        order.payment_status = "Cancelled"
+
+    order.save()
+
+    return JsonResponse({
+        "message": "IPN Processed Successfully"
+    })
