@@ -55,8 +55,13 @@ A full-stack Online Food Ordering System built with React.js and Django REST Fra
 
 ## 📷 Screenshots
 
-(Add screenshots here)
+## 🏠 Home Page
 
+![Home](screenshots/home1.png) (screenshots/home2.png) 
+(screenshots/home3.png) 
+## 🔐 User Login
+
+![Login](screenshots/login.png)
 ---
 
 ## ⚙ Installation
@@ -64,7 +69,7 @@ A full-stack Online Food Ordering System built with React.js and Django REST Fra
 ### Clone repository
 
 ```bash
-git clone https://github.com/yourusername/yourrepository.git
+git clone https://github.com/abidhasan2422/Food-Ordering-System
 ```
 
 ### Backend
