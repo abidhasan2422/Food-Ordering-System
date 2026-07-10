@@ -25,7 +25,8 @@ useEffect(() => {
   return (
     <PublicLayout>
    
-   <section className="hero-section container-fluid ">
+
+<section className="hero-section container-fluid">
 
   <div
     className="row align-items-center hero-box"
@@ -34,14 +35,14 @@ useEffect(() => {
     }}
   >
 
-   <div className="hero-overlay">
+   
+    <div className="hero-overlay"></div>
 
-<div className="col-lg-6 hero-content">
+    <div className="col-lg-6 hero-content">
 
-
-  <span className="badge bg-warning text-dark mb-3">
-    Fresh & Delicious
-</span>
+      <span className="badge bg-warning text-dark mb-3">
+        Fresh & Delicious
+      </span>
 
       <h1 className="display-3 fw-bold text-white">
         Order Your Favourite Food Here
@@ -54,12 +55,11 @@ useEffect(() => {
       </p>
 
       <button
-        className="btn btn-warning rounded-pill px-5 py-3 fw-semibold"
+        className="btn rounded-pill px-5 py-3 fw-bold d-inline-flex align-items-center gap-2 btn-hero mb-4"
         onClick={() => navigate("/menu")}
       >
-        Browse Menu
+        <FaShoppingBasket /> Browse Menu
       </button>
-      </div>
 
     </div>
 
@@ -119,9 +119,7 @@ useEffect(() => {
       Ready to Order Your Favorite Food?
     </h4>
 
-    {/* <Link to="/foods" className="btn btn-dark btn-lg mt-3">
-      Browse Full Menu
-    </Link> */}
+    
     <button
     className="btn btn-dark"
     onClick={() => navigate("/menu")}
