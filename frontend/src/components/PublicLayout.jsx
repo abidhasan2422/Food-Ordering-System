@@ -36,7 +36,7 @@ const PublicLayout = ({ children }) => {
       <div className="col-md-4 mb-3">
         <h5>Contact Us</h5>
         <p>Email: likhon2422@gmail.com</p>
-        <p>Phone: +880 130-0708255</p>
+        <p>Phone: +8801307-08255</p>
       </div>
     </div>
 
@@ -44,7 +44,7 @@ const PublicLayout = ({ children }) => {
 
     <div className="text-center">
       <p className="mb-0">
-        © 2026 Food Ordering System. All Rights Reserved.
+        © 2026 BiteBox. Designed & Developed by Abid Hasan.
       </p>
     </div>
 

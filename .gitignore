@@ -1,0 +1,10 @@
+# Project level directories
+screenshots/
+
+# Editor and IDE configurations
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db

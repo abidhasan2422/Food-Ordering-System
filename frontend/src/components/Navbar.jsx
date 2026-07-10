@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaSignInAlt,
-
   FaUserShield,
   FaUtensils,
   FaShoppingCart,
@@ -11,16 +10,18 @@ import {
   FaUserEdit,
   FaLock,
   FaSignOutAlt,
+  FaBoxOpen
 } from "react-icons/fa";
 import "../styles/layout.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { CartContext } from "./CartContext";
 import { useEffect, useState, useContext } from "react";
 import userApi from "../utils/userApi";
-import { FaBoxOpen } from "react-icons/fa";
+
 const Navbar = () => {
   const { cartCount  } = useContext(CartContext);
   const navigate = useNavigate();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     const fetchCartCount = async () => {
@@ -54,17 +55,10 @@ const Navbar = () => {
         
 
 
-{/* <a className="navbar-brand d-flex align-items-center" href="/">
+<a className="navbar-brand d-flex align-items-center" href="/">
   <FaBoxOpen className="text-warning me-2" size={28} />
   <span className="fw-bold text-white">BiteBox</span>
-</a> */}
-import { FaShoppingBag } from "react-icons/fa";
-
-// Inside your Navbar component:
-<a className="navbar-brand d-flex align-items-center" href="/">
-  <FaShoppingBag className="text-warning me-2" size={26} />
-  <span className="fw-bold text-white">BiteBox</span>
-</a>
+ </a>
 
         <button
           className="navbar-toggler"
@@ -132,9 +126,13 @@ import { FaShoppingBag } from "react-icons/fa";
 
 
 
-<li className="nav-item dropdown mx-1">
+{/* <li className="nav-item dropdown mx-1"> */}
+<li 
+      className="nav-item dropdown mx-1" 
+      onClick={() => setIsProfileOpen(!isProfileOpen)}
+    >
 
-  <button
+  {/* <button
     className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
     id="profileDropdown"
     data-bs-toggle="dropdown"
@@ -142,12 +140,25 @@ import { FaShoppingBag } from "react-icons/fa";
   >
     <FaUserCircle className="me-2" />
     Profile
-  </button>
+  </button> */}
+  <button
+        className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
+        id="profileDropdown"
+        type="button" // Always add type="button" to React buttons to prevent form submissions
+      >
+        <FaUserCircle className="me-2" />
+        Profile
+      </button>
+      
 
-  <ul
+  {/* <ul
     className="dropdown-menu dropdown-menu-end"
     aria-labelledby="profileDropdown"
-  >
+  > */}
+  <ul
+        className={`dropdown-menu dropdown-menu-end ${isProfileOpen ? "show" : ""}`}
+        aria-labelledby="profileDropdown"
+      >
 
     <li>
       <Link className="dropdown-item" to="/profile">
