@@ -35,8 +35,8 @@ const PublicLayout = ({ children }) => {
 
       <div className="col-md-4 mb-3">
         <h5>Contact Us</h5>
-        <p>Email: likhon123@gmail.com</p>
-        <p>Phone: +880 0130-7082551</p>
+        <p>Email: likhon2422@gmail.com</p>
+        <p>Phone: +880 130-0708255</p>
       </div>
     </div>
 

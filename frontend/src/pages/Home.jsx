@@ -3,8 +3,9 @@ import PublicLayout from "../components/PublicLayout";
 import '../styles/home.css'
 import { useNavigate ,Link } from "react-router-dom";
 import  { useState,useEffect } from "react";
-import { FaShoppingBasket } from "react-icons/fa";
+import { FaHamburger, FaMapMarkerAlt, FaShippingFast,FaShoppingBasket } from "react-icons/fa";
 import FoodCard from "../components/FoodCard";
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -84,6 +85,7 @@ useEffect(() => {
     ))}
   </div>
 </section>
+
 <section className="bg-dark text-white py-5">
   <div className="container">
     <h2 className="text-center fw-bold mb-5">
@@ -92,21 +94,24 @@ useEffect(() => {
 
     <div className="row text-center">
       <div className="col-md-4 mb-4">
-        <h4>🍔 Choose Your Meal</h4>
+        <FaHamburger className="text-warning mb-3" size={35} />
+        <h4> Choose Your Meal</h4>
         <p>
           Browse our menu and select your favorite food from a wide range of dishes.
         </p>
       </div>
 
       <div className="col-md-4 mb-4">
-        <h4>📍 Add Delivery Address</h4>
+        <FaMapMarkerAlt className="text-warning mb-3" size={35} />
+        <h4> Add Delivery Address</h4>
         <p>
           Enter your location and we'll make sure your order reaches you quickly.
         </p>
       </div>
 
       <div className="col-md-4 mb-4">
-        <h4>🚚 Fast Delivery</h4>
+         <FaShippingFast className="text-warning mb-3" size={35} />
+        <h4> Fast Delivery</h4>
         <p>
           Relax and enjoy while our delivery partners bring your meal to your doorstep.
         </p>
@@ -114,19 +119,56 @@ useEffect(() => {
     </div>
   </div>
 
-  <section className="py-5 bg-warning text-center text-dark">
-    <h4 className="fw-bold">
-      Ready to Order Your Favorite Food?
-    </h4>
+ 
+  <section className="py-5 bg-warning text-center text-dark position-relative">
 
-    
-    <button
-    className="btn btn-dark"
-    onClick={() => navigate("/menu")}
->
-    Browse Full Menu
-</button>
-  </section>
+<div id="offerCarousel" className="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="false" data-bs-wrap="true">    <div className="carousel-inner container">
+
+      {/* Slide 1: 10% Off Offer */}
+      <div className="carousel-item active">
+        <h3 className="fw-bold mb-3">
+          Craving Something Specific?
+        </h3>
+        <h5 className="mb-4 text-dark">
+          Get <span className="bg-white px-2 py-1 rounded text-danger fw-bold">10% OFF</span> your first order!
+        </h5>
+        <button
+          className="btn btn-dark rounded-pill px-5 py-3 fw-bold shadow"
+          onClick={() => navigate("/menu")}
+        >
+          Claim Your Discount
+        </button>
+      </div>
+
+      {/* Slide 2: Free Delivery Offer */}
+      <div className="carousel-item">
+        <h3 className="fw-bold mb-3">
+          Feast with Friends & Family
+        </h3>
+        <h5 className="mb-4 text-dark">
+          Enjoy <span className="bg-white px-2 py-1 rounded text-danger fw-bold">Free Delivery</span> on orders over ৳1,000!
+        </h5>
+        <button
+          className="btn btn-dark rounded-pill px-5 py-3 fw-bold shadow"
+          onClick={() => navigate("/menu")}
+        >
+          Order Now
+        </button>
+      </div>
+
+    </div>
+
+    {/* Navigation Arrows (Optional, but good for user control) */}
+    <button className="carousel-control-prev" type="button" data-bs-target="#offerCarousel" data-bs-slide="prev" style={{ width: "5%" }}>
+      <span className="carousel-control-prev-icon" aria-hidden="true" style={{ filter: "invert(1)" }}></span>
+      <span className="visually-hidden">Previous</span>
+    </button>
+    <button className="carousel-control-next" type="button" data-bs-target="#offerCarousel" data-bs-slide="next" style={{ width: "5%" }}>
+      <span className="carousel-control-next-icon" aria-hidden="true" style={{ filter: "invert(1)" }}></span>
+      <span className="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
 </section>
 
     </PublicLayout>
