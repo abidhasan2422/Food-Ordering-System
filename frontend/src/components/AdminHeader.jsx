@@ -1,4 +1,4 @@
-import { FaBell, FaSignOutAlt,  FaBars, FaUtensils } from "react-icons/fa";
+import { FaBell, FaSignOutAlt,  FaBars, FaUtensils,FaBoxOpen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const AdminHeader = ({ setSidebarOpen }) => {
@@ -31,16 +31,10 @@ const AdminHeader = ({ setSidebarOpen }) => {
         </button>
 
         {/* Logo */}
-        <div className="d-flex align-items-center">
-          <FaUtensils
-            size={28}
-            className="me-2 text-dark"
-          />
-
-          <h4 className="mb-0 fw-bold">
-            Online Food Ordering System
-          </h4>
-        </div>
+       <a className="navbar-brand d-flex align-items-center" href="/admin-dashboard">
+         <FaBoxOpen className="text-warning me-2" size={28} />
+         <span className="fw-bold text-dark">BiteBox</span>
+        </a>
 
         {/* Right Side */}
         <div className="collapse navbar-collapse">

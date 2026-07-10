@@ -81,9 +81,7 @@ const Navbar = () => {
             {token ? (
               <>
                 <li className="nav-item mx-1">
-                  {/* <Link className="nav-link" to="/cart"> <FaShoppingCart className="me-2" /> 
-                          Cart
-                        </Link> */}
+                
                   <Link
                     to="/cart"
                     className="btn btn-outline-light position-relative"
@@ -126,21 +124,12 @@ const Navbar = () => {
 
 
 
-{/* <li className="nav-item dropdown mx-1"> */}
 <li 
       className="nav-item dropdown mx-1" 
       onClick={() => setIsProfileOpen(!isProfileOpen)}
     >
 
-  {/* <button
-    className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
-    id="profileDropdown"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
-  >
-    <FaUserCircle className="me-2" />
-    Profile
-  </button> */}
+  
   <button
         className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
         id="profileDropdown"
@@ -150,11 +139,6 @@ const Navbar = () => {
         Profile
       </button>
       
-
-  {/* <ul
-    className="dropdown-menu dropdown-menu-end"
-    aria-labelledby="profileDropdown"
-  > */}
   <ul
         className={`dropdown-menu dropdown-menu-end ${isProfileOpen ? "show" : ""}`}
         aria-labelledby="profileDropdown"
