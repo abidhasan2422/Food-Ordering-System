@@ -57,8 +57,11 @@ A full-stack Online Food Ordering System built with React.js and Django REST Fra
 
 ## 🏠 Home Page
 
-![Home](screenshots/home1.png) (screenshots/home2.png) 
-(screenshots/home3.png) 
+![Home 1](screenshots/home1.png)
+
+![Home 2](screenshots/home2.png)
+
+![Home 3](screenshots/home3.png)
 ## 🔐 User Login
 
 ![Login](screenshots/login.png)

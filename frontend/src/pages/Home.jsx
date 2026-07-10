@@ -7,7 +7,7 @@ import { FaShoppingBasket } from "react-icons/fa";
 import FoodCard from "../components/FoodCard";
 const Home = () => {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
+
 const [foods, setFoods] = useState([]);
 
 useEffect(() => {
@@ -22,41 +22,53 @@ useEffect(() => {
     });
 }, []);
 
-  const handleSearch = (e) => {
-  e.preventDefault();
-  navigate(`/search?keyword=${search}`);
-};
   return (
     <PublicLayout>
-       <section className="hero-section" style={{  backgroundImage: "url('/images/hero1.jpeg')"}}>
-      <div className="overlay">
-        <div className="hero-content">
-          <h1>Order Delicious Food Online</h1>
+   
+   <section className="hero-section container-fluid ">
 
-          <p>
-             Fresh meals, quick delivery, and the best dining experience at your fingertips.
-          </p>
+  <div
+    className="row align-items-center hero-box"
+    style={{
+      backgroundImage: "url('/images/hero.jpg')",
+    }}
+  >
 
-          <div className="search-box">
-            
-  <form onSubmit={handleSearch}>
-  <input
-    type="text"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    placeholder="Search food..."
-  />
+   <div className="hero-overlay">
 
-  <button type="submit">
-    Search
-  </button>
-</form>
-          </div>
-        </div>
+<div className="col-lg-6 hero-content">
+
+
+  <span className="badge bg-warning text-dark mb-3">
+    Fresh & Delicious
+</span>
+
+      <h1 className="display-3 fw-bold text-white">
+        Order Your Favourite Food Here
+      </h1>
+
+      <p className="text-white mt-4">
+        Choose from our delicious menu featuring burgers,
+        pizza, pasta, drinks and much more.
+        Fresh ingredients and fast delivery at your doorstep.
+      </p>
+
+      <button
+        className="btn btn-warning rounded-pill px-5 py-3 fw-semibold"
+        onClick={() => navigate("/menu")}
+      >
+        Browse Menu
+      </button>
       </div>
 
-    </section>
-    <section className="container py-5">
+    </div>
+
+  </div>
+
+</section>
+
+    
+ <section className="container-fluid pt-4">
   <h2 className="text-center mb-5">
     Most Popular Dishes This Month
   </h2>
