@@ -1,128 +1,143 @@
-# 🍔 Online Food Ordering System
+<h1 align="center">
+  📦 BiteBox 
+  <br>
+  <span style="font-size: 0.6em; font-weight: normal;">Modern Full-Stack Food Ordering Platform</span>
+</h1>
 
-A full-stack Online Food Ordering System built with React.js and Django REST Framework.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django" />
+  <img src="https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap" />
+</p>
+
+<p align="center">
+  A responsive, feature-rich online food ordering system designed for seamless user experience and robust administrative control. Built with a decoupled architecture using React.js and Django REST Framework.
+</p>
+
+---
+
+## 📑 Table of Contents
+- [🚀 Features](#-features)
+- [🛠 Tech Stack](#-tech-stack)
+- [📷 Screenshots](#-screenshots)
+- [⚙️ Installation & Setup](#️-installation--setup)
+- [📁 Project Structure](#-project-structure)
+- [👨‍💻 Author](#-author)
 
 ---
 
 ## 🚀 Features
 
-### User
+### 🍔 Customer Experience
+- **Secure Authentication:** User registration, login, and secure session management using JWT.
+- **Dynamic UI:** Auto-sliding promotional carousels, responsive navigation, and modern custom icons.
+- **Smart Browsing:** Search functionality and category-based menu filtering.
+- **Seamless Shopping:** Interactive shopping cart, wishlist management, and secure checkout.
+- **Profile Management:** Update personal details, change passwords, and track past orders.
 
-- User Registration & Login
-- JWT Authentication
-- Forgot Password
-- Profile Management
-- Change Password
-- Search Food
-- Browse Menu by Category
-- Wishlist
-- Shopping Cart
-- Checkout
-- My Orders
-
-### Admin
-
-- Dashboard
-- Category Management
-- Food Management
-- Customer Management
-- Order Management
-- Sales Report
-- Order Report
-- PDF Export
-- Excel Export
+### 🛡️ Admin Dashboard
+- **Centralized Management:** Full CRUD control over Categories, Menu Items, and Customers.
+- **Order Tracking:** Real-time visibility and management of incoming orders.
+- **Analytics & Reporting:** Generate and analyze detailed Sales and Order reports.
+- **Data Export:** Instantly export reports to **PDF** or **Excel** formats.
 
 ---
 
 ## 🛠 Tech Stack
 
-### Frontend
+**Frontend:**
+- React.js (Hooks, Context)
+- React Router DOM (Protected Routes)
+- Bootstrap 5 & Custom CSS
+- Axios (API Integration)
+- React Icons & React Toastify
 
-- React.js
-- Bootstrap 5
-- Axios
-- React Router
-- React Toastify
-
-### Backend
-
-- Django
-- Django REST Framework
-- JWT Authentication
-- MySQL
+**Backend:**
+- Python 3.x
+- Django & Django REST Framework (DRF)
+- SimpleJWT (Token Authentication)
+- MySQL Database
+- ReportLab & OpenPyXL (PDF/Excel Generation)
 
 ---
 
 ## 📷 Screenshots
 
-## 🏠 Home Page
+<details>
+  <summary><b>Click to expand and view screenshots</b></summary>
+  <br>
+  
+  ### 🏠 Home Page
+  ![Home 1](screenshots/home1.png)
+  ![Home 2](screenshots/home2.png)
+  ![Home 3](screenshots/home3.png)
+  
+  ### 🔐 Authentication
+  ![Login](screenshots/login.png)
+  
+</details>
 
-![Home 1](screenshots/home1.png)
-
-![Home 2](screenshots/home2.png)
-
-![Home 3](screenshots/home3.png)
-## 🔐 User Login
-
-![Login](screenshots/login.png)
 ---
 
-## ⚙ Installation
+## ⚙️ Installation & Setup
 
-### Clone repository
+Follow these instructions to get a local copy of BiteBox up and running on your machine.
 
+### 1. Clone the repository
 ```bash
-git clone https://github.com/abidhasan2422/Food-Ordering-System
-```
+git clone [https://github.com/abidhasan2422/Food-Ordering-System.git](https://github.com/abidhasan2422/Food-Ordering-System.git)
+cd Food-Ordering-System
 
-### Backend
-
-```bash
+Backend Setup:
 cd backend
 
+# Create and activate virtual environment
 python -m venv venv
+venv\Scripts\activate      # On Windows
+# source venv/bin/activate # On Mac/Linux
 
-venv\Scripts\activate
-
+# Install required Python packages
 pip install -r requirements.txt
 
+# Run database migrations
 python manage.py migrate
 
+# Start the Django development server
 python manage.py runserver
-```
 
-### Frontend
-
-```bash
+Frontend Setup:
 cd frontend
 
+# Install Node modules
 npm install
 
-npm start
-```
+# Start the React development server
+npm run dev
 
----
-
-## 📁 Folder Structure
-
-```
-Online Food Ordering System
+📁 Project Structure
+BiteBox/
 │
-├── backend
+├── backend/                  # Django REST API
+│   ├── manage.py
+│   ├── requirements.txt      # Python dependencies
+│   └── .gitignore            # Ignores venv/, sqlite3, pycache
 │
-├── frontend
+├── frontend/                 # React.js UI
+│   ├── src/
+│   ├── package.json
+│   └── .gitignore            # Ignores node_modules/, dist/
 │
-└── README.md
-```
+├── screenshots/              # Demo images
+├── .gitignore                # Root ignore (IDE settings, etc.)
+└── README.md                 # Project documentation
 
----
 
-## 👨‍💻 Author
+👨‍💻 Author
+Abid Hasan Likhon
 
-**Abid Hasan Likhon**
+LinkedIn: MD Abid Hasan Likhon
 
-LinkedIn:
-https://www.linkedin.com/in/md-abid-hasan-likhon-0b6402321/
+GitHub: @abidhasan2422
 
-GitHub:
-https://github.com/abidhasan2422
+If you find this project helpful, please consider giving it a ⭐ on GitHub!
