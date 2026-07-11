@@ -76,6 +76,33 @@
   ### 🔐 Authentication
   ![Login](screenshots/login.png)
   
+ ### 🍽️ Menu
+![Menu Management](screenshots/menu1.png)
+### 🛒 Shopping Cart
+![Cart](screenshots/cart.png)
+
+### 💳 Checkout
+![Checkout 1](screenshots/checkout1.png)
+![Checkout 2](screenshots/checkout2.png)
+
+### 💰 SSLCOMMERZ Payment
+![Payment](screenshots/payment.png)
+
+### ✅ Order Success
+![Order Success](screenshots/ordersuccess.png)
+
+### 👤 User Orders
+![My Orders](screenshots/my-orders.png)
+
+### 📊 Admin Dashboard
+![Dashboard](screenshots/admindashboard.png)
+
+### 📊 Sales Report
+![Sales Report](screenshots/salesreport.png)
+
+### 📦 Order Report
+![Order Report](screenshots/orderreport.png)
+
 </details>
 
 ---
