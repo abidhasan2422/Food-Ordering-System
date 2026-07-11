@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link,useParams } from "react-router-dom";
 import userApi from "../utils/userApi";
+import Navbar from "../components/Navbar";
 
 const OrderSuccess = () => {
   const {id} = useParams();
@@ -37,6 +38,8 @@ if (!order) {
     );
 }
   return (
+    <>
+    <Navbar />
  <div className="container py-5">
 
   <div
@@ -156,6 +159,8 @@ if (!order) {
   </div>
 
 </div>
+
+</>
   );
 };
 
