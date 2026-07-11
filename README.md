@@ -82,7 +82,7 @@
 ![Cart](screenshots/cart.png)
 
 ### 💳 Checkout
-![Checkout 1](screenshots/checkout1.png)
+![Checkout 1](screenshots/checkout.png)
 ![Checkout 2](screenshots/checkout2.png)
 
 ### 💰 SSLCOMMERZ Payment
@@ -92,7 +92,7 @@
 ![Order Success](screenshots/ordersuccess.png)
 
 ### 👤 User Orders
-![My Orders](screenshots/my-orders.png)
+![My Orders](screenshots/myorder.png)
 
 ### 📊 Admin Dashboard
 ![Dashboard](screenshots/admindashboard.png)
@@ -163,8 +163,7 @@ BiteBox/
 👨‍💻 Author
 Abid Hasan Likhon
 
-LinkedIn: MD Abid Hasan Likhon
+LinkedIn:https://www.linkedin.com/in/md-abid-hasan-likhon-0b6402321/
 
-GitHub: @abidhasan2422
+GitHub: https://github.com/abidhasan2422
 
-If you find this project helpful, please consider giving it a ⭐ on GitHub!
