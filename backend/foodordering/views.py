@@ -1008,20 +1008,57 @@ def admin_orders(request):
 
     return Response(serializer.data)
 
+# @api_view(["PATCH"])
+# @permission_classes([IsAdminUser])
+# def update_order_status(request, id):
+
+#     order = Order.objects.get(id=id)
+
+#     status = request.data.get("status")
+
+#     order.status = status
+
+#     order.save()
+
+#     return Response({
+#         "message": "Status Updated"
+#     })
+from rest_framework import status
+
 @api_view(["PATCH"])
 @permission_classes([IsAdminUser])
 def update_order_status(request, id):
 
     order = Order.objects.get(id=id)
 
-    status = request.data.get("status")
+    new_status = request.data.get("status")
 
-    order.status = status
+    # Reduce stock only the first time the order becomes Delivered
+    if order.status != "Delivered" and new_status == "Delivered":
 
+        for item in order.items.all():
+
+            food = item.food
+
+            if food.item_quantity >= item.quantity:
+
+                food.item_quantity -= item.quantity
+                food.save()
+
+            else:
+
+                return Response(
+                    {
+                        "message": f"Not enough stock for {food.item_name}"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+    order.status = new_status
     order.save()
 
     return Response({
-        "message": "Status Updated"
+        "message": "Status Updated Successfully"
     })
 
 @api_view(["GET"])
