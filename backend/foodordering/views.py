@@ -1008,21 +1008,6 @@ def admin_orders(request):
 
     return Response(serializer.data)
 
-# @api_view(["PATCH"])
-# @permission_classes([IsAdminUser])
-# def update_order_status(request, id):
-
-#     order = Order.objects.get(id=id)
-
-#     status = request.data.get("status")
-
-#     order.status = status
-
-#     order.save()
-
-#     return Response({
-#         "message": "Status Updated"
-#     })
 from rest_framework import status
 
 @api_view(["PATCH"])
@@ -1040,9 +1025,14 @@ def update_order_status(request, id):
 
             food = item.food
 
-            if food.item_quantity >= item.quantity:
+            current_quantity = int(food.item_quantity)
 
-                food.item_quantity -= item.quantity
+            if current_quantity >= item.quantity:
+
+                food.item_quantity = str(
+                    current_quantity - item.quantity
+                )
+
                 food.save()
 
             else:
