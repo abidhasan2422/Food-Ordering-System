@@ -94,7 +94,8 @@ const Checkout = () => {
 
     toast.success("Order placed successfully", {
       autoClose: 1500,
-      onClose: () => navigate("/order-success"),
+      // onClose: () => navigate("/order-success"),
+       onClose: () =>navigate(`/order-success/${response.data.order_id}`),
     });
 
   } else if (paymentMethod === "SSLCOMMERZ") {

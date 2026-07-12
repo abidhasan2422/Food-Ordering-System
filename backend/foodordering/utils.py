@@ -2,6 +2,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
+from django.core.mail import send_mail
+from django.conf import settings
+
+
 def send_order_confirmation_email(order):
 
     subject = f"Order Confirmation - FO-{order.id:06d}"
@@ -18,15 +22,20 @@ Order Number: FO-{order.id:06d}
 Items:
 """
 
+    # Order Items
     for item in order.items.all():
 
+        total = item.price * item.quantity
+
         message += (
-            f"- {item.food.item_name} x {item.quantity} "
-            f"(৳{item.price})\n"
+            f"- {item.food.item_name}\n"
+            f"  Qty: {item.quantity}\n"
+            f"  Unit Price: ৳{item.price}\n"
+            f"  Total: ৳{total}\n\n"
         )
 
+    # Remaining Details
     message += f"""
-
 Subtotal: ৳{order.subtotal}
 Delivery Charge: ৳{order.delivery_charge}
 Total Amount: ৳{order.total_amount}

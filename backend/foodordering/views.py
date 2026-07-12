@@ -19,7 +19,7 @@ from reportlab.lib import colors
 from django.db.models.functions import TruncDate
 from .throttles import UserLoginThrottle,AdminLoginThrottle,RegisterThrottle,SearchThrottle,WishlistThrottle
 from rest_framework.decorators import throttle_classes
-
+from .utils import send_order_confirmation_email
 
 @api_view(['POST'])
 @throttle_classes([AdminLoginThrottle])
@@ -463,7 +463,7 @@ def create_order(request):
             quantity=request.data.get("quantity"),
             price=food.item_price
         )
-
+        send_order_confirmation_email(order)
         return Response({
             "message": "Order Created",
             "order_id": order.id
@@ -975,6 +975,7 @@ def create_order_from_cart(request):
             )
 
         cart_items.delete()
+        send_order_confirmation_email(order)
 
         return Response({
             "message": "Order Created Successfully",
