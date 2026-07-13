@@ -119,6 +119,7 @@ def payment_initiate(request):
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from foodordering.utils import send_order_confirmation_email
 
 @csrf_exempt
 def payment_success(request):
@@ -152,6 +153,7 @@ def payment_success(request):
     order.payment_status = "Paid"
     order.transaction_id = bank_tran_id
     order.save()
+    send_order_confirmation_email(order)
 
     return redirect(f"http://localhost:3000/order-success/{order.id}")
 

@@ -6,11 +6,12 @@ import {
   FaUtensils,
   FaShoppingCart,
   FaBox,
-  FaUserCircle, 
+  FaUserCircle,
   FaUserEdit,
   FaLock,
   FaSignOutAlt,
-  FaBoxOpen
+  FaBoxOpen,
+
 } from "react-icons/fa";
 import "../styles/layout.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
@@ -19,7 +20,7 @@ import { useEffect, useState, useContext } from "react";
 import userApi from "../utils/userApi";
 
 const Navbar = () => {
-  const { cartCount  } = useContext(CartContext);
+  const { cartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -31,8 +32,6 @@ const Navbar = () => {
 
       try {
         const response = await userApi.get("cart/");
-
-      
       } catch (error) {
         console.log(error);
       }
@@ -52,13 +51,10 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
-        
-
-
-<a className="navbar-brand d-flex align-items-center" href="/">
-  <FaBoxOpen className="text-warning me-2" size={28} />
-  <span className="fw-bold text-white">BiteBox</span>
- </a>
+        <a className="navbar-brand d-flex align-items-center" href="/">
+          <FaBoxOpen className="text-warning me-2" size={28} />
+          <span className="fw-bold text-white">BiteBox</span>
+        </a>
 
         <button
           className="navbar-toggler"
@@ -76,22 +72,30 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-           
 
             {token ? (
               <>
+                     
+             <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/menu">
+                    <FaUtensils  className="me-2" />
+                    Menu
+                  </Link>
+                </li>
+
+        
+
+
                 <li className="nav-item mx-1">
-                
                   <Link
                     to="/cart"
                     className="btn btn-outline-light position-relative"
                   >
-                    
-                    <i className="fas fa-shopping-cart"></i> 
+                    <i className="fas fa-shopping-cart"></i>
 
-                   {cartCount > 0 && (
-  <span
-    className="
+                    {cartCount > 0 && (
+                      <span
+                        className="
       position-absolute
       top-0
       start-100
@@ -100,86 +104,81 @@ const Navbar = () => {
       rounded-pill
       bg-danger
     "
-  > 
-    {cartCount}
-  </span>
-)}
+                      >
+                        {cartCount}
+                      </span>
+                    )}
                   </Link>
                 </li>
 
-
-                 <li className="nav-item mx-1">
-              <Link className="nav-link" to="/wishlist">
-                {" "}
-                <FaRegHeart className="me-2" /> Wishlist
-              </Link>
-            </li>
+                <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/wishlist">
+                    {" "}
+                    <FaRegHeart className="me-2" /> Wishlist
+                  </Link>
+                </li>
 
                 <li className="nav-item mx-1">
-  <Link className="nav-link" to="/my-orders">
-    <FaBox className="me-2" />
-    My Orders
-  </Link>
-</li>
+                  <Link className="nav-link" to="/my-orders">
+                    <FaBox className="me-2" />
+                    My Orders
+                  </Link>
+                </li>
+                
 
+                <li
+                  className="nav-item dropdown mx-1"
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                >
+                  <button
+                    className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
+                    id="profileDropdown"
+                    type="button" // Always add type="button" to React buttons to prevent form submissions
+                  >
+                    <FaUserCircle className="me-2" />
+                    Profile
+                  </button>
 
+                  <ul
+                    className={`dropdown-menu dropdown-menu-end ${isProfileOpen ? "show" : ""}`}
+                    aria-labelledby="profileDropdown"
+                  >
+                    <li>
+                      <Link className="dropdown-item" to="/profile">
+                        <FaUserCircle className="me-2" />
+                        My Profile
+                      </Link>
+                    </li>
 
-<li 
-      className="nav-item dropdown mx-1" 
-      onClick={() => setIsProfileOpen(!isProfileOpen)}
-    >
+                    <li>
+                      <Link className="dropdown-item" to="/edit-profile">
+                        <FaUserEdit className="me-2" />
+                        Edit Profile
+                      </Link>
+                    </li>
 
-  
-  <button
-        className="nav-link dropdown-toggle btn btn-link text-decoration-none border-0 bg-transparent"
-        id="profileDropdown"
-        type="button" // Always add type="button" to React buttons to prevent form submissions
-      >
-        <FaUserCircle className="me-2" />
-        Profile
-      </button>
-      
-  <ul
-        className={`dropdown-menu dropdown-menu-end ${isProfileOpen ? "show" : ""}`}
-        aria-labelledby="profileDropdown"
-      >
+                    <li>
+                      <Link className="dropdown-item" to="/change_password">
+                        <FaLock className="me-2" />
+                        Change Password
+                      </Link>
+                    </li>
 
-    <li>
-      <Link className="dropdown-item" to="/profile">
-        <FaUserCircle className="me-2" />
-        My Profile
-      </Link>
-    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
 
-    <li>
-      <Link className="dropdown-item" to="/edit-profile">
-        <FaUserEdit className="me-2" />
-        Edit Profile
-      </Link>
-    </li>
-
-    <li>
-      <Link className="dropdown-item" to="/change_password">
-        <FaLock className="me-2" />
-        Change Password
-      </Link>
-    </li>
-
-    <li><hr className="dropdown-divider" /></li>
-
-    <li>
-      <button
-        className="dropdown-item text-danger"
-        onClick={handleLogout}
-      >
-        <FaSignOutAlt className="me-2" />
-        Logout
-      </button>
-    </li>
-
-  </ul>
-
-</li>
+                    <li>
+                      <button
+                        className="dropdown-item text-danger"
+                        onClick={handleLogout}
+                      >
+                        <FaSignOutAlt className="me-2" />
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </li>
               </>
             ) : (
               <>
