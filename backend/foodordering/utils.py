@@ -10,12 +10,22 @@ def send_order_confirmation_email(order):
 
     subject = f"Order Confirmation - FO-{order.id:06d}"
 
+    # Dynamic payment message
+    if order.payment_method == "COD":
+        payment_message = (
+            "Payment will be collected upon delivery."
+        )
+    else:
+        payment_message = (
+            "Your payment has been received successfully."
+        )
+
     message = f"""
 Hello {order.full_name},
 
 Thank you for your order!
 
-Your order has been received successfully.
+{payment_message}
 
 Order Number: FO-{order.id:06d}
 
@@ -46,6 +56,9 @@ Delivery Address:
 
 Payment Method:
 {order.payment_method}
+
+Payment Status:
+{order.payment_status}
 
 Order Status:
 {order.status}
