@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <style>
+
 body{
     font-family:Arial,sans-serif;
     background:#f5f5f5;
@@ -57,8 +59,13 @@ table th{
 <div class="container">
 
 <div class="header">
-<h1>🍔 BiteBox</h1>
-<h3>Order Confirmation</h3>
+   <img
+    src="{% static 'images/logo.png' %}"
+    alt="BiteBox Logo"
+    width="170"
+>
+    <h1>BiteBox</h1>
+    <h3>Order Confirmation</h3>
 </div>
 
 <div class="content">

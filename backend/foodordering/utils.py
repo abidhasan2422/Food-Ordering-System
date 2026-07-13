@@ -1,9 +1,7 @@
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.template.loader import render_to_string
 
-
-from django.core.mail import send_mail
-from django.conf import settings
 
 
 def send_order_confirmation_email(order):
@@ -69,10 +67,23 @@ Best Regards,
 BiteBox Team
 """
 
-    send_mail(
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,
-        [order.email],
-        fail_silently=False,
-    )
+    html_content = render_to_string(
+    "emails/order_confirmation.html",
+    {
+        "order": order
+    }
+)
+
+    email = EmailMultiAlternatives(
+    subject=subject,
+    body=message,   # Plain text fallback
+    from_email=settings.EMAIL_HOST_USER,
+    to=[order.email],
+)
+
+    email.attach_alternative(
+    html_content,
+    "text/html"
+)
+
+    email.send()
