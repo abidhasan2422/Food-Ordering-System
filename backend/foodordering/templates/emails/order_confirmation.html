@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    padding:30px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.header{
+    background:#ff9800;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.content{
+    padding:25px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th,
+table td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+table th{
+    background:#f4f4f4;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    background:#fafafa;
+    color:#666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>🍔 BiteBox</h1>
+<h3>Order Confirmation</h3>
+</div>
+
+<div class="content">
+
+<p>Hello <b>{{ order.full_name }}</b>,</p>
+
+<p>Thank you for your order.</p>
+
+<h3>Order #FO-{{ order.id }}</h3>
+
+<table>
+
+<tr>
+<th>Food</th>
+<th>Qty</th>
+<th>Price</th>
+<th>Total</th>
+</tr>
+
+{% for item in order.items.all %}
+
+<tr>
+<td>{{ item.food.item_name }}</td>
+<td>{{ item.quantity }}</td>
+<td>৳{{ item.price }}</td>
+<td>৳{{ item.price|floatformat:2 }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<p><strong>Subtotal:</strong> ৳{{ order.subtotal }}</p>
+
+<p><strong>Delivery Charge:</strong> ৳{{ order.delivery_charge }}</p>
+
+<p><strong>Total:</strong> ৳{{ order.total_amount }}</p>
+
+<hr>
+
+<p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+
+<p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+
+<p><strong>Order Status:</strong> {{ order.status }}</p>
+
+</div>
+
+<div class="footer">
+
+Thank you for choosing BiteBox ❤️
+
+</div>
+
+</div>
+
+</body>
+</html>
