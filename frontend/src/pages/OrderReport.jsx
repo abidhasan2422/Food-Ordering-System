@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import {
   FaClipboardList,
   FaCheckCircle,
-  FaTruck,
   FaTimesCircle,
   FaFilePdf,
   FaFileExcel,
@@ -17,8 +16,6 @@ const OrderReport = () => {
   const [fromDate, setFromDate] = useState("");
 
   const [toDate, setToDate] = useState("");
-
-  const [page, setPage] = useState(1);
 
   const [report, setReport] = useState(null);
 
@@ -112,26 +109,26 @@ const downloadExcel = async () => {
 
 };
 
-  useEffect(() => {
+useEffect(() => {
+    const fetchReport = async () => {
+        try {
+            const response = await adminApi.get("admin/order-report/", {
+                params: {
+                    status,
+                    from_date: fromDate,
+                    to_date: toDate,
+                    page: currentPage,
+                },
+            });
+
+            setReport(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     fetchReport();
-  }, [status, fromDate, toDate, currentPage]);
-
-  const fetchReport = async () => {
-    try {
-      const response = await adminApi.get("admin/order-report/", {
-        params: {
-          status,
-          from_date: fromDate,
-          to_date: toDate,
-          page: currentPage,
-        },
-      });
-
-      setReport(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+}, [status, fromDate, toDate, currentPage]);
 
   if (!report) {
     return (

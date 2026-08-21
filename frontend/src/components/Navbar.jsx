@@ -4,7 +4,7 @@ import {
   FaSignInAlt,
   FaUserShield,
   FaUtensils,
-  FaShoppingCart,
+  
   FaBox,
   FaUserCircle,
   FaUserEdit,
@@ -14,7 +14,7 @@ import {
 
 } from "react-icons/fa";
 import "../styles/layout.css";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 import { CartContext } from "./CartContext";
 import { useEffect, useState, useContext } from "react";
 import userApi from "../utils/userApi";
@@ -31,7 +31,7 @@ const Navbar = () => {
       if (!token) return;
 
       try {
-        const response = await userApi.get("cart/");
+         await userApi.get("cart/");
       } catch (error) {
         console.log(error);
       }

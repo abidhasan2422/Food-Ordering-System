@@ -9,29 +9,25 @@ import {
   FaTruck,
 } from "react-icons/fa";
 const OrderDetails = () => {
-  const { id } = useParams();
+ const { id } = useParams();
 
-  const [order, setOrder] = useState(null);
+const [order, setOrder] = useState(null);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchOrder = async () => {
-      try {
-        
+        try {
+            const response = await userApi.get(
+                `order/${id}/`
+            );
 
-       const response = await userApi.get(
-  `order/${id}/`
-);
-console.log(order);
-
-        setOrder(response.data);
-      } catch (error) {
-        console.log(error);
-          // toast.error("Failed to load order");
-      }
+            setOrder(response.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     fetchOrder();
-  }, [id]);
+}, [id]);
 
   if (!order) {
     return (

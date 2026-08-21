@@ -5,27 +5,25 @@ import { useParams, Link } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
 import { FaShoppingBag, FaMoneyBillWave, FaSearch} from "react-icons/fa";
 const CustomerDetails = () => {
-  const { id } = useParams();
+const { id } = useParams();
 const [search, setSearch] = useState("");
-  const [customer, setCustomer] = useState(null);
+const [customer, setCustomer] = useState(null);
 
-  useEffect(() => {
+useEffect(() => {
+    const fetchCustomer = async () => {
+        try {
+            const response = await adminApi.get(
+                `admin/customers/${id}/`
+            );
+
+            setCustomer(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     fetchCustomer();
-  }, []);
-
-  const fetchCustomer = async () => {
-    try {
-
-      const response = await adminApi.get(
-        `admin/customers/${id}/`,
-        
-      );
-
-      setCustomer(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+}, [id]);
 
 
 
@@ -69,9 +67,7 @@ const [search, setSearch] = useState("");
           shadow
         "
                 style={{
-                  width: "90px",
-                  //height: "90px",
-                  //fontSize: "32px",
+  
                   fontWeight: "bold",
                   width: "110px",
                   height: "110px",

@@ -3,7 +3,6 @@ import adminApi from "../utils/adminApi";
 
 import AdminLayout from "../components/AdminLayout";
 import {
-  FaMoneyBillWave,
   FaCalendarDay,
   FaChartLine,
   FaUtensils,

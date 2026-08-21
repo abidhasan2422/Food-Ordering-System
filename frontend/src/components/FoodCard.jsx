@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -6,11 +6,8 @@ import userApi from "../utils/userApi";
 
 const FoodCard = ({food , onRemove }) => {
 const [isWishlisted, setIsWishlisted] = useState(false);
-useEffect(() => {
-    checkWishlist();
-}, [food.id]);
 
-const checkWishlist = async () => {
+const checkWishlist = useCallback(async () => {
     try {
         const response = await userApi.get(
             `wishlist/check/${food.id}/`
@@ -21,14 +18,20 @@ const checkWishlist = async () => {
     } catch (error) {
         console.log(error);
     }
-};
+}, [food.id]);
+
+useEffect(() => {
+    checkWishlist();
+}, [checkWishlist]);
+
+
 const toggleWishlist = async () => {
 
     try {
 
         if (isWishlisted) {
 
-            const response = await userApi.delete(
+            await userApi.delete(
                 `wishlist/remove/${food.id}/`
             );
 

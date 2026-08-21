@@ -9,23 +9,21 @@ const ManageOrderDetails = () => {
 
   const [order, setOrder] = useState(null);
 
-  useEffect(() => {
+useEffect(() => {
+    const fetchOrder = async () => {
+        try {
+            const response = await adminApi.get(
+                `admin/order/${id}/`
+            );
+
+            setOrder(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     fetchOrder();
-  }, []);
-
-  const fetchOrder = async () => {
-    try {
-
-      const response = await adminApi.get(
-        `admin/order/${id}/`,
-        
-      );
-
-      setOrder(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+}, [id]);
 
   if (!order) {
     return <div className="container py-5 text-center">Loading...</div>;
@@ -53,71 +51,6 @@ const ManageOrderDetails = () => {
         </div>
 
         <div className="row">
-          {/* Order Information */}
-
-          {/* <div className="col-md-6 mb-4">
-            <div className="card shadow-sm border-0">
-              <div className="card-body">
-                <h4 className="mb-3">Order Information</h4>
-
-                <p>
-                  <strong>Order ID:</strong> {order.order_number}
-                </p>
-
-                <p>
-                  <strong>Date:</strong>{" "}
-                  {new Date(order.created_at).toLocaleString()}
-                </p>
-
-                
-                <p className="mb-0">
-                  <strong>Status:</strong>
-
-                  <span
-                    className={
-                      order.status === "Pending"
-                        ? "badge bg-warning text-dark ms-2"
-                        : order.status === "Confirmed"
-                          ? "badge bg-primary ms-2"
-                          : order.status === "Processing"
-                            ? "badge bg-info ms-2"
-                            : order.status === "Delivered"
-                              ? "badge bg-success ms-2"
-                              : "badge bg-danger ms-2"
-                    }
-                  >
-                    {order.status}
-                  </span>
-                </p>
-  {order.transaction_id && (
-        <p>
-          <strong>Transaction ID:</strong> {order.transaction_id}
-        </p>
-      )}
-
-      <p className="mb-0">
-        <strong>Status:</strong>
-
-        <span
-          className={
-            order.status === "Pending"
-              ? "badge bg-warning text-dark ms-2"
-              : order.status === "Confirmed"
-              ? "badge bg-primary ms-2"
-              : order.status === "Processing"
-              ? "badge bg-info ms-2"
-              : order.status === "Delivered"
-              ? "badge bg-success ms-2"
-              : "badge bg-danger ms-2"
-          }
-        >
-          {order.status}
-        </span>
-      </p>
-
-              </div>
-            </div>
-          </div> */}
 
 
 

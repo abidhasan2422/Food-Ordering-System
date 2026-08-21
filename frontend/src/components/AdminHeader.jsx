@@ -1,4 +1,4 @@
-import { FaBell, FaSignOutAlt,  FaBars, FaUtensils,FaBoxOpen } from "react-icons/fa";
+import { FaBell, FaSignOutAlt,  FaBars,FaBoxOpen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const AdminHeader = ({ setSidebarOpen }) => {

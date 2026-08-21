@@ -16,7 +16,7 @@ const ForgotPassword = () => {
 
         try {
 
-            const response = await userApi.post(
+           await userApi.post(
                 "forgot-password/",
                 {
                     email: email,

@@ -1,7 +1,7 @@
 import React from "react";
 import PublicLayout from "../components/PublicLayout";
 import '../styles/home.css'
-import { useNavigate ,Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import  { useState,useEffect } from "react";
 import { FaHamburger, FaMapMarkerAlt, FaShippingFast,FaShoppingBasket } from "react-icons/fa";
 import FoodCard from "../components/FoodCard";
