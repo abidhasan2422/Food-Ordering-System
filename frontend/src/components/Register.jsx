@@ -22,38 +22,32 @@ const Register = () => {
  const handleSubmit = async (e) => {
   e.preventDefault();
 
-  try {
-    const response = await fetch(
-      "http://127.0.0.1:8000/api/register/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+ try {
+  const response = await userApi.post(
+    "register/",
+    formData
+  );
 
-    const data = await response.json();
+  const data = response.data;
 
-    if (response.ok) {
-      alert("Registration Successful");
-      setFormData({
-        first_name: "",
-        last_name: "",
-        email: "",
-        mobile: "",
-        password: "",
-        confirm_password: "",
-      });
-    } else {
-      console.log(data);
-      alert("Registration Failed");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  alert("Registration Successful");
+
+  setFormData({
+    first_name: "",
+    last_name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirm_password: "",
+  });
+
+} catch (error) {
+  console.log(error);
+
+  console.log(error.response?.data);
+
+  alert("Registration Failed");
+}
 
   return (
     <PublicLayout>

@@ -1,0 +1,54 @@
+[
+{
+  "model": "foodordering.food",
+  "pk": 11,
+  "fields": {
+    "category": 10,
+    "item_name": "Naga Burger",
+    "item_price": "150.00",
+    "item_description": "This is one of the most famous Burger",
+    "image": "food-images/barger.jpg",
+    "item_quantity": "15",
+    "is_available": true
+  }
+},
+{
+  "model": "foodordering.food",
+  "pk": 12,
+  "fields": {
+    "category": 1,
+    "item_name": "BBQ Pizza",
+    "item_price": "250.00",
+    "item_description": "Best Pizza.",
+    "image": "food-images/pizza.jpg",
+    "item_quantity": "10",
+    "is_available": true
+  }
+},
+{
+  "model": "foodordering.food",
+  "pk": 13,
+  "fields": {
+    "category": 12,
+    "item_name": "Mojo",
+    "item_price": "30.00",
+    "item_description": "For refreshment drink Mojo.",
+    "image": "food-images/coke.jpg",
+    "item_quantity": "120",
+    "is_available": true
+  }
+},
+{
+  "model": "foodordering.food",
+  "pk": 14,
+  "fields": {
+    "category": 12,
+    "item_name": "Mint Lemonte",
+    "item_price": "50.00",
+    "item_description": "Drink for feel cool.",
+    "image": "food-images/ml.jpg",
+    "item_quantity": "20",
+    "is_available": true
+  }
+}
+]

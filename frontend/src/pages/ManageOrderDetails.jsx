@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import adminApi from "../utils/adminApi";
-
+import userApi from "../utils/userApi";
 import { useParams, Link } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
 
@@ -36,10 +36,10 @@ useEffect(() => {
           <h2 className="fw-bold">Order Details</h2>
 
           <div>
-            <a
-              href={`http://127.0.0.1:8000/api/order/${order.id}/invoice/`}
-              className="btn btn-danger me-2"
-            >
+             <a
+    href={`${process.env.REACT_APP_API_URL}/order/${order.id}/invoice/`}
+    className="btn btn-danger me-2"
+  >
               <i className="fas fa-file-pdf me-2"></i>
               Download Invoice
             </a>
@@ -185,7 +185,7 @@ useEffect(() => {
                   <tr key={item.id}>
                     <td>
                       <img
-                        src={`http://127.0.0.1:8000${item.image}`}
+                        src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${item.image}`}
                         alt={item.item_name}
                         width="80"
                         height="80"

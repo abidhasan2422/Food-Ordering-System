@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import FoodCard from "../components/FoodCard";
+import userApi from "../utils/userApi";
 
 
 const SearchPage = () => {
@@ -14,13 +15,11 @@ const SearchPage = () => {
  useEffect(() => {
   const fetchFoods = async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/search-food/?keyword=${keyword}`
-      );
+      const response = await userApi.get(
+  `search-food/?keyword=${encodeURIComponent(keyword)}`
+);
 
-      const data = await response.json();
-
-      setFoods(data);
+setFoods(response.data);
     } catch (error) {
       console.log(error);
     }

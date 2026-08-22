@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PublicLayout from "../components/PublicLayout";
 import userApi from "../utils/userApi";
-// import Checkout from './Checkout';
 import { useContext } from "react";
 import { CartContext } from "../components/CartContext";
-import { toast,ToastContainer } from "react-toastify";
-
+import { toast, ToastContainer } from "react-toastify";
 
 const FoodDetails = () => {
   const { fetchCartCount } = useContext(CartContext);
@@ -15,65 +13,68 @@ const FoodDetails = () => {
   const [food, setFood] = useState(null);
 
   const addToCart = async () => {
-  const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
 
-  if (!token) {
-    toast.info("Please login to add items to your cart.",{
-    autoClose:1500,
-    onClose:() => navigate("/login"),
-    });
+    if (!token) {
+      toast.info("Please login to add items to your cart.", {
+        autoClose: 1500,
+        onClose: () => navigate("/login"),
+      });
 
-    
-    return;
-  }
+      return;
+    }
 
-  try {
-    await userApi.post("cart/add/", {
-      food_id: food.id,
-    });
+    try {
+      await userApi.post("cart/add/", {
+        food_id: food.id,
+      });
 
-    await fetchCartCount();
+      await fetchCartCount();
 
-    toast.success("Item added to cart successfully!",{
-      autoClose:1000,
-      onClose:() => navigate("/cart"),
-    });
+      toast.success("Item added to cart successfully!", {
+        autoClose: 1000,
+        onClose: () => navigate("/cart"),
+      });
+    } catch (error) {
+      console.log(error.response?.data);
 
-    
-
-  } catch (error) {
-    console.log(error.response?.data);
-
-    toast.error("Failed to add item to cart.");
-  }
-};
+      toast.error("Failed to add item to cart.");
+    }
+  };
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/foods/${id}/`)
-      .then((res) => res.json())
-      .then((data) => setFood(data))
-      .catch((err) => console.log(err));
+    const fetchFood = async () => {
+      try {
+        const response = await userApi.get(`foods/${id}/`);
+
+        setFood(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchFood();
   }, [id]);
 
-const buyNow = () => {
-  const token = localStorage.getItem("access_token");
+  const buyNow = () => {
+    const token = localStorage.getItem("access_token");
 
-  if (!token) {
-    toast.info("Please login to continue with your purchase.", {
-      autoClose: 1500,
-      onClose: () => navigate("/login"),
+    if (!token) {
+      toast.info("Please login to continue with your purchase.", {
+        autoClose: 1500,
+        onClose: () => navigate("/login"),
+      });
+
+      return;
+    }
+
+    navigate("/checkout", {
+      state: {
+        food,
+        quantity: 1,
+      },
     });
-
-    return;
-  }
-
-  navigate("/checkout", {
-    state: {
-      food,
-      quantity: 1,
-    },
-  });
-};
+  };
   if (!food) {
     return <h2 className="text-center mt-5">Loading...</h2>;
   }
@@ -85,7 +86,7 @@ const buyNow = () => {
           {/* Food Image */}
           <div className="col-md-5 p-0">
             <img
-              src={`http://127.0.0.1:8000${food.image}`}
+              src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${food.image}`}
               alt={food.item_name}
               className="w-100 h-100"
               style={{
@@ -113,7 +114,6 @@ const buyNow = () => {
 
             <h2 className="text-success fw-bold mb-3">৳{food.item_price}</h2>
 
-           
             <p className="fs-5 mb-4">
               <span className="text-primary fw-bold">Description:</span>{" "}
               <span className="text-muted">{food.item_description}</span>
@@ -133,18 +133,14 @@ const buyNow = () => {
               </button>
 
               <button className="btn btn-success px-4" onClick={buyNow}>
-                  <i className="fas fa-shopping-bag me-2"></i>
-
+                <i className="fas fa-shopping-bag me-2"></i>
                 Buy Now
               </button>
             </div>
           </div>
         </div>
       </div>
-      <ToastContainer
-  position="top-right"
-  autoClose={3000}
-/>
+      <ToastContainer position="top-right" autoClose={3000} />
     </PublicLayout>
   );
 };

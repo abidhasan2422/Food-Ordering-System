@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import userApi from "../utils/userApi";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const FoodCard = ({food , onRemove }) => {
 const [isWishlisted, setIsWishlisted] = useState(false);
 
@@ -96,7 +96,7 @@ const toggleWishlist = async () => {
     }
 </div>
             <img
-                src={`http://127.0.0.1:8000${food.image}`}
+                src={`${API_URL.replace("/api", "")}${food.image}`}
                 alt={food.item_name}
                 className="food-image"
             />

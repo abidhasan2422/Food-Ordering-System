@@ -4,7 +4,7 @@ import { toast,ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-
+import userApi from "../utils/userApi";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState({
@@ -22,24 +22,18 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
 
-  try {
-    const response = await fetch(
-      "http://127.0.0.1:8000/api/admin-login/",
-      {
-        method: "POST",
+ try {
+  const response = await userApi.post(
+    "admin-login/",
+    adminData
+  );
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+  const data = response.data;
 
-        body: JSON.stringify(adminData),
-      }
-    );
+  console.log(data);
 
-    const data = await response.json();
-
-if (response.ok) {
   toast.success("Login Successful");
+
   localStorage.setItem("admin_access", data.access);
   localStorage.setItem("admin_refresh", data.refresh);
 
@@ -48,37 +42,27 @@ if (response.ok) {
     localStorage.getItem("admin_access")
   );
 
- 
-  //console.log("Navigating to dashboard");
   setTimeout(() => {
+    navigate("/admin-dashboard");
+  }, 1500);
 
-  navigate("/admin-dashboard");
+} catch (error) {
+  console.log(error);
 
-}, 1500);
+  if (error.response?.status === 429) {
+    toast.warning(
+      "Too many login attempts. Please try again later."
+    );
+  } else {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Server Error";
 
-    } 
-    
-
-else if (response.status === 429) {
-
-      toast.warning(
-        
-        "Too many login attempts. Please try again later."
-      );
-    }
-
-    else {
-      toast.error(data.message);
-    }
-
-
-  } catch (error) {
-    console.log(error);
-
-    toast.error("Server Error");
+    toast.error(message);
   }
+}
 };
-
   return (
      <>
       <Navbar />

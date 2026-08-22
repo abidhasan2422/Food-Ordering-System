@@ -3,6 +3,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import FoodCard from "../components/FoodCard";
 import { FaSearch, FaTimes } from "react-icons/fa";
+import userApi from "../utils/userApi";
 
 const Menu = () => {
   const [categories, setCategories] = useState([]);
@@ -15,11 +16,9 @@ const [selectedCategory, setSelectedCategory] = useState("All");
 
   const fetchMenu = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/menu/"
-      );
+     const response = await userApi.get("menu/");
 
-      setCategories(response.data);
+    setCategories(response.data);
     } catch (error) {
       console.log(error);
     }

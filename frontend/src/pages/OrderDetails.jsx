@@ -8,26 +8,26 @@ import {
   FaCog,
   FaTruck,
 } from "react-icons/fa";
+import userApi from "../utils/userApi";
+
 const OrderDetails = () => {
- const { id } = useParams();
+  const { id } = useParams();
 
-const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState(null);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchOrder = async () => {
-        try {
-            const response = await userApi.get(
-                `order/${id}/`
-            );
+      try {
+        const response = await userApi.get(`order/${id}/`);
 
-            setOrder(response.data);
-        } catch (error) {
-            console.log(error);
-        }
+        setOrder(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchOrder();
-}, [id]);
+  }, [id]);
 
   if (!order) {
     return (
@@ -42,13 +42,12 @@ useEffect(() => {
   return (
     <PublicLayout>
       <div className="container py-5">
-      
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold">Order Details</h2>
 
           <div className="d-flex gap-2">
             <a
-              href={`http://127.0.0.1:8000/api/order/${order.id}/invoice/`}
+              href={`${process.env.REACT_APP_API_URL}/order/${order.id}/invoice/`}
               className="btn btn-danger"
             >
               <i className="fas fa-file-pdf me-2"></i>
@@ -65,68 +64,68 @@ useEffect(() => {
           <div className="card-body">
             <div className="row">
               <div className="col-md-6">
-  <h5 className="fw-bold mb-3">Order Information</h5>
+                <h5 className="fw-bold mb-3">Order Information</h5>
 
-  <p>
-    <strong>Order ID:</strong> {order.order_number}
-  </p>
+                <p>
+                  <strong>Order ID:</strong> {order.order_number}
+                </p>
 
-  <p>
-    <strong>Status:</strong>{" "}
-    <span
-      className={
-        order.status === "Pending"
-          ? "badge bg-warning text-dark"
-          : order.status === "Confirmed"
-          ? "badge bg-primary"
-          : order.status === "Processing"
-          ? "badge bg-info text-dark"
-          : order.status === "Delivered"
-          ? "badge bg-success"
-          : "badge bg-danger"
-      }
-    >
-      {order.status}
-    </span>
-  </p>
+                <p>
+                  <strong>Status:</strong>{" "}
+                  <span
+                    className={
+                      order.status === "Pending"
+                        ? "badge bg-warning text-dark"
+                        : order.status === "Confirmed"
+                          ? "badge bg-primary"
+                          : order.status === "Processing"
+                            ? "badge bg-info text-dark"
+                            : order.status === "Delivered"
+                              ? "badge bg-success"
+                              : "badge bg-danger"
+                    }
+                  >
+                    {order.status}
+                  </span>
+                </p>
 
-  <p>
-    <strong>Payment Method:</strong>{" "}
-    {order.payment_method === "SSLCOMMERZ"
-      ? "Online Payment (SSLCOMMERZ)"
-      : "Cash on Delivery"}
-  </p>
+                <p>
+                  <strong>Payment Method:</strong>{" "}
+                  {order.payment_method === "SSLCOMMERZ"
+                    ? "Online Payment (SSLCOMMERZ)"
+                    : "Cash on Delivery"}
+                </p>
 
-  <p>
-    <strong>Payment Status:</strong>{" "}
-    <span
-      className={
-        order.payment_status === "Paid"
-          ? "badge bg-success"
-          : order.payment_status === "Pending"
-          ? "badge bg-warning text-dark"
-          : "badge bg-danger"
-      }
-    >
-      {order.payment_status}
-    </span>
-  </p>
+                <p>
+                  <strong>Payment Status:</strong>{" "}
+                  <span
+                    className={
+                      order.payment_status === "Paid"
+                        ? "badge bg-success"
+                        : order.payment_status === "Pending"
+                          ? "badge bg-warning text-dark"
+                          : "badge bg-danger"
+                    }
+                  >
+                    {order.payment_status}
+                  </span>
+                </p>
 
-  {order.transaction_id && (
-    <p>
-      <strong>Transaction ID:</strong> {order.transaction_id}
-    </p>
-  )}
+                {order.transaction_id && (
+                  <p>
+                    <strong>Transaction ID:</strong> {order.transaction_id}
+                  </p>
+                )}
 
-  <p>
-    <strong>Total Amount:</strong> ৳{order.total_amount}
-  </p>
+                <p>
+                  <strong>Total Amount:</strong> ৳{order.total_amount}
+                </p>
 
-  <p>
-    <strong>Date:</strong>{" "}
-    {new Date(order.created_at).toLocaleString()}
-  </p>
-</div>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(order.created_at).toLocaleString()}
+                </p>
+              </div>
 
               <div className="col-md-6">
                 <h5 className="fw-bold mb-3">Customer Information</h5>
@@ -327,7 +326,6 @@ useEffect(() => {
 
             <table className="table table-bordered table-hover">
               <thead className="table-dark">
-                
                 <tr>
                   <th>#</th>
                   <th>Item</th>
@@ -335,7 +333,7 @@ useEffect(() => {
                   <th>Price</th>
                 </tr>
               </thead>
-            
+
               <tbody>
                 {order.items.map((item, index) => (
                   <tr key={index}>

@@ -90,13 +90,10 @@ def payment_initiate(request):
 
             "cus_city": order.city,
 
-            "success_url": "http://127.0.0.1:8000/api/payment/success/",
-
-            "fail_url": "http://127.0.0.1:8000/api/payment/fail/",
-
-            "cancel_url": "http://127.0.0.1:8000/api/payment/cancel/",
-
-            "ipn_url": "http://127.0.0.1:8000/api/payment/ipn/",
+            "success_url": f"{settings.BACKEND_URL}/api/payment/success/",
+            "fail_url": f"{settings.BACKEND_URL}/api/payment/fail/",
+            "cancel_url": f"{settings.BACKEND_URL}/api/payment/cancel/",
+            "ipn_url": f"{settings.BACKEND_URL}/api/payment/ipn/",
 
         }
 

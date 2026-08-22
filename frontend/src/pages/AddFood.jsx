@@ -5,6 +5,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import { useRef } from "react";
 import adminApi from "../utils/adminApi";
+import userApi from "../utils/userApi";
 
 
 const AddFood = () => {
@@ -26,20 +27,19 @@ const AddFood = () => {
   }, []);
 
   const fetchCategories = async () => {
-    try {
+  try {
+    const response = await userApi.get(
+      "categories/"
+    );
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/categories/"
-      );
+    const data = response.data;
 
-      const data = await response.json();
+    setCategories(data);
 
-      setCategories(data);
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const handleChange = (e) => {
 

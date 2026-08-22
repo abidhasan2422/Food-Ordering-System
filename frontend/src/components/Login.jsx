@@ -5,6 +5,7 @@ import PublicLayout from "./PublicLayout";
 import "../styles/login.css";
 import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import userApi from "../utils/userApi";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -26,60 +27,50 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await fetch(
-      "http://127.0.0.1:8000/api/login/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier: formData.identifier,
-          password: formData.password,
-        }),
-      }
+    const response = await userApi.post("login/", {
+      identifier: formData.identifier,
+      password: formData.password,
+    });
+
+    const data = response.data;
+
+    console.log(data);
+
+    
+    toast.success("Login Successful");
+
+    localStorage.setItem("access_token", data.access);
+    localStorage.setItem("refresh_token", data.refresh);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data.user)
     );
 
-    const data = await response.json();
-        console.log(data);
-    if (response.ok) {
-     toast.success("Login Successful");
+    navigate("/login");
 
-      // Save JWT tokens to LocalStorage
-      localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token", data.refresh);
-      
-      //  Save user profile info
-      localStorage.setItem("user", JSON.stringify(data.user));
-       navigate("/login");
-      // Clear Form
-      setFormData({
-        identifier: "",
-        password: "",
-      });
+    setFormData({
+      identifier: "",
+      password: "",
+    });
 
-      console.log("Tokens stored successfully!", data);
-      
+    console.log("Tokens stored successfully!", data);
 
-
-    }
-       else if (response.status === 429) {
-
-      toast.warning(
-        
-        "Too many login attempts. Please try again later."
-      );
-
-    }
-  
-    
-    else {
-      // Handles the error object returned from your Django view
-      toast.warning(data.error || "Invalid Credentials");
-    }
   } catch (error) {
     console.log(error);
-    toast.warning("Something went wrong with the server connection");
+
+    if (error.response?.status === 429) {
+      toast.warning(
+        "Too many login attempts. Please try again later."
+      );
+    } else {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Invalid Credentials";
+
+      toast.warning(message);
+    }
   }
 };
 

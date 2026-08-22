@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import  { useState,useEffect } from "react";
 import { FaHamburger, FaMapMarkerAlt, FaShippingFast,FaShoppingBasket } from "react-icons/fa";
 import FoodCard from "../components/FoodCard";
+import api from "../utils/userApi";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const [foods, setFoods] = useState([]);
 
 useEffect(() => {
   fetch(
-    "http://127.0.0.1:8000/api/random-foods/"
+   api.get("random-foods/")
   )
     .then((response) =>
       response.json()

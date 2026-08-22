@@ -25,23 +25,7 @@ const ChangePassword = () => {
     });
   };
 
-//   const handleSubmit = async(e) => {
-//     e.preventDefault();
-//     try{
-//        const response =  await userApi.put("change_password/",formData);
-//       console.log(formData);
-//     } catch (error) {
-//     const errors = error.response?.data;
 
-//     if (errors.message) {
-//         toast.error(errors.message);
-//     } else {
-//         const firstField = Object.keys(errors)[0];
-//         toast.error(errors[firstField][0]);
-//     }
-// }
-
-//   };
 const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -41,7 +41,7 @@ const Cart = () => {
   const decreaseQty = async (id) => {
     try {
       await userApi.patch(
-        `/cart/decrease/${id}/`,
+        `cart/decrease/${id}/`,
         {},
         
       );
@@ -106,7 +106,7 @@ fetchCartCount();
                     <td>
                       <div className="d-flex align-items-center">
                         <img
-                          src={`http://127.0.0.1:8000${item.image}`}
+                          src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${item.image}`}
                           alt={item.item_name}
                           width="55"
                           height="55"
