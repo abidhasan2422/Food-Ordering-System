@@ -8,7 +8,7 @@ import {
   FaCog,
   FaTruck,
 } from "react-icons/fa";
-import userApi from "../utils/userApi";
+
 
 const OrderDetails = () => {
   const { id } = useParams();

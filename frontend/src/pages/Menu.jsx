@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+
 import Navbar from "../components/Navbar";
 import FoodCard from "../components/FoodCard";
 import { FaSearch, FaTimes } from "react-icons/fa";

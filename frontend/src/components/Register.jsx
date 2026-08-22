@@ -1,13 +1,13 @@
 import PublicLayout from "./PublicLayout";
 import "../styles/register.css";
 import React, { useState } from "react";
-
+import userApi from "../utils/userApi";
 const Register = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    phone: "",
+    mobile: "",
     password: "",
     confirm_password: "",
   });
@@ -23,12 +23,12 @@ const Register = () => {
   e.preventDefault();
 
  try {
-  const response = await userApi.post(
+   await userApi.post(
     "register/",
     formData
   );
 
-  const data = response.data;
+  
 
   alert("Registration Successful");
 
@@ -48,6 +48,7 @@ const Register = () => {
 
   alert("Registration Failed");
 }
+ };
 
   return (
     <PublicLayout>

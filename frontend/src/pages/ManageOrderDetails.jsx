@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import adminApi from "../utils/adminApi";
-import userApi from "../utils/userApi";
+
 import { useParams, Link } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
 
