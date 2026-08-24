@@ -463,10 +463,10 @@ def create_order(request):
             quantity=request.data.get("quantity"),
             price=food.item_price
         )
-        try:
-          send_order_confirmation_email(order)
-        except Exception as e:
-          print("EMAIL ERROR:", e)
+        # try:
+        #   send_order_confirmation_email(order)
+        # except Exception as e:
+        #   print("EMAIL ERROR:", e)
         return Response({
             "message": "Order Created",
             "order_id": order.id
@@ -978,7 +978,7 @@ def create_order_from_cart(request):
             )
 
         cart_items.delete()
-        send_order_confirmation_email(order)
+        # send_order_confirmation_email(order)
 
         return Response({
             "message": "Order Created Successfully",
