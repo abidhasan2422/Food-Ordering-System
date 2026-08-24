@@ -948,47 +948,71 @@ def download_invoice(request, id):
     return response
 
 
+from django.db import transaction
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_order_from_cart(request):
 
-    serializer = OrderSerializer(
-        data=request.data
-    )
+    try:
+        with transaction.atomic():
 
-    if serializer.is_valid():
-
-        order = serializer.save(
-            user=request.user
-        )
-
-        cart = Cart.objects.get(
-            user=request.user
-        )
-
-        cart_items = cart.items.all()
-
-        for item in cart_items:
-
-            OrderItem.objects.create(
-                order=order,
-                food=item.food,
-                quantity=item.quantity,
-                price=item.food.item_price
+            cart = Cart.objects.get(
+                user=request.user
             )
 
-        cart_items.delete()
-        # send_order_confirmation_email(order)
+            cart_items = cart.items.select_related(
+                "food"
+            ).all()
 
-        return Response({
-            "message": "Order Created Successfully",
-            "order_id": order.id
-        })
+            if not cart_items.exists():
+                return Response(
+                    {
+                        "message": "Your cart is empty."
+                    },
+                    status=400
+                )
 
-    return Response(
-        serializer.errors,
-        status=400
-    )
+            serializer = OrderSerializer(
+                data=request.data
+            )
+
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=400
+                )
+
+            order = serializer.save(
+                user=request.user
+            )
+
+            for item in cart_items:
+
+                OrderItem.objects.create(
+                    order=order,
+                    food=item.food,
+                    quantity=item.quantity,
+                    price=item.food.item_price
+                )
+
+            cart_items.delete()
+
+           
+            # send_order_confirmation_email(order)
+
+            return Response({
+                "message": "Order Created Successfully",
+                "order_id": order.id
+            })
+
+    except Cart.DoesNotExist:
+        return Response(
+            {
+                "message": "Cart not found."
+            },
+            status=404
+        )
 
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
