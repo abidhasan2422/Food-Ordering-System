@@ -13,14 +13,24 @@ const Home = () => {
 const [foods, setFoods] = useState([]);
 
 useEffect(() => {
-  fetch(
+  
    api.get("random-foods/")
-  )
+  
     .then((response) =>
       response.json()
     )
     .then((data) => {
       setFoods(data);
+    });
+}, []);
+
+useEffect(() => {
+  api.get("random-foods/")
+    .then((response) => {
+      setFoods(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
     });
 }, []);
 
