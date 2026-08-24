@@ -11,13 +11,9 @@ const Checkout = () => {
   const { fetchCartCount } = useContext(CartContext);
   const food = location.state?.food;
   const quantity = location.state?.quantity || 1;
-
   const cartItems = location.state?.cartItems || [];
-
-
-
   const [paymentMethod, setPaymentMethod] = useState("COD");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -28,6 +24,9 @@ const Checkout = () => {
     notes: "",
   });
   const handleOrder = async () => {
+    // Prevent multiple clicks
+    if (isSubmitting) return;
+
     const orderData = {
       full_name: formData.full_name,
       phone: formData.phone,
@@ -49,7 +48,7 @@ const Checkout = () => {
       orderData.quantity = quantity;
     }
 
-    // form  validation
+    // Form validation
     if (!formData.full_name.trim()) {
       toast.error("Full name is required.");
       return;
@@ -79,6 +78,10 @@ const Checkout = () => {
       toast.error("Please select your delivery area.");
       return;
     }
+
+    // Start submitting only after validation
+    setIsSubmitting(true);
+
     try {
       let response;
 
@@ -92,15 +95,16 @@ const Checkout = () => {
 
         toast.success("Order placed successfully", {
           autoClose: 1500,
-          // onClose: () => navigate("/order-success"),
           onClose: () => navigate(`/order-success/${response.data.order_id}`),
         });
       } else if (paymentMethod === "SSLCOMMERZ") {
         response = await userApi.post("payment/initiate/", orderData);
+
         if (response.data.GatewayPageURL) {
           window.location.href = response.data.GatewayPageURL;
         } else {
           toast.error("Unable to initialize payment.");
+          setIsSubmitting(false);
         }
       }
     } catch (error) {
@@ -116,6 +120,9 @@ const Checkout = () => {
       } else {
         toast.error("Something went wrong. Please try again later.");
       }
+
+      // Allow user to try again after failure
+      setIsSubmitting(false);
     }
   };
 
@@ -325,9 +332,11 @@ const Checkout = () => {
                 <button
                   className="btn btn-success btn-lg w-100 mt-4"
                   onClick={handleOrder}
+                  disabled={isSubmitting}
                 >
                   <i className="fas fa-check-circle me-2"></i>
-                  Confirm Order
+
+                  {isSubmitting ? "Processing..." : "Confirm Order"}
                 </button>
               </div>
             </div>
