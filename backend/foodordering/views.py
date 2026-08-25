@@ -1002,7 +1002,10 @@ def create_order_from_cart(request):
             cart_items.delete()
 
            
-            send_order_confirmation_email(order)
+            try:
+                send_order_confirmation_email(order)
+            except Exception as e:
+               print("EMAIL ERROR:", e)
 
             return Response({
                 "message": "Order Created Successfully",

@@ -201,7 +201,9 @@ SIMPLE_JWT = {
 }
 
 # Email Configuration
+from dotenv import load_dotenv
 
+load_dotenv()
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 
 SSLCOMMERZ_STORE_ID = os.environ.get("SSLCOMMERZ_STORE_ID")

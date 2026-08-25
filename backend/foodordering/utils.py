@@ -4,6 +4,9 @@ from django.template.loader import render_to_string
 
 
 def send_order_confirmation_email(order):
+    print("EMAIL FUNCTION CALLED")
+    print("RESEND KEY EXISTS:", bool(settings.RESEND_API_KEY))
+    print("EMAIL TO:", order.email)
 
     subject = f"Order Confirmation - FO-{order.id:06d}"
 
@@ -82,3 +85,4 @@ BiteBox Team
         "html": html_content,
         "text": message,
     })
+    print("EMAIL SENT SUCCESSFULLY")
