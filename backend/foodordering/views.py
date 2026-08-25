@@ -463,10 +463,13 @@ def create_order(request):
             quantity=request.data.get("quantity"),
             price=food.item_price
         )
-        # try:
-        #   send_order_confirmation_email(order)
-        # except Exception as e:
-        #   print("EMAIL ERROR:", e)
+
+        # Send confirmation email
+        try:
+            send_order_confirmation_email(order)
+        except Exception as e:
+            print("EMAIL ERROR:", e)
+
         return Response({
             "message": "Order Created",
             "order_id": order.id
@@ -999,7 +1002,7 @@ def create_order_from_cart(request):
             cart_items.delete()
 
            
-            # send_order_confirmation_email(order)
+            send_order_confirmation_email(order)
 
             return Response({
                 "message": "Order Created Successfully",
@@ -1469,231 +1472,6 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 
 from .models import Order
-
-
-# @api_view(["GET"])
-# @permission_classes([IsAdminUser])
-# def export_order_report_pdf(request):
-
-#     # Filters
-
-#     status = request.GET.get("status")
-#     from_date = request.GET.get("from_date")
-#     to_date = request.GET.get("to_date")
-
-#     # Base Query
-
-#     orders = Order.objects.order_by("-id")
-
-#     if status and status != "All Orders":
-
-#         orders = orders.filter(
-#             status=status
-#         )
-
-#     if from_date:
-
-#         orders = orders.filter(
-#             created_at__date__gte=from_date
-#         )
-
-#     if to_date:
-
-#         orders = orders.filter(
-#             created_at__date__lte=to_date
-#         )
-
-#     # Summary
-
-#     total_orders = orders.count()
-
-#     total_revenue = (
-#         orders.aggregate(
-#             total=Sum("total_amount")
-#         )["total"]
-#         or 0
-#     )
-
-#     # PDF Response
-
-#     response = HttpResponse(
-#         content_type="application/pdf"
-#     )
-
-#     response[
-#         "Content-Disposition"
-#     ] = 'attachment; filename="Order_Report.pdf"'
-
-#     # PDF Document
-
-#     doc = SimpleDocTemplate(response)
-
-#     elements = []
-
-#     styles = getSampleStyleSheet()
-
-#     # Title
-
-#     elements.append(
-#         Paragraph(
-#             "Order Report",
-#             styles["Title"]
-#         )
-#     )
-
-#     elements.append(
-#         Spacer(1, 15)
-#     )
-
-#     # Report Info
-
-#     elements.append(
-#         Paragraph(
-#             f"Generated On: {timezone.now().strftime('%d %b %Y %I:%M %p')}",
-#             styles["Normal"]
-#         )
-#     )
-
-#     elements.append(
-#         Paragraph(
-#             f"Status Filter: {status if status else 'All Orders'}",
-#             styles["Normal"]
-#         )
-#     )
-
-#     if from_date or to_date:
-
-#         elements.append(
-#             Paragraph(
-#                 f"Date Range: {from_date or 'Beginning'} to {to_date or 'Today'}",
-#                 styles["Normal"]
-#             )
-#         )
-
-#     elements.append(
-#         Spacer(1, 10)
-#     )
-
-#     # Summary Section
-
-#     elements.append(
-#         Paragraph(
-#             f"<b>Total Orders:</b> {total_orders}",
-#             styles["Normal"]
-#         )
-#     )
-
-#     elements.append(
-#         Paragraph(
-#             f"<b>Total Revenue:</b> ৳{total_revenue:,.0f}",
-#             styles["Normal"]
-#         )
-#     )
-
-#     elements.append(
-#         Spacer(1, 20)
-#     )
-
-#     # Table Data
-
-#     data = [
-#         [
-#             "Order ID",
-#             "Customer",
-#             "Status",
-#             "Amount"
-#         ]
-#     ]
-
-#     for order in orders:
-
-#         data.append([
-#             f"FO-{order.id:06d}",
-#             order.full_name,
-#             order.status,
-#             f"৳{float(order.total_amount):,.0f}"
-#         ])
-
-#     # Table
-
-#     table = Table(data)
-
-#     table.setStyle(
-#         TableStyle([
-
-#             (
-#                 "BACKGROUND",
-#                 (0, 0),
-#                 (-1, 0),
-#                 colors.black
-#             ),
-
-#             (
-#                 "TEXTCOLOR",
-#                 (0, 0),
-#                 (-1, 0),
-#                 colors.white
-#             ),
-
-#             (
-#                 "FONTNAME",
-#                 (0, 0),
-#                 (-1, 0),
-#                 "Helvetica-Bold"
-#             ),
-
-#             (
-#                 "ALIGN",
-#                 (0, 0),
-#                 (-1, -1),
-#                 "CENTER"
-#             ),
-
-#             (
-#                 "GRID",
-#                 (0, 0),
-#                 (-1, -1),
-#                 1,
-#                 colors.black
-#             ),
-
-#             (
-#                 "ROWBACKGROUNDS",
-#                 (0, 1),
-#                 (-1, -1),
-#                 [
-#                     colors.whitesmoke,
-#                     colors.lightgrey
-#                 ]
-#             ),
-
-#         ])
-#     )
-
-#     elements.append(table)
-
-#     # Footer
-
-#     elements.append(
-#         Spacer(1, 20)
-#     )
-
-#     elements.append(
-#         Paragraph(
-#             "Generated by Food Ordering System Admin Panel",
-#             styles["Italic"]
-#         )
-#     )
-
-#     # Build PDF
-
-#     doc.build(elements)
-
-#     return response
-
-
-
-
 from django.http import HttpResponse
 from django.utils import timezone
 from django.db.models import Sum
@@ -1703,13 +1481,6 @@ from rest_framework.permissions import IsAdminUser
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-
-# NOTE: If the Taka symbol (৳) renders as a black box, uncomment the lines below 
-# and register a font that supports Bengali/UTF-8 characters.
-# from reportlab.pdfbase import pdfmetrics
-# from reportlab.pdfbase.ttfonts import TTFont
-# pdfmetrics.registerFont(TTFont('Arial', 'path/to/arial.ttf'))
-
 
 @api_view(["GET"])
 @permission_classes([IsAdminUser])

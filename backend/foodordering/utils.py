@@ -1,7 +1,6 @@
-from django.core.mail import EmailMultiAlternatives
+import resend
 from django.conf import settings
 from django.template.loader import render_to_string
-
 
 
 def send_order_confirmation_email(order):
@@ -68,22 +67,18 @@ BiteBox Team
 """
 
     html_content = render_to_string(
-    "emails/order_confirmation.html",
-    {
-        "order": order
-    }
-)
+        "emails/order_confirmation.html",
+        {
+            "order": order
+        }
+    )
 
-    email = EmailMultiAlternatives(
-    subject=subject,
-    body=message,   # Plain text fallback
-    from_email=settings.EMAIL_HOST_USER,
-    to=[order.email],
-)
+    resend.api_key = settings.RESEND_API_KEY
 
-    email.attach_alternative(
-    html_content,
-    "text/html"
-)
-
-    email.send()
+    resend.Emails.send({
+        "from": "BiteBox <onboarding@resend.dev>",
+        "to": [order.email],
+        "subject": subject,
+        "html": html_content,
+        "text": message,
+    })
